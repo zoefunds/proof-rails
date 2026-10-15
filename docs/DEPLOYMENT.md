@@ -8,7 +8,7 @@
 - Deployment transaction: `0x6759d35a1f8e4e30a76555064810c17321dbbf0c53f86e449bcf2cf04ae9b7d0`
 - Execution hash: `0xa2f5ec8983763d6b4bea082d10b5f7ddd879c250a5a479cb34a17bafd906deb3`
 - Exact deployed/local source SHA-256: `4705ad10c2e201d2b623b4416ccbfc37becd4d95aba8c1ab1f758eb087e961ff`
-- Current v3 verification rail: `1` (`artifacts/live-e2e-4.studionet.json`)
+- Current v3 verification rail: `2` (`artifacts/live-e2e-4.studionet.json`)
 - Deployment record: `artifacts/deployment.studionet.json`
 - Historical v2 lifecycle records: `artifacts/live-e2e-1.studionet.json`, `artifacts/live-e2e-2.studionet.json`, and `artifacts/live-e2e-3.studionet.json`
 

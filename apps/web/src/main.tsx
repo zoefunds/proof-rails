@@ -10,11 +10,11 @@ const pages=[{label:"Control room",path:"/",icon:Activity},{label:"Rails",path:"
 const blank={name:"",recipient:"",criterion:"",amount:"",url:"",domain:"",publisher:"",version:"",digest:"",from:"",until:"",claimBy:""};
 const liveTransactions=[
   ["Contract redeployed","0x6759d35a1f8e4e30a76555064810c17321dbbf0c53f86e449bcf2cf04ae9b7d0","Source-equivalent v3 backend finalized on Studionet"],
-  ["Payout rail opened","0x308c91253bc1df57f49391a6d96f0fcbeed046612f73ef204083976635eac211","0.01 GEN locked with a distinct two-day claim window"],
-  ["Named claim lodged","0x94b90a4886dcc0668f96ddccb479549a5c9a7d45f6005aaf86810f5bd281aec6","The beneficiary claimed after the observation interval ended"],
-  ["Evidence review finalized","0x88bd6c16e2be8ff63b3518bd5829ebf4077fee8a596cf5b6b405854496ca6f37","Validators authenticated the DID document and exact v3 bytes, then classified BREACHED"],
-  ["Second review bonded","0x9a118090d5da5fc3c1bab761e78a51495fba62e288b3b30b5643f3322625d029","A written reason and exact 5% bond opened bounded reconsideration"],
-  ["Recipient payout finalized","0x66afdc77fc24b9c28e8074c3fef56f1b530839e60912bc18289b63e847a408fd","BREACHED transferred 0.01 GEN principal to the named recipient"],
+  ["Payout rail opened","0xa2a9ca982ef2058f4ba901bf88704f46a18f088263c2f433eb353fea93ba3f6d","0.01 GEN locked with a distinct two-day claim window"],
+  ["Named claim lodged","0x5c649dfd8e866cc91be86839999811591a024880e66cb6984e9c4cf08f6bfc57","The beneficiary claimed after the observation interval ended"],
+  ["Evidence review finalized","0x45d26d022504ca016e43a9fae18f1b09a7bc2710c5c5d22149b66c06fad60a37","Validators authenticated the DID document and exact v3 bytes, then classified BREACHED"],
+  ["Second review bonded","0x018486ec9ddeedeb8dbbe718bd335da01426ca34fae67c46b07e40d80a2aa92a","A written reason and exact 5% bond opened bounded reconsideration"],
+  ["Recipient payout finalized","0xbe7f673a2bd08b86a127afdede5bf38e3b84d8f188cfa09f4d6e24003c8cfe2a","BREACHED transferred 0.01 GEN principal to the named recipient"],
 ] as const;
 function evidence(r:Rail){try{return JSON.parse(r.evidence_json)}catch{return {}}}
 function deadline(value:unknown){const n=Number(value);return n?new Date(n*1000).toLocaleString():"—"}
