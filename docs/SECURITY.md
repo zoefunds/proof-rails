@@ -12,6 +12,8 @@ Evidence is delimited and declared inert. It cannot add authorities, change crit
 
 Funding and challenge bonds must be exact. Accounting is updated before transfers, and a failed native transfer reverts the on-chain transaction. Retry spacing, initial review windows, and dispute windows are finite; permissionless recovery closes every nonterminal flow. Terminal rails cannot be settled twice.
 
+An unresolved dispute cannot be reviewed after its three-day deadline. Permissionless recovery preserves the last verified provisional verdict and returns the bond to the challenger. This is intentionally neutral: infrastructure unavailability does not transfer the bond to either opponent, while withdrawing evidence cannot erase or improve the already-supported provisional financial outcome.
+
 ## Residual assumptions
 
 TLS origin authentication depends on the public PKI and publisher domain control at retrieval time. SHA-256 precommitment detects mutation but does not prove a publisher's statement is factually correct; parties must select an appropriate authoritative publisher. GenLayer consensus governs nondeterministic acceptance.

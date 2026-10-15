@@ -4,12 +4,12 @@ BODY='{"availability":"99.2%","incident_minutes":350,"period":"2030-01"}'
 DIGEST=hashlib.sha256(BODY.encode()).hexdigest()
 EVIDENCE=json.dumps({"url":"https://status.acme.test/attestations/"+DIGEST+".json","publisher_id":"did:web:status.acme.test","publisher_domain":"status.acme.test","content_version":"2030-01/v1","content_sha256":DIGEST,"observed_from":1893456000,"observed_until":1896134400})
 OUTCOMES=json.dumps([{"code":"PASS","description":"availability at least 99.9%","payout_bps":0},{"code":"BREACH","description":"availability below 99.9%","payout_bps":10000}])
-START=1893456000; END=1896134400
+START=1893456000; END=1896134400; CLAIM_END=END+86400
 
 def addr(c,x):return type(c._zero())(x)
 def warp(vm,t):vm.warp(t);sys.modules["genlayer.gl"].message_raw["datetime"]=t
 def create(vm,c,a,b,amount=20000):
- vm.sender=addr(c,a);vm.value=amount;c.open_rail(addr(c,b),"January service rail","Availability is at least 99.9%",START,END,amount,EVIDENCE,OUTCOMES)
+ vm.sender=addr(c,a);vm.value=amount;c.open_rail(addr(c,b),"January service rail","Availability is at least 99.9%",START,CLAIM_END,amount,EVIDENCE,OUTCOMES)
 def mocks(vm,code,body=BODY):
  did=json.dumps({"id":"did:web:status.acme.test","service":[{"id":"did:web:status.acme.test#attestations","type":"LinkedDomains","serviceEndpoint":"https://status.acme.test/attestations/"}]})
  vm.mock_web("status.acme.test/.well-known/did.json",{"method":"GET","status":200,"body":did});vm.mock_web("status.acme.test/attestations/"+DIGEST+".json",{"method":"GET","status":200,"body":body});vm.mock_llm(".*",code)
@@ -56,12 +56,19 @@ def test_claim_waits_for_completed_observation_window(direct_vm,direct_deploy,di
  with pytest.raises(AssertionError):c.lodge_claim(1)
 
 @pytest.mark.direct
+def test_creation_requires_meaningful_post_observation_claim_window(direct_vm,direct_deploy,direct_alice,direct_bob):
+ c=direct_deploy("contracts/proofrail.py");direct_vm.sender=addr(c,direct_alice);direct_vm.value=20000
+ with pytest.raises(AssertionError):c.open_rail(addr(c,direct_bob),"x","y",START,END,20000,EVIDENCE,OUTCOMES)
+
+@pytest.mark.direct
 def test_expired_unreviewed_claim_is_permissionlessly_recoverable(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
  c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(1);warp(direct_vm,"2030-02-08T00:00:01Z");direct_vm.sender=addr(c,direct_charlie);c.recover(1);r=c.get_rail(1);assert r.status==8 and r.locked==0 and r.returned==20000;assert c.accounting()["locked"]==0
 
 @pytest.mark.direct
-def test_permanently_unavailable_dispute_has_bounded_recovery(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(1);mocks(direct_vm,"PASS");direct_vm.sender=addr(c,direct_charlie);c.review_claim(1);direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"Reconsider the same authenticated artifact.");direct_vm.clear_mocks();direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);assert c.get_rail(1).status==4;warp(direct_vm,"2030-02-04T00:00:01Z");c.recover(1);r=c.get_rail(1);assert r.status==6 and r.final_code=="PASS" and r.locked==0 and r.bond==0;assert c.accounting()["bonds_locked"]==0
+def test_permanently_unavailable_dispute_has_neutral_bounded_recovery(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(1);mocks(direct_vm,"PASS");direct_vm.sender=addr(c,direct_charlie);c.review_claim(1);direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"Reconsider the same authenticated artifact.");direct_vm.clear_mocks();direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);assert c.get_rail(1).status==4;warp(direct_vm,"2030-02-04T00:00:01Z");mocks(direct_vm,"BREACH")
+ with pytest.raises(AssertionError):c.review_dispute(1)
+ c.recover(1);r=c.get_rail(1);assert r.status==6 and r.final_code=="PASS" and r.locked==0 and r.bond==0 and r.terminal_reason=="DISPUTE_UNRESOLVABLE";assert c.accounting()["bonds_locked"]==0
 
 @pytest.mark.direct
 def test_outcome_descriptions_are_supplied_for_arbitrary_codes(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):

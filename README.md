@@ -24,7 +24,7 @@ TLS authenticates the committed publisher origin at retrieval time; the frozen d
 
 `SCHEDULED → CLAIM_LODGED → EVIDENCE_CHECK → CHALLENGE_WINDOW → PAID | RELEASED`
 
-A failed retrieval remains retryable inside a bounded review window. Either financial party may post the exact 5% bond and a reason to request reconsideration of the same frozen evidence. A successful challenge returns the bond; an unsuccessful challenge awards it to the counterparty. Expired draft, unreviewed, reviewing, and disputed rails all have permissionless recovery paths; dispute expiry preserves the provisional settlement and awards the bond to the counterparty.
+A failed retrieval remains retryable inside a bounded review window. Either financial party may post the exact 5% bond and a reason to request reconsideration of the same frozen evidence. A verified successful challenge returns the bond; a verified unsuccessful challenge awards it to the counterparty. Expired draft, unreviewed, reviewing, and disputed rails all have permissionless recovery paths. If infrastructure remains unresolvable through dispute expiry, recovery preserves the provisional settlement and neutrally refunds the challenger bond.
 
 ## Repository
 
@@ -62,7 +62,7 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-Studionet contract: `0x6ccB0124DEF180d34E6830ebCDC1450F61b4b365` (chain ID `61999`). The immutable deployment record and funded lifecycle evidence are stored in `artifacts/`.
+Studionet contract: `0xe0eD7d02f8c0F907f342E4d3A2aF1F707EDc97dc` (chain ID `61999`). The immutable deployment record includes matching local/deployed source SHA-256 values; funded lifecycle evidence is stored in `artifacts/`.
 
 The release runner in `scripts/live_e2e.mjs` executes funded creation, named-recipient claim, independent evidence review, reasoned bonded reconsideration, deterministic settlement, receipt verification, and accounting verification against Studionet. Scenario 4 proves a `BREACHED` result, 0.01 GEN recipient payout, successful final execution, and a 0.0095 GEN net recipient balance increase after bond disposition.
 

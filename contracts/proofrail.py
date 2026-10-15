@@ -7,7 +7,7 @@ from genlayer import *
 
 DRAFT=0; CLAIMED=1; REVIEWING=2; PROVISIONAL=3; DISPUTED=4; PAID=5; RELEASED=6; EXPIRED=7; VOIDED=8
 VERIFIED="VERIFIED"; UNAVAILABLE="UNAVAILABLE"; TAMPERED="TAMPERED"; INVALID="INVALID"
-CHALLENGE_WINDOW=u256(172800); REVIEW_WINDOW=u256(604800); DISPUTE_WINDOW=u256(259200); RETRY_INTERVAL=u256(3600); BOND_BPS=u256(500)
+CHALLENGE_WINDOW=u256(172800); REVIEW_WINDOW=u256(604800); DISPUTE_WINDOW=u256(259200); RETRY_INTERVAL=u256(3600); MIN_CLAIM_WINDOW=u256(86400); BOND_BPS=u256(500)
 
 @allow_storage
 @dataclass
@@ -108,7 +108,7 @@ class ProofRail(gl.Contract):
  @gl.public.write.payable
  def open_rail(self,recipient:Address,name:str,criterion:str,opens_at:u256,closes_at:u256,amount:u256,evidence_json:str,outcomes_json:str):
   assert recipient not in (self._zero(),gl.message.sender_address) and gl.message.value==amount and amount>0 and amount*BOND_BPS//u256(10000)>0 and 0<len(name)<=120 and 0<len(criterion)<=2400 and opens_at<closes_at
-  self._validate_policy(evidence_json,outcomes_json);spec=json.loads(evidence_json);assert spec["observed_from"]>=int(opens_at) and spec["observed_until"]<=int(closes_at)
+  self._validate_policy(evidence_json,outcomes_json);spec=json.loads(evidence_json);assert spec["observed_from"]>=int(opens_at) and u256(spec["observed_until"])+MIN_CLAIM_WINDOW<=closes_at
   i=self.next_id;self.next_id+=u256(1);self.rails[i]=Rail(gl.message.sender_address,recipient,name,criterion,evidence_json,outcomes_json,amount,amount,u256(0),u256(0),u8(DRAFT),opens_at,closes_at,u256(0),u8(0),u256(0),"",u256(0),u256(0),self._zero(),u256(0),u256(0),"","",u16(0),"");self.total_funded+=amount;self.total_locked+=amount
 
  @gl.public.write
@@ -121,14 +121,14 @@ class ProofRail(gl.Contract):
  def dispute(self,i:u256,reason:str):
   r=self._get(i);bond=r.funded*BOND_BPS//u256(10000);assert r.status==u8(PROVISIONAL) and self._now()<r.challenge_until and gl.message.sender_address in (r.issuer,r.recipient) and gl.message.value==bond and 0<len(reason)<=600;r.status=u8(DISPUTED);r.challenger=gl.message.sender_address;r.bond=bond;r.dispute_deadline=self._now()+DISPUTE_WINDOW;r.challenge_reason=reason;r.attempts=u8(0);self.bonds_locked+=bond;self.rails[i]=r
  @gl.public.write
- def review_dispute(self,i:u256):r=self._get(i);assert r.status==u8(DISPUTED) and (r.attempts==u8(0) or self._now()>=r.last_attempt+RETRY_INTERVAL);self._apply_review(i,True)
+ def review_dispute(self,i:u256):r=self._get(i);assert r.status==u8(DISPUTED) and self._now()<=r.dispute_deadline and (r.attempts==u8(0) or self._now()>=r.last_attempt+RETRY_INTERVAL);self._apply_review(i,True)
  @gl.public.write
  def finalize(self,i:u256):r=self._get(i);assert r.status==u8(PROVISIONAL) and self._now()>=r.challenge_until;self._settle(i,r.provisional_code,"UNCHALLENGED")
  @gl.public.write
  def recover(self,i:u256):
   r=self._get(i)
   if r.status==u8(DISPUTED) and self._now()>r.dispute_deadline:
-   bond=r.bond;r.bond=u256(0);self.bonds_locked-=bond;counterparty=r.issuer if r.challenger==r.recipient else r.recipient;self.rails[i]=r;self._settle(i,r.provisional_code,"DISPUTE_DEADLINE");self._pay(counterparty,bond);return
+   bond=r.bond;r.bond=u256(0);self.bonds_locked-=bond;self.rails[i]=r;self._settle(i,r.provisional_code,"DISPUTE_UNRESOLVABLE");self._pay(r.challenger,bond);return
   assert (r.status==u8(DRAFT) and self._now()>r.closes_at) or (r.status in (u8(CLAIMED),u8(REVIEWING)) and self._now()>r.claimed_at+REVIEW_WINDOW)
   refund=r.locked;r.locked=u256(0);r.returned+=refund;r.status=u8(EXPIRED if r.claimed_at==0 else VOIDED);r.terminal_reason="WINDOW_EXPIRED";self.total_locked-=refund;self.total_returned+=refund;self.rails[i]=r;self._pay(r.issuer,refund)
  @gl.public.view
@@ -146,5 +146,5 @@ class ProofRail(gl.Contract):
  @gl.public.view
  def accounting(self)->dict:return {"funded":self.total_funded,"locked":self.total_locked,"paid":self.total_paid,"returned":self.total_returned,"bonds_locked":self.bonds_locked}
  @gl.public.view
- def constants(self)->dict:return {"bond_bps":BOND_BPS,"challenge_window":CHALLENGE_WINDOW,"review_window":REVIEW_WINDOW,"dispute_window":DISPUTE_WINDOW,"retry_interval":RETRY_INTERVAL,"max_page_size":25,"dispute_mode":"RECONSIDERATION_ONLY"}
+ def constants(self)->dict:return {"bond_bps":BOND_BPS,"challenge_window":CHALLENGE_WINDOW,"review_window":REVIEW_WINDOW,"dispute_window":DISPUTE_WINDOW,"retry_interval":RETRY_INTERVAL,"min_claim_window":MIN_CLAIM_WINDOW,"max_page_size":25,"dispute_mode":"RECONSIDERATION_ONLY","unresolved_bond_policy":"REFUND_CHALLENGER"}
 

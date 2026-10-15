@@ -1,21 +1,21 @@
 {
-  "schema": "proofrail.live-verification/v2",
+  "schema": "proofrail.live-verification/v3",
   "scenario": 4,
   "scenarioName": "Recipient payout failure condition",
   "expectedOutcome": "BREACHED",
   "network": "GenLayer Studionet",
   "chainId": 61999,
-  "contractAddress": "0x6ccB0124DEF180d34E6830ebCDC1450F61b4b365",
+  "contractAddress": "0xe0eD7d02f8c0F907f342E4d3A2aF1F707EDc97dc",
   "railId": 1,
   "issuer": "0x86640E27BB18E467aE2193A2FF680375653c69FC",
   "recipient": "0x53705Bb2B34ff7CEcC93F79a1D91aDa1185D87Dd",
   "evidence": {
-    "url": "https://proof-rails.vercel.app/evidence/a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1.json",
-    "digest": "a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1",
-    "version": "proofrail-release/2.0.0",
+    "url": "https://proof-rails.vercel.app/evidence/2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24.json",
+    "digest": "2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24",
+    "version": "proofrail-release/3.0.0",
     "publisher": "did:web:proof-rails.vercel.app"
   },
-  "criterion": "Classify FULFILLED only when the immutable release record reports fourteen passing Direct Mode contract tests. The record reports thirteen, so classify BREACHED.",
+  "criterion": "Classify FULFILLED only when the immutable release record reports fifteen passing Direct Mode contract tests. The record reports fourteen, so classify BREACHED.",
   "outcomes": [
     {
       "code": "FULFILLED",
@@ -31,54 +31,54 @@
   "transactions": [
     {
       "label": "open content-addressed production rail",
-      "hash": "0xac8d069ca90e4bb2d8109b25d155efc3389ec6a82618ceae8603dc4f0f24d992",
+      "hash": "0x308c91253bc1df57f49391a6d96f0fcbeed046612f73ef204083976635eac211",
       "consensus": "MAJORITY_AGREE",
-      "finalizedAt": "2026-10-15T21:33:35.939Z"
+      "finalizedAt": "2026-10-15T23:29:11.147Z"
     },
     {
       "label": "lodge named-recipient claim",
-      "hash": "0x77f42b4e6e8db08a1a197df8d7c42f6f68121335df88cd5cadcc36d7ad41f866",
+      "hash": "0x94b90a4886dcc0668f96ddccb479549a5c9a7d45f6005aaf86810f5bd281aec6",
       "consensus": "MAJORITY_AGREE",
-      "finalizedAt": "2026-10-15T21:34:15.161Z"
+      "finalizedAt": "2026-10-15T23:29:50.235Z"
     },
     {
       "label": "independent validator evidence review",
-      "hash": "0x1470b59d3446d0f0bf31a35c21ca9a7455b4c78d52d678687a82dde74ed14ea0",
+      "hash": "0x88bd6c16e2be8ff63b3518bd5829ebf4077fee8a596cf5b6b405854496ca6f37",
       "consensus": "MAJORITY_AGREE",
-      "finalizedAt": "2026-10-15T21:35:00.238Z"
+      "finalizedAt": "2026-10-15T23:30:34.714Z"
     },
     {
       "label": "bonded second review",
-      "hash": "0xa8f16beec01086b23aa4b5eedd47a6229b2eaf1814c38bcbb7d323dc988eb7c1",
+      "hash": "0x9a118090d5da5fc3c1bab761e78a51495fba62e288b3b30b5643f3322625d029",
       "consensus": "MAJORITY_AGREE",
-      "finalizedAt": "2026-10-15T21:35:41.805Z"
+      "finalizedAt": "2026-10-15T23:31:15.012Z"
     },
     {
       "label": "resolve bonded review",
-      "hash": "0x50a72796b84f2e56b1f6d0f354bab106b37a7646c37b16b75d5a645b35abe941",
+      "hash": "0x66afdc77fc24b9c28e8074c3fef56f1b530839e60912bc18289b63e847a408fd",
       "consensus": "MAJORITY_AGREE",
-      "finalizedAt": "2026-10-15T21:36:26.586Z"
+      "finalizedAt": "2026-10-15T23:32:03.177Z"
     }
   ],
   "provisional": {
     "attempts": 1,
     "bond": 0,
     "challenge_reason": "",
-    "challenge_until": 1792272856,
+    "challenge_until": 1792279791,
     "challenger": "0x0000000000000000000000000000000000000000",
-    "claimed_at": 1792100017,
-    "closes_at": 1792103572,
-    "criterion": "Classify FULFILLED only when the immutable release record reports fourteen passing Direct Mode contract tests. The record reports thirteen, so classify BREACHED.",
+    "claimed_at": 1792106952,
+    "closes_at": 1792279708,
+    "criterion": "Classify FULFILLED only when the immutable release record reports fifteen passing Direct Mode contract tests. The record reports fourteen, so classify BREACHED.",
     "dispute_deadline": 0,
-    "evidence_json": "{\"url\":\"https://proof-rails.vercel.app/evidence/a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1.json\",\"publisher_id\":\"did:web:proof-rails.vercel.app\",\"publisher_domain\":\"proof-rails.vercel.app\",\"content_version\":\"proofrail-release/2.0.0\",\"content_sha256\":\"a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1\",\"observed_from\":1792096372,\"observed_until\":1792099912}",
+    "evidence_json": "{\"url\":\"https://proof-rails.vercel.app/evidence/2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24.json\",\"publisher_id\":\"did:web:proof-rails.vercel.app\",\"publisher_domain\":\"proof-rails.vercel.app\",\"content_version\":\"proofrail-release/3.0.0\",\"content_sha256\":\"2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24\",\"observed_from\":1792103308,\"observed_until\":1792106848}",
     "final_bps": 0,
     "final_code": "",
     "funded": "10000000000000000",
     "issuer": "0x86640e27bb18e467ae2193a2ff680375653c69fc",
-    "last_attempt": 1792100056,
+    "last_attempt": 1792106991,
     "locked": "10000000000000000",
     "name": "Recipient payout failure condition",
-    "opens_at": 1792096372,
+    "opens_at": 1792103308,
     "outcomes_json": "[{\"code\":\"FULFILLED\",\"description\":\"The scenario-specific criterion is fully supported by the committed release artifact.\",\"payout_bps\":0},{\"code\":\"BREACHED\",\"description\":\"The scenario-specific criterion is not fully supported by the committed release artifact.\",\"payout_bps\":10000}]",
     "paid": 0,
     "provisional_amount": "10000000000000000",
@@ -92,21 +92,21 @@
     "attempts": 1,
     "bond": 0,
     "challenge_reason": "Request a bounded reconsideration of the same authenticated release artifact and registered criterion.",
-    "challenge_until": 1792272856,
+    "challenge_until": 1792279791,
     "challenger": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
-    "claimed_at": 1792100017,
-    "closes_at": 1792103572,
-    "criterion": "Classify FULFILLED only when the immutable release record reports fourteen passing Direct Mode contract tests. The record reports thirteen, so classify BREACHED.",
-    "dispute_deadline": 1792359302,
-    "evidence_json": "{\"url\":\"https://proof-rails.vercel.app/evidence/a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1.json\",\"publisher_id\":\"did:web:proof-rails.vercel.app\",\"publisher_domain\":\"proof-rails.vercel.app\",\"content_version\":\"proofrail-release/2.0.0\",\"content_sha256\":\"a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1\",\"observed_from\":1792096372,\"observed_until\":1792099912}",
+    "claimed_at": 1792106952,
+    "closes_at": 1792279708,
+    "criterion": "Classify FULFILLED only when the immutable release record reports fifteen passing Direct Mode contract tests. The record reports fourteen, so classify BREACHED.",
+    "dispute_deadline": 1792366237,
+    "evidence_json": "{\"url\":\"https://proof-rails.vercel.app/evidence/2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24.json\",\"publisher_id\":\"did:web:proof-rails.vercel.app\",\"publisher_domain\":\"proof-rails.vercel.app\",\"content_version\":\"proofrail-release/3.0.0\",\"content_sha256\":\"2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24\",\"observed_from\":1792103308,\"observed_until\":1792106848}",
     "final_bps": 10000,
     "final_code": "BREACHED",
     "funded": "10000000000000000",
     "issuer": "0x86640e27bb18e467ae2193a2ff680375653c69fc",
-    "last_attempt": 1792100142,
+    "last_attempt": 1792107076,
     "locked": 0,
     "name": "Recipient payout failure condition",
-    "opens_at": 1792096372,
+    "opens_at": 1792103308,
     "outcomes_json": "[{\"code\":\"FULFILLED\",\"description\":\"The scenario-specific criterion is fully supported by the committed release artifact.\",\"payout_bps\":0},{\"code\":\"BREACHED\",\"description\":\"The scenario-specific criterion is not fully supported by the committed release artifact.\",\"payout_bps\":10000}]",
     "paid": "10000000000000000",
     "provisional_amount": "10000000000000000",
@@ -117,10 +117,10 @@
     "terminal_reason": "DISPUTE_RESOLVED"
   },
   "primaryReceipt": {
-    "content_version": "proofrail-release/2.0.0",
-    "expected_digest": "a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1",
-    "observation_window": "1792096372..1792099912",
-    "observed_digest": "a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1",
+    "content_version": "proofrail-release/3.0.0",
+    "expected_digest": "2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24",
+    "observation_window": "1792103308..1792106848",
+    "observed_digest": "2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24",
     "outcome_code": "BREACHED",
     "phase": "PRIMARY",
     "publisher_document_digest": "84d6ad4e81ffdd9119efb02b9147d852248b5601d4e40af41723cf73331517ee",
@@ -128,15 +128,15 @@
     "publisher_id": "did:web:proof-rails.vercel.app",
     "rail_id": 1,
     "result": "VERIFIED",
-    "retrieved_at": 1792100056,
+    "retrieved_at": 1792106991,
     "round": 1,
-    "source_url": "https://proof-rails.vercel.app/evidence/a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1.json"
+    "source_url": "https://proof-rails.vercel.app/evidence/2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24.json"
   },
   "disputeReceipt": {
-    "content_version": "proofrail-release/2.0.0",
-    "expected_digest": "a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1",
-    "observation_window": "1792096372..1792099912",
-    "observed_digest": "a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1",
+    "content_version": "proofrail-release/3.0.0",
+    "expected_digest": "2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24",
+    "observation_window": "1792103308..1792106848",
+    "observed_digest": "2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24",
     "outcome_code": "BREACHED",
     "phase": "DISPUTE",
     "publisher_document_digest": "84d6ad4e81ffdd9119efb02b9147d852248b5601d4e40af41723cf73331517ee",
@@ -144,13 +144,13 @@
     "publisher_id": "did:web:proof-rails.vercel.app",
     "rail_id": 1,
     "result": "VERIFIED",
-    "retrieved_at": 1792100142,
+    "retrieved_at": 1792107076,
     "round": 1,
-    "source_url": "https://proof-rails.vercel.app/evidence/a912d78cc5052b6bfdecca0e1cc3b3a2f512f414c5697669f96d0437714d19b1.json"
+    "source_url": "https://proof-rails.vercel.app/evidence/2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24.json"
   },
   "recipientBalance": {
-    "before": "2996500000000000000",
-    "after": "3006000000000000000",
+    "before": "3006000000000000000",
+    "after": "3015500000000000000",
     "increase": "9500000000000000"
   },
   "accounting": {
@@ -169,5 +169,5 @@
       "returned": 0
     }
   },
-  "verifiedAt": "2026-10-15T21:36:32.524Z"
+  "verifiedAt": "2026-10-15T23:32:08.701Z"
 }
