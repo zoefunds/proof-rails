@@ -62,9 +62,9 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-Studionet contract: `0xe0eD7d02f8c0F907f342E4d3A2aF1F707EDc97dc` (chain ID `61999`). The immutable deployment record includes matching local/deployed source SHA-256 values; funded lifecycle evidence is stored in `artifacts/`.
+Studionet contract: `0xe0eD7d02f8c0F907f342E4d3A2aF1F707EDc97dc` (chain ID `61999`). The deployment record proves that the finalized on-chain contract source and local `contracts/proofrail.py` both hash to `4705ad10c2e201d2b623b4416ccbfc37becd4d95aba8c1ab1f758eb087e961ff`.
 
-The release runner in `scripts/live_e2e.mjs` executes funded creation, named-recipient claim, independent evidence review, reasoned bonded reconsideration, deterministic settlement, receipt verification, and accounting verification against Studionet. Scenario 4 proves a `BREACHED` result, 0.01 GEN recipient payout, successful final execution, and a 0.0095 GEN net recipient balance increase after bond disposition.
+The current verification record is `artifacts/live-e2e-4.studionet.json`. It contains the five finalized transactions for funded creation, named-recipient claim, primary review, reasoned bonded dispute, and dispute review. Rail 2 reached `BREACHED`, paid the 0.01 GEN principal to the recipient, left no locked principal or bond, and increased the recipient balance by 0.0095 GEN net of the 0.0005 GEN dispute bond. The production workflow was also exercised through the public browser interface, including separate observation and claim deadlines, a nonempty dispute reason, finalized GenVM success reporting, and recovery visibility.
 
 ## Safety properties
 

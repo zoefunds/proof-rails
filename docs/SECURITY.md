@@ -14,6 +14,10 @@ Funding and challenge bonds must be exact. Accounting is updated before transfer
 
 An unresolved dispute cannot be reviewed after its three-day deadline. Permissionless recovery preserves the last verified provisional verdict and returns the bond to the challenger. This is intentionally neutral: infrastructure unavailability does not transfer the bond to either opponent, while withdrawing evidence cannot erase or improve the already-supported provisional financial outcome.
 
+## Client transaction integrity
+
+The frontend requires an injected wallet, never embeds signing keys, and treats a submitted hash as pending rather than successful. Success requires majority consensus plus explicit GenVM execution evidence. Creation enforces the same minimum post-observation claim window as the contract; disputes require a nonempty written reason; and recovery is offered only for contract states whose deadline has actually expired. These checks improve operator safety but do not replace contract enforcement.
+
 ## Residual assumptions
 
 TLS origin authentication depends on the public PKI and publisher domain control at retrieval time. SHA-256 precommitment detects mutation but does not prove a publisher's statement is factually correct; parties must select an appropriate authoritative publisher. GenLayer consensus governs nondeterministic acceptance.
