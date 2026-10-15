@@ -1,0 +1,11 @@
+import {mkdir,readFile,writeFile} from "node:fs/promises";
+import {createAccount,createClient} from "genlayer-js";
+import {studionet} from "genlayer-js/chains";
+import {ExecutionResult,TransactionStatus} from "genlayer-js/types";
+const key=process.env.PROOFRAIL_DEPLOYER_KEY;if(!key)throw Error("PROOFRAIL_DEPLOYER_KEY is required");
+const client=createClient({chain:studionet,account:createAccount(key)}),code=await readFile(new URL("../contracts/proofrail.py",import.meta.url),"utf8"),startedAt=new Date().toISOString();
+const txHash=await client.deployContract({code,args:[]});console.log(`deployment submitted ${txHash}`);
+const receipt=await client.waitForTransactionReceipt({hash:txHash,status:TransactionStatus.FINALIZED,retries:180,interval:5000});
+const consensus=receipt.result_name??receipt.resultName,execution=receipt.tx_execution_result_name??receipt.txExecutionResultName,contractAddress=receipt.data?.contract_address??receipt.data?.contractAddress;
+if(consensus!=="MAJORITY_AGREE")throw Error(`deployment consensus ${consensus}`);if(execution&&execution!==ExecutionResult.FINISHED_WITH_RETURN)throw Error(`deployment execution ${execution}`);if(!contractAddress)throw Error("finalized deployment returned no contract address");
+const record={network:"GenLayer Studionet",chainId:61999,source:"contracts/proofrail.py",deployer:client.account.address,startedAt,finalizedAt:new Date().toISOString(),txHash,contractAddress,consensus,execution},artifact=new URL("../artifacts/deployment.studionet.json",import.meta.url);await mkdir(new URL("../artifacts",import.meta.url),{recursive:true});await writeFile(artifact,JSON.stringify(record,null,2)+"\n");console.log(JSON.stringify(record,null,2));

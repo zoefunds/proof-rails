@@ -1,0 +1,29 @@
+{
+  "schema": "proofrail.live-verification/v1",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0x55E598C3AAefD6C3610E82289276cFEcB6499Ef9",
+  "railId": 1,
+  "issuer": "0x8d928cB3E99656bb118FE5828546eD8111D96d2c",
+  "recipient": "0x5e48a9D408885Abbc110fAE230e440b17727cE6a",
+  "evidence": {
+    "url": "https://proof-rails.vercel.app/evidence/02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a.json",
+    "digest": "02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a",
+    "version": "proofrail-release/1.0.0",
+    "publisher": "did:web:proof-rails.vercel.app"
+  },
+  "criterion": "Classify FULFILLED only when the immutable ProofRail release attestation reports six passing Direct Mode contract tests, five passing frontend protocol tests, a passing contract lint, passing TypeScript and production build, and zero production dependency vulnerabilities. Otherwise classify BREACHED.",
+  "transactions": [
+    {"label":"open content-addressed production rail","hash":"0x0b82d3936ea11b5e403e53cc021029963c3a0d7abe90b416515e83aefcbc5137","consensus":"MAJORITY_AGREE","finalizedAt":"2026-10-15T19:52:09.589Z"},
+    {"label":"lodge named-recipient claim","hash":"0x1a9757cee106b8cee0b7337bd99028c27f68d315cd1809e14df96efa2a4ace58","consensus":"MAJORITY_AGREE","finalizedAt":"2026-10-15T19:52:45.044Z"},
+    {"label":"independent validator evidence review","hash":"0x51953ca63f5297d0647569652e0061df9d983db076cdc15648b88d446d610e3f","consensus":"MAJORITY_AGREE","finalizedAt":"2026-10-15T19:53:59.958Z"},
+    {"label":"bonded second review","hash":"0xe02b6004348962f02685f6e3216e2e97a86ad57fa0a5df439dc0d7d778302b26","consensus":"MAJORITY_AGREE","finalizedAt":"2026-10-15T19:54:40.027Z"},
+    {"label":"resolve bonded review","hash":"0xd9dc4ac083dd715a52eb7a633041dba3b86eb4676e55582ed7f62defb606b60e","consensus":"MAJORITY_AGREE","finalizedAt":"2026-10-15T19:55:26.039Z"}
+  ],
+  "provisional":{"status":3,"code":"FULFILLED","amount":"0"},
+  "final":{"status":6,"code":"FULFILLED","payoutBps":0,"paid":"0","returned":"10000000000000000","terminalReason":"DISPUTE_RESOLVED"},
+  "primaryReceipt":{"phase":"PRIMARY","result":"VERIFIED","outcomeCode":"FULFILLED","expectedDigest":"02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a","observedDigest":"02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a","retrievedAt":1792093966},
+  "disputeReceipt":{"phase":"DISPUTE","result":"VERIFIED","outcomeCode":"FULFILLED","expectedDigest":"02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a","observedDigest":"02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a","retrievedAt":1792094081},
+  "accounting":{"before":{"funded":"0","locked":"0","paid":"0","returned":"0","bondsLocked":"0"},"after":{"funded":"10000000000000000","locked":"0","paid":"0","returned":"10000000000000000","bondsLocked":"0"}},
+  "verifiedAt": "2026-10-15T19:55:31.241Z"
+}

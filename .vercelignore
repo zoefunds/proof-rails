@@ -1,0 +1,7 @@
+contracts/
+tests/
+docs/
+requirements.txt
+gltest.config.yaml
+.pytest_cache/
+**/__pycache__/

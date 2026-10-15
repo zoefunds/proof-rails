@@ -1,0 +1,11 @@
+{
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "source": "contracts/proofrail.py",
+  "deployer": "0x8d928cB3E99656bb118FE5828546eD8111D96d2c",
+  "startedAt": "2026-10-15T19:50:34.371Z",
+  "finalizedAt": "2026-10-15T19:51:11.626Z",
+  "txHash": "0x8b2d09b20d3bfa709e95952d365d8873208e240d4a9ee6a259e530222d0ff084",
+  "contractAddress": "0x55E598C3AAefD6C3610E82289276cFEcB6499Ef9",
+  "consensus": "MAJORITY_AGREE"
+}

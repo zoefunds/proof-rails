@@ -1,0 +1,5 @@
+export const STATUS=["Scheduled","Claim lodged","Evidence check","Challenge window","Disputed","Paid","Released","Expired","Voided"];
+export const sha256=/^[a-f0-9]{64}$/;
+export function parseGen(value:string){if(!/^\d+(\.\d{0,18})?$/.test(value))throw Error("Enter a valid GEN amount");const [w,f=""]=value.split(".");return BigInt(w)*10n**18n+BigInt((f+"0".repeat(18)).slice(0,18));}
+export function formatGen(value:unknown){const n=BigInt(String(value??0));return `${n/10n**18n}.${(n%10n**18n).toString().padStart(18,"0").slice(0,2)} GEN`;}
+export function validateEvidence(v:{url:string;domain:string;digest:string;version:string;publisher:string}){const host=new URL(v.url).hostname;if(host!==v.domain)throw Error("Evidence URL must use the publisher domain");if(!sha256.test(v.digest))throw Error("Digest must be lowercase SHA-256");if(v.publisher!==`did:web:${host}`)throw Error("Publisher ID must be the DID for the evidence origin");if(!v.url.includes(v.digest))throw Error("Evidence URL must contain its SHA-256 content address");if(!v.version)throw Error("Content version is required");return true;}
