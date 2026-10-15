@@ -4,7 +4,7 @@
 
 - Console: `https://proof-rails.vercel.app`
 - Network: GenLayer Studionet (`61999`)
-- Contract: `0xc323678aF48503F3CF3F99C0Ba58dc90A68Cf78c`
+- Contract: `0x6ccB0124DEF180d34E6830ebCDC1450F61b4b365`
 - Deployment transaction: `0x44581e5cb7c3e7bc553d0ff389ac9fee702b7ac83d6bf5ec5f765e41e2b5fe37`
 - Live verification rails: `1`, `2`, and `3`
 - Deployment record: `artifacts/deployment.studionet.json`

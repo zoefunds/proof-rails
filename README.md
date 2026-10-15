@@ -11,11 +11,12 @@ Deterministic contracts can enforce funding, permissions, time windows, and arit
 ## Evidence pipeline
 
 1. **Bind** — freeze the publisher ID, exact TLS origin, version, observation window, and SHA-256 digest before funding.
-2. **Retrieve** — validators independently fetch the content-addressed artifact.
-3. **Verify** — each validator recomputes the digest. Changed bytes yield `TAMPERED`; missing content yields `UNAVAILABLE`. Neither reaches the model.
-4. **Interpret** — matching bytes are classified against a frozen criterion and finite outcome set.
-5. **Receipt** — the contract records URL, publisher, version, expected and observed digest, observation window, phase, round, timestamp, and result.
-6. **Settle** — contract code applies `funded × payout_bps / 10,000`.
+2. **Authenticate** — validators retrieve the publisher's `did:web` document, require a same-origin linked service endpoint, and record its SHA-256 digest.
+3. **Retrieve** — validators independently fetch the content-addressed artifact.
+4. **Verify** — each validator recomputes the digest. Changed bytes yield `TAMPERED`; missing content yields `UNAVAILABLE`. Neither reaches the model.
+5. **Interpret** — matching bytes are classified against a frozen criterion and finite outcome set with human-readable definitions but no payout amounts.
+6. **Receipt** — the contract records evidence and publisher-document URLs and digests, version, observation window, phase, round, timestamp, and result.
+7. **Settle** — contract code applies `funded × payout_bps / 10,000`.
 
 TLS authenticates the committed publisher origin at retrieval time; the frozen digest authenticates the exact content version selected before escrow. The receipt makes the bytes that drove settlement independently auditable.
 
@@ -23,7 +24,7 @@ TLS authenticates the committed publisher origin at retrieval time; the frozen d
 
 `SCHEDULED → CLAIM_LODGED → EVIDENCE_CHECK → CHALLENGE_WINDOW → PAID | RELEASED`
 
-A failed retrieval remains retryable inside a bounded review window. Either financial party may post the exact 5% bond to request a second review. A successful challenge returns the bond; an unsuccessful challenge awards it to the counterparty. Expired unopened or unresolved rails can be recovered permissionlessly.
+A failed retrieval remains retryable inside a bounded review window. Either financial party may post the exact 5% bond and a reason to request reconsideration of the same frozen evidence. A successful challenge returns the bond; an unsuccessful challenge awards it to the counterparty. Expired draft, unreviewed, reviewing, and disputed rails all have permissionless recovery paths; dispute expiry preserves the provisional settlement and awards the bond to the counterparty.
 
 ## Repository
 
@@ -61,9 +62,9 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-Studionet contract: `0xc323678aF48503F3CF3F99C0Ba58dc90A68Cf78c` (chain ID `61999`). The deployment and three complete finalized lifecycle records are stored in `artifacts/`.
+Studionet contract: `0x6ccB0124DEF180d34E6830ebCDC1450F61b4b365` (chain ID `61999`). The immutable deployment record and funded lifecycle evidence are stored in `artifacts/`.
 
-The release runner in `scripts/live_e2e.mjs` executes a funded creation, named-recipient claim, independent evidence review, bonded second review, deterministic settlement, receipt verification, and accounting verification against Studionet. It writes the complete transaction and state record to `artifacts/live-e2e.studionet.json`.
+The release runner in `scripts/live_e2e.mjs` executes funded creation, named-recipient claim, independent evidence review, reasoned bonded reconsideration, deterministic settlement, receipt verification, and accounting verification against Studionet. Scenario 4 proves a `BREACHED` result, 0.01 GEN recipient payout, successful final execution, and a 0.0095 GEN net recipient balance increase after bond disposition.
 
 ## Safety properties
 

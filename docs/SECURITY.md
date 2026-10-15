@@ -2,7 +2,7 @@
 
 ## Evidence integrity
 
-The contract rejects non-HTTPS evidence, mismatched publisher origins, malformed digests, invalid observation windows, and mutable policy after creation. Every review compares the retrieved raw bytes to the precommitted digest before any semantic prompt. Receipts expose expected and observed digests for audit.
+The contract uses a standards-compliant URL parser and rejects non-HTTPS, credentials, fragments, non-default ports, ambiguous authorities, mismatched canonical publisher origins, malformed digests, invalid observation windows, and mutable policy after creation. Every validator also retrieves the `did:web` document, verifies its identifier and same-origin linked service, and records its digest. Every review compares the retrieved raw bytes to the precommitted digest before any semantic prompt. Receipts expose publisher-document and evidence digests for audit.
 
 ## Prompt injection
 
@@ -10,7 +10,7 @@ Evidence is delimited and declared inert. It cannot add authorities, change crit
 
 ## Funds and liveness
 
-Funding and challenge bonds must be exact. Accounting is updated before transfers. Retry spacing and review windows are finite; permissionless recovery closes expired flows. Terminal rails cannot be settled twice.
+Funding and challenge bonds must be exact. Accounting is updated before transfers, and a failed native transfer reverts the on-chain transaction. Retry spacing, initial review windows, and dispute windows are finite; permissionless recovery closes every nonterminal flow. Terminal rails cannot be settled twice.
 
 ## Residual assumptions
 

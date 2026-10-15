@@ -74,3 +74,11 @@ def test_exact_funding_and_bounded_reads(direct_vm,direct_deploy,direct_alice,di
  c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);assert c.accounting()["funded"]==20000 and len(c.list_rails(0,25))==1
  with pytest.raises(AssertionError):c.list_rails(0,26)
 
+@pytest.mark.direct
+def test_failed_native_transfer_reverts_settlement(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(1);mocks(direct_vm,"BREACH");direct_vm.sender=addr(c,direct_charlie);c.review_claim(1);warp(direct_vm,"2030-02-03T00:00:01Z")
+ def fail_transfer(vm,request):
+  if "EthSend" in request:raise RuntimeError("simulated native transfer failure")
+ direct_vm._gl_call_hook=fail_transfer
+ with pytest.raises(RuntimeError,match="native transfer failure"):c.finalize(1)
+

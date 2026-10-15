@@ -3,9 +3,9 @@
   "chainId": 61999,
   "source": "contracts/proofrail.py",
   "deployer": "0x9e75694e204B03997D55B5A664a924aDaE3F43D1",
-  "startedAt": "2026-10-15T20:43:26.850Z",
-  "finalizedAt": "2026-10-15T20:44:02.963Z",
-  "txHash": "0x44581e5cb7c3e7bc553d0ff389ac9fee702b7ac83d6bf5ec5f765e41e2b5fe37",
-  "contractAddress": "0xc323678aF48503F3CF3F99C0Ba58dc90A68Cf78c",
+  "startedAt": "2026-10-15T21:31:02.348Z",
+  "finalizedAt": "2026-10-15T21:31:43.354Z",
+  "txHash": "0x118fefa474cea790cf642a4eb5ed0ca943eac2d0d0e87938f416cc22bd791afa",
+  "contractAddress": "0x6ccB0124DEF180d34E6830ebCDC1450F61b4b365",
   "consensus": "MAJORITY_AGREE"
 }

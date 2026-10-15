@@ -9,6 +9,12 @@ High-risk successful paths are executable tests:
 - unavailable dispute retrieval → bond preserved in dispute state → bounded retry → deterministic settlement;
 - changed evidence bytes → `TAMPERED` receipt → classifier bypass and retryable state;
 - publisher-origin mismatch rejected at creation;
+- credential-bearing and ambiguous URL authorities rejected;
+- incomplete observation intervals rejected;
+- expired unreviewed claims recovered permissionlessly;
+- permanently unavailable disputes settled at their deadline with deterministic bond disposition;
+- arbitrary frozen outcome codes interpreted from their registered descriptions;
+- failed native transfers surfaced as transaction failures;
 - exact accounting and bounded reads.
 
 Run:
@@ -22,5 +28,5 @@ npm run build --prefix apps/web
 
 Direct Mode proves storage/runtime integration and the complete nondeterministic lifecycle with controlled validator inputs. A production release should additionally deploy to a local multi-validator Studio network, then Studionet, and archive transaction receipts for creation, claim, review, challenge, and settlement.
 
-`npm run e2e --prefix scripts` performs that Studionet lifecycle against the public content-addressed release attestation. It fails unless both retrieval receipts reproduce the frozen digest and the rail reaches a terminal state.
+`PROOFRAIL_E2E_SCENARIO=4 npm run e2e --prefix scripts` performs the funded breach lifecycle against the public content-addressed v2 release attestation. It fails unless both retrieval receipts reproduce the frozen digest, the agreed code is `BREACHED`, the full principal is paid, every transaction finalizes with majority agreement, and the named recipient's balance increases.
 
