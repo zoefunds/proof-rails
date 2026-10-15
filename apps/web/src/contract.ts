@@ -1,7 +1,7 @@
 import {createClient} from "genlayer-js";
 import {studionet} from "genlayer-js/chains";
 import {CalldataAddress,TransactionStatus} from "genlayer-js/types";
-export const CONTRACT=(import.meta.env.VITE_PROOFRAIL_CONTRACT_ADDRESS||"") as `0x${string}`;
+export const CONTRACT=(import.meta.env.VITE_PROOFRAIL_CONTRACT_ADDRESS||"0xc323678aF48503F3CF3F99C0Ba58dc90A68Cf78c") as `0x${string}`;
 export const EXPLORER="https://explorer-studio.genlayer.com";const reads=createClient({chain:studionet});let writes:any=null;
 export type Rail={id:number;issuer:unknown;recipient:unknown;name:string;criterion:string;evidence_json:string;outcomes_json:string;funded:unknown;locked:unknown;paid:unknown;returned:unknown;status:number;opens_at:unknown;closes_at:unknown;claimed_at:unknown;attempts:number;last_attempt:unknown;provisional_code:string;provisional_amount:unknown;challenge_until:unknown;challenger:unknown;bond:unknown;final_code:string;final_bps:number;terminal_reason:string};
 export function addressText(value:unknown){if(typeof value==="string")return value;const bytes=value&&typeof value==="object"&&"bytes" in value?(value as any).bytes:value;if(bytes instanceof Uint8Array)return `0x${Array.from(bytes,x=>x.toString(16).padStart(2,"0")).join("")}`;return String(value??"")}

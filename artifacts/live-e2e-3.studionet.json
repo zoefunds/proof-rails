@@ -1,0 +1,159 @@
+{
+  "schema": "proofrail.live-verification/v1",
+  "scenario": 3,
+  "scenarioName": "Auditable security and build verification",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0xc323678aF48503F3CF3F99C0Ba58dc90A68Cf78c",
+  "railId": 3,
+  "issuer": "0x86640E27BB18E467aE2193A2FF680375653c69FC",
+  "recipient": "0x53705Bb2B34ff7CEcC93F79a1D91aDa1185D87Dd",
+  "evidence": {
+    "url": "https://proof-rails.vercel.app/evidence/02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a.json",
+    "digest": "02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a",
+    "version": "proofrail-release/1.0.0",
+    "publisher": "did:web:proof-rails.vercel.app"
+  },
+  "criterion": "Classify FULFILLED only when the immutable release record reports zero production dependency vulnerabilities, all six contract Direct Mode tests passing with zero failures, and both TypeScript and the production build passing. Otherwise classify BREACHED.",
+  "outcomes": [
+    {
+      "code": "FULFILLED",
+      "description": "The scenario-specific criterion is fully supported by the committed release artifact.",
+      "payout_bps": 0
+    },
+    {
+      "code": "BREACHED",
+      "description": "The scenario-specific criterion is not fully supported by the committed release artifact.",
+      "payout_bps": 10000
+    }
+  ],
+  "transactions": [
+    {
+      "label": "open content-addressed production rail",
+      "hash": "0x35d3b19f780348ce4351342941e34a0425fd7d902c209526ee29a9542560f1d8",
+      "consensus": "MAJORITY_AGREE",
+      "finalizedAt": "2026-10-15T20:53:10.224Z"
+    },
+    {
+      "label": "lodge named-recipient claim",
+      "hash": "0x3eebcaf7ab3d584872c2a31f7090e457538e68280f9d3e06f595cf1be4ef5ea3",
+      "consensus": "MAJORITY_AGREE",
+      "finalizedAt": "2026-10-15T20:53:52.602Z"
+    },
+    {
+      "label": "independent validator evidence review",
+      "hash": "0x1106577567f2a1da365ebea7d7dfd8fd04a34b211ba0006e6cfcd4301e30d27c",
+      "consensus": "MAJORITY_AGREE",
+      "finalizedAt": "2026-10-15T20:54:37.662Z"
+    },
+    {
+      "label": "bonded second review",
+      "hash": "0x8d40203ee1ded491300b41d1c6f4ba6088af1a3dc2a088cb593d10be08df598b",
+      "consensus": "MAJORITY_AGREE",
+      "finalizedAt": "2026-10-15T20:55:13.950Z"
+    },
+    {
+      "label": "resolve bonded review",
+      "hash": "0x3529395fca66dc56da01a0ec8a9f20de1016ec6b015914f72d41bb081ecfcf1a",
+      "consensus": "MAJORITY_AGREE",
+      "finalizedAt": "2026-10-15T20:55:59.916Z"
+    }
+  ],
+  "provisional": {
+    "attempts": 1,
+    "bond": 0,
+    "challenge_until": 1792270433,
+    "challenger": "0x0000000000000000000000000000000000000000",
+    "claimed_at": 1792097593,
+    "closes_at": 1792101146,
+    "criterion": "Classify FULFILLED only when the immutable release record reports zero production dependency vulnerabilities, all six contract Direct Mode tests passing with zero failures, and both TypeScript and the production build passing. Otherwise classify BREACHED.",
+    "evidence_json": "{\"url\":\"https://proof-rails.vercel.app/evidence/02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a.json\",\"publisher_id\":\"did:web:proof-rails.vercel.app\",\"publisher_domain\":\"proof-rails.vercel.app\",\"content_version\":\"proofrail-release/1.0.0\",\"content_sha256\":\"02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a\",\"observed_from\":1792095746,\"observed_until\":1792101146}",
+    "final_bps": 0,
+    "final_code": "",
+    "funded": "10000000000000000",
+    "issuer": "0x86640e27bb18e467ae2193a2ff680375653c69fc",
+    "last_attempt": 1792097633,
+    "locked": "10000000000000000",
+    "name": "Auditable security and build verification",
+    "opens_at": 1792095746,
+    "outcomes_json": "[{\"code\":\"FULFILLED\",\"description\":\"The scenario-specific criterion is fully supported by the committed release artifact.\",\"payout_bps\":0},{\"code\":\"BREACHED\",\"description\":\"The scenario-specific criterion is not fully supported by the committed release artifact.\",\"payout_bps\":10000}]",
+    "paid": 0,
+    "provisional_amount": 0,
+    "provisional_code": "FULFILLED",
+    "recipient": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
+    "returned": 0,
+    "status": 3,
+    "terminal_reason": ""
+  },
+  "final": {
+    "attempts": 1,
+    "bond": 0,
+    "challenge_until": 1792270433,
+    "challenger": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
+    "claimed_at": 1792097593,
+    "closes_at": 1792101146,
+    "criterion": "Classify FULFILLED only when the immutable release record reports zero production dependency vulnerabilities, all six contract Direct Mode tests passing with zero failures, and both TypeScript and the production build passing. Otherwise classify BREACHED.",
+    "evidence_json": "{\"url\":\"https://proof-rails.vercel.app/evidence/02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a.json\",\"publisher_id\":\"did:web:proof-rails.vercel.app\",\"publisher_domain\":\"proof-rails.vercel.app\",\"content_version\":\"proofrail-release/1.0.0\",\"content_sha256\":\"02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a\",\"observed_from\":1792095746,\"observed_until\":1792101146}",
+    "final_bps": 0,
+    "final_code": "FULFILLED",
+    "funded": "10000000000000000",
+    "issuer": "0x86640e27bb18e467ae2193a2ff680375653c69fc",
+    "last_attempt": 1792097715,
+    "locked": 0,
+    "name": "Auditable security and build verification",
+    "opens_at": 1792095746,
+    "outcomes_json": "[{\"code\":\"FULFILLED\",\"description\":\"The scenario-specific criterion is fully supported by the committed release artifact.\",\"payout_bps\":0},{\"code\":\"BREACHED\",\"description\":\"The scenario-specific criterion is not fully supported by the committed release artifact.\",\"payout_bps\":10000}]",
+    "paid": 0,
+    "provisional_amount": 0,
+    "provisional_code": "FULFILLED",
+    "recipient": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
+    "returned": "10000000000000000",
+    "status": 6,
+    "terminal_reason": "DISPUTE_RESOLVED"
+  },
+  "primaryReceipt": {
+    "content_version": "proofrail-release/1.0.0",
+    "expected_digest": "02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a",
+    "observation_window": "1792095746..1792101146",
+    "observed_digest": "02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a",
+    "outcome_code": "FULFILLED",
+    "phase": "PRIMARY",
+    "publisher_id": "did:web:proof-rails.vercel.app",
+    "rail_id": 3,
+    "result": "VERIFIED",
+    "retrieved_at": 1792097633,
+    "round": 1,
+    "source_url": "https://proof-rails.vercel.app/evidence/02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a.json"
+  },
+  "disputeReceipt": {
+    "content_version": "proofrail-release/1.0.0",
+    "expected_digest": "02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a",
+    "observation_window": "1792095746..1792101146",
+    "observed_digest": "02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a",
+    "outcome_code": "FULFILLED",
+    "phase": "DISPUTE",
+    "publisher_id": "did:web:proof-rails.vercel.app",
+    "rail_id": 3,
+    "result": "VERIFIED",
+    "retrieved_at": 1792097715,
+    "round": 1,
+    "source_url": "https://proof-rails.vercel.app/evidence/02add933f6b661b0812df0991073d636d34f1fd7d8177c59b1bd868e74b1b58a.json"
+  },
+  "accounting": {
+    "before": {
+      "bonds_locked": 0,
+      "funded": "20000000000000000",
+      "locked": 0,
+      "paid": 0,
+      "returned": "20000000000000000"
+    },
+    "after": {
+      "bonds_locked": 0,
+      "funded": "30000000000000000",
+      "locked": 0,
+      "paid": 0,
+      "returned": "30000000000000000"
+    }
+  },
+  "verifiedAt": "2026-10-15T20:56:05.231Z"
+}

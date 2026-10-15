@@ -9,12 +9,12 @@ import {verifiedReleaseForm} from "./autofill";
 const pages=[{label:"Control room",path:"/",icon:Activity},{label:"Rails",path:"/rails",icon:CircleDollarSign},{label:"Attestations",path:"/attestations",icon:Fingerprint},{label:"Activity",path:"/activity",icon:Timer},{label:"Protocol",path:"/protocol",icon:BookOpen}];
 const blank={name:"",recipient:"",criterion:"",amount:"",url:"",domain:"",publisher:"",version:"",digest:"",from:"",until:""};
 const liveTransactions=[
-  ["Contract deployed","0x8b2d09b20d3bfa709e95952d365d8873208e240d4a9ee6a259e530222d0ff084","ProofRail v1 became immutable on Studionet"],
-  ["Rail opened","0x0b82d3936ea11b5e403e53cc021029963c3a0d7abe90b416515e83aefcbc5137","0.01 GEN locked against content-addressed evidence"],
-  ["Claim lodged","0x1a9757cee106b8cee0b7337bd99028c27f68d315cd1809e14df96efa2a4ace58","Beneficiary requested independent review"],
-  ["Primary review","0x51953ca63f5297d0647569652e0061df9d983db076cdc15648b88d446d610e3f","Validators returned a provisional outcome"],
-  ["Challenge bonded","0xe02b6004348962f02685f6e3216e2e97a86ad57fa0a5df439dc0d7d778302b26","A 5% bond opened the second review"],
-  ["Dispute resolved","0xd9dc4ac083dd715a52eb7a633041dba3b86eb4676e55582ed7f62defb606b60e","FULFILLED finalized with matching receipt digests"],
+  ["Contract redeployed","0x44581e5cb7c3e7bc553d0ff389ac9fee702b7ac83d6bf5ec5f765e41e2b5fe37","Corrected ProofRail backend became immutable on Studionet"],
+  ["Quality-gate rail opened","0x0070c8d846e7dfda4f74043334d2c193160f3c005f7751ef02457f4ffde5dc26","0.01 GEN locked against the production release record"],
+  ["Named claim lodged","0xb35a3f9d1d8c59327c518bdbae71d5c080edee016fa39de8e2fd4443b5361e02","The configured beneficiary requested independent review"],
+  ["Evidence review finalized","0x9f5b03e428d73a6b5d57616a9433400d30aec806d4af9f157a98c90a0033e27a","Validators authenticated exact bytes and classified FULFILLED"],
+  ["Second review bonded","0x8db518283d28e166115d12ab11ec6d061025aab461f4f666ef78c62eb7129908","A 5% bond exercised the accountable challenge path"],
+  ["Quality gate resolved","0x1318d3f027c8de991e9ba7ee1551044df3d6dac890cf4120f3c94b3e206936df","FULFILLED finalized with matching primary and dispute digests"],
 ] as const;
 function evidence(r:Rail){try{return JSON.parse(r.evidence_json)}catch{return {}}}
 function PageHead({kicker,title,copy}:{kicker:string,title:string,copy:string}){return <section className="page-head"><span>{kicker}</span><h1>{title}</h1><p>{copy}</p></section>}

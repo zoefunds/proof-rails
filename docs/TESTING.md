@@ -6,6 +6,7 @@ High-risk successful paths are executable tests:
 
 - claim → matching content digest → semantic breach → provisional result → deterministic payout;
 - claim → provisional pass → bonded recipient dispute → second review → higher payout and bond return;
+- unavailable dispute retrieval → bond preserved in dispute state → bounded retry → deterministic settlement;
 - changed evidence bytes → `TAMPERED` receipt → classifier bypass and retryable state;
 - publisher-origin mismatch rejected at creation;
 - exact accounting and bounded reads.

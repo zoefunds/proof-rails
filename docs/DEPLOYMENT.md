@@ -4,11 +4,11 @@
 
 - Console: `https://proof-rails.vercel.app`
 - Network: GenLayer Studionet (`61999`)
-- Contract: `0x55E598C3AAefD6C3610E82289276cFEcB6499Ef9`
-- Deployment transaction: `0x8b2d09b20d3bfa709e95952d365d8873208e240d4a9ee6a259e530222d0ff084`
-- Live verification rail: `1`
+- Contract: `0xc323678aF48503F3CF3F99C0Ba58dc90A68Cf78c`
+- Deployment transaction: `0x44581e5cb7c3e7bc553d0ff389ac9fee702b7ac83d6bf5ec5f765e41e2b5fe37`
+- Live verification rails: `1`, `2`, and `3`
 - Deployment record: `artifacts/deployment.studionet.json`
-- Lifecycle record: `artifacts/live-e2e.studionet.json`
+- Lifecycle records: `artifacts/live-e2e-1.studionet.json`, `artifacts/live-e2e-2.studionet.json`, and `artifacts/live-e2e-3.studionet.json`
 
 ## Release procedure
 

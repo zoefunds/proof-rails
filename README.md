@@ -61,7 +61,7 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-Studionet contract: `0x55E598C3AAefD6C3610E82289276cFEcB6499Ef9` (chain ID `61999`). The deployment and complete finalized lifecycle records are stored in `artifacts/`.
+Studionet contract: `0xc323678aF48503F3CF3F99C0Ba58dc90A68Cf78c` (chain ID `61999`). The deployment and three complete finalized lifecycle records are stored in `artifacts/`.
 
 The release runner in `scripts/live_e2e.mjs` executes a funded creation, named-recipient claim, independent evidence review, bonded second review, deterministic settlement, receipt verification, and accounting verification against Studionet. It writes the complete transaction and state record to `artifacts/live-e2e.studionet.json`.
 

@@ -22,6 +22,11 @@ def test_successful_challenge_resolution_direct(direct_vm,direct_deploy,direct_a
  c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(1);mocks(direct_vm,"PASS");direct_vm.sender=addr(c,direct_charlie);c.review_claim(1);direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1);direct_vm.clear_mocks();mocks(direct_vm,"BREACH");direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.status==5 and r.final_code=="BREACH";assert c.accounting()["bonds_locked"]==0
 
 @pytest.mark.direct
+def test_unavailable_dispute_remains_retryable_and_preserves_bond(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(1);mocks(direct_vm,"PASS");direct_vm.sender=addr(c,direct_charlie);c.review_claim(1);direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1);direct_vm.clear_mocks();direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.status==4 and r.bond==1000 and c.accounting()["bonds_locked"]==1000
+ warp(direct_vm,"2030-02-01T01:00:01Z");mocks(direct_vm,"BREACH");c.review_dispute(1);r=c.get_rail(1);assert r.status==5 and r.final_code=="BREACH" and r.bond==0;assert c.accounting()["bonds_locked"]==0
+
+@pytest.mark.direct
 def test_tampered_bytes_never_reach_classifier(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
  c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(1);direct_vm.mock_web("status.acme.test",{"status":200,"body":"changed"});direct_vm.sender=addr(c,direct_charlie);c.review_claim(1);receipt=c.get_receipt(1,False,1);assert receipt.result=="TAMPERED" and receipt.expected_digest!=receipt.observed_digest;assert c.get_rail(1).status==2
 

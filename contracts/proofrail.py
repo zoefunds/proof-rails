@@ -81,7 +81,7 @@ class ProofRail(gl.Contract):
   r=self._get(i); result=json.loads(self._review(r)); spec=json.loads(r.evidence_json); round=u8(r.attempts+1)
   self.receipts[self._receipt_key(i,dispute,round)]=Receipt(i,"DISPUTE" if dispute else "PRIMARY",round,self._now(),result["result"],result["code"],spec["url"],spec["publisher_id"],spec["content_version"],spec["content_sha256"],result["digest"],str(spec["observed_from"])+".."+str(spec["observed_until"]))
   r.attempts=round;r.last_attempt=self._now()
-  if result["result"]!=VERIFIED:r.status=u8(REVIEWING);self.rails[i]=r;return
+  if result["result"]!=VERIFIED:r.status=u8(DISPUTED if dispute else REVIEWING);self.rails[i]=r;return
   code=result["code"]
   if dispute:
    amount=r.funded*u256(self._bps(r,code))//u256(10000); success=(r.challenger==r.recipient and amount>r.provisional_amount) or (r.challenger==r.issuer and amount<r.provisional_amount); bond=r.bond;r.bond=u256(0);self.bonds_locked-=bond;self.rails[i]=r;self._settle(i,code,"DISPUTE_RESOLVED");self._pay(r.challenger if success else (r.issuer if r.challenger==r.recipient else r.recipient),bond);return
@@ -106,7 +106,7 @@ class ProofRail(gl.Contract):
  def dispute(self,i:u256):
   r=self._get(i);bond=r.funded*BOND_BPS//u256(10000);assert r.status==u8(PROVISIONAL) and self._now()<r.challenge_until and gl.message.sender_address in (r.issuer,r.recipient) and gl.message.value==bond;r.status=u8(DISPUTED);r.challenger=gl.message.sender_address;r.bond=bond;r.attempts=u8(0);self.bonds_locked+=bond;self.rails[i]=r
  @gl.public.write
- def review_dispute(self,i:u256):r=self._get(i);assert r.status==u8(DISPUTED);self._apply_review(i,True)
+ def review_dispute(self,i:u256):r=self._get(i);assert r.status==u8(DISPUTED) and (r.attempts==u8(0) or self._now()>=r.last_attempt+RETRY_INTERVAL);self._apply_review(i,True)
  @gl.public.write
  def finalize(self,i:u256):r=self._get(i);assert r.status==u8(PROVISIONAL) and self._now()>=r.challenge_until;self._settle(i,r.provisional_code,"UNCHALLENGED")
  @gl.public.write
