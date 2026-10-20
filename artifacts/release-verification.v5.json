@@ -13,7 +13,7 @@
     "artifacts/evidence-policy.v5.json": "141dd62412c7ca8ed417adca44e99d0031f1640d007ac2de6b75e8c8db3256dd",
     "artifacts/counterevidence.v5.json": "413e239136e3df30cdda9732636e5ab5b23b9552db0a90aba877e2b9f95e72e1",
     "artifacts/authority-governance.v1.json": "a3533d04a177814a476598dda58be4d9663a5da1593410ca93454912d833932a",
-    "artifacts/ci-blocker.v1.json": "a162bcc6f5986e9df97c13fccb45177218356efbae6e09c7c1ae6a470d15679a",
+    "artifacts/ci-blocker.v1.json": "82411ad767f63723b9b56ba1cd55bd1b108c2a64e6b9a3cf6e787422dbcfd23d",
     "apps/web/src/contract.ts": "e01fabc09f52747930ba15bb028e46bcd5a45e6accffeda696a78c82204da60a"
   },
   "verifiedResults": {

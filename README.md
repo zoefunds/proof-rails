@@ -68,6 +68,8 @@ Studionet v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` (chain ID `6
 
 `artifacts/release-verification.v5.json` binds the reviewed implementation commit to the exact contract, deployment, funded proof, policy, counterevidence, and frontend configuration bytes. `node scripts/verify_release_artifact.mjs` rejects any drift.
 
+The organizational-admission policy and audited CI-blocker evidence were added in commit `f0aa0be9c98c3b9e36871c992e71307bc71d9ca5`. The five hosted fixtures remain explicitly demonstration-only; production organizational independence requires separately controlled publishers holding admissible third-party credentials. This is presently an onboarding/release gate, not on-chain credential verification; the deployed contract enforces technical identity uniqueness only.
+
 Local release verification is green. The current GitHub Actions run did not start because GitHub reports an account-level billing lock; see [CI attestation](docs/CI_ATTESTATION.md) for the zero-step job evidence and exact reviewer decision rule. This repository does not claim a passing hosted run until GitHub executes the jobs.
 
 ## Safety properties

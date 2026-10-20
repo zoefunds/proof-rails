@@ -7,6 +7,7 @@
 - Local and deployed source SHA-256: `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`
 - Funded proof: `artifacts/live-e2e-4.studionet.json`
 - Release manifest: `artifacts/release-verification.v5.json` (implementation commit `985f591710134a4222d2e234120f8ebd7a34f3d2`)
+- Authority/CI evidence commit: `f0aa0be9c98c3b9e36871c992e71307bc71d9ca5`
 - Production browser: `https://proof-rails.vercel.app`
 
 Rail 1 locked 0.01 GEN against a frozen 99.90% uptime threshold for a one-hour UTC period. The two primary publishers misleadingly asserted `BREACHED`, but their authenticated records contained only one and two unavailable seconds, so validators calculated `FULFILLED`. A 5% recipient bond opened the separate three-source counter panel. Those publishers misleadingly asserted `FULFILLED`, while their records contained 20, 24, and 18 unavailable seconds, so validators calculated `BREACHED`. The recipient received exactly 0.01 GEN and principal/bond accounting returned to zero.
