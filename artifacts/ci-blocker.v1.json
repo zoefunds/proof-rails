@@ -1,0 +1,25 @@
+{
+  "schema": "proofrail.ci-blocker/v1",
+  "repository": "https://github.com/zoefunds/proof-rails",
+  "releaseCommit": "0ea21536d505cb2601a9f7f1e6099ab2ced0f0b0",
+  "workflowRun": "https://github.com/zoefunds/proof-rails/actions/runs/39463848784",
+  "workflow": "verify",
+  "observedAt": "2026-10-20T17:11:15Z",
+  "conclusion": "failure",
+  "executionClassification": "RUNNER_STARTUP_BLOCKED",
+  "jobs": [
+    {
+      "name": "contract",
+      "jobId": 118769938750,
+      "executedSteps": 0
+    },
+    {
+      "name": "web",
+      "jobId": 118769939057,
+      "executedSteps": 0
+    }
+  ],
+  "githubAnnotation": "The job was not started because your account is locked due to a billing issue.",
+  "interpretation": "No repository command failed. No hosted verification command executed. This is not a green CI result and is not represented as one.",
+  "remediation": "The repository owner must resolve the GitHub billing lock and rerun this exact workflow at the release commit. Only a completed run with green contract and web jobs satisfies independent hosted CI."
+}

@@ -18,6 +18,7 @@ npm run typecheck --prefix apps/web
 npm run build --prefix apps/web
 node scripts/verify_live_artifact.mjs
 node scripts/verify_release_artifact.mjs
+node scripts/verify_review_evidence.mjs
 ```
 
 The current v5 local verification produces:

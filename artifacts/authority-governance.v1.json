@@ -1,0 +1,43 @@
+{
+  "schema": "proofrail.authority-governance/v1",
+  "profile": "W3C-VC-2.0+GLEIF-vLEI",
+  "admissionMode": "TRUSTED_ISSUER_CREDENTIAL",
+  "minimumIndependentPrimaryOperators": 2,
+  "minimumIndependentCounterOperators": 3,
+  "requirements": {
+    "selfIssuedCredentialsAllowed": false,
+    "credentialProofRequired": true,
+    "credentialStatusRequired": true,
+    "expiryCheckRequired": true,
+    "uniqueLegalEntityId": true,
+    "uniqueOperatorId": true,
+    "uniquePublisherDid": true,
+    "uniqueRegistrableDomain": true,
+    "uniqueInfrastructureControl": true,
+    "conflictDisclosureRequired": true,
+    "unverifiableFailsClosed": true
+  },
+  "preferredOrganizationalCredential": "GLEIF vLEI Legal Entity Credential",
+  "standards": [
+    "https://www.w3.org/TR/vc-data-model-2.0/",
+    "https://www.w3.org/TR/vc-data-integrity/",
+    "https://www.w3.org/TR/vc-bitstring-status-list/",
+    "https://www.w3.org/TR/did-core/",
+    "https://www.gleif.org/en/organizational-identity/become-a-vlei-issuer-qvi/vlei-ecosystem-governance-framework"
+  ],
+  "currentDemonstration": {
+    "classification": "DEMONSTRATION_ONLY",
+    "organizationalIndependenceProven": false,
+    "reason": "All five fixture publishers are controlled through one deployment account.",
+    "claimsPermitted": [
+      "technical identity uniqueness",
+      "authenticated retrieval",
+      "separate primary and counter panels",
+      "consensus-changing payout"
+    ],
+    "claimsProhibited": [
+      "independent organizational control",
+      "production authority admission"
+    ]
+  }
+}

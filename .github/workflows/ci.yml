@@ -23,3 +23,4 @@ jobs:
       - run: npm audit --prefix apps/web --omit=dev --audit-level=high
       - run: node scripts/verify_live_artifact.mjs
       - run: node scripts/verify_release_artifact.mjs
+      - run: node scripts/verify_review_evidence.mjs

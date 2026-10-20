@@ -37,5 +37,5 @@ The browser reads rails with paginated contract methods. Transaction submission 
 - The contract alone computes transfers.
 - The interface is an untrusted transaction composer and read client.
 
-Distinct identifiers are a technical anti-reuse rule, not proof that publishers are unrelated legal or operational entities. The current funded demonstration uses separately addressed publisher deployments controlled by one project operator. A production trust claim therefore requires independently operated publisher domains or a separately governed authority registry; the demonstration does not relabel its five origins as organizationally independent.
+Distinct identifiers are a technical anti-reuse rule, not proof that publishers are unrelated legal or operational entities. The current funded demonstration uses separately addressed publisher deployments controlled by one project operator. Production admission therefore follows [Publisher authority governance](AUTHORITY_GOVERNANCE.md): independently issued W3C organizational credentials, active credential status, unique legal-entity/operator/infrastructure control, and conflict disclosure. The demonstration does not relabel its five origins as organizationally independent.
 

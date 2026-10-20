@@ -68,7 +68,7 @@ Studionet v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` (chain ID `6
 
 `artifacts/release-verification.v5.json` binds the reviewed implementation commit to the exact contract, deployment, funded proof, policy, counterevidence, and frontend configuration bytes. `node scripts/verify_release_artifact.mjs` rejects any drift.
 
-Local release verification is green. The current GitHub Actions run did not start because GitHub reports an account-level billing lock; see [Deployment](docs/DEPLOYMENT.md#ci-status) for the exact status. This repository does not claim a passing hosted run until GitHub executes the jobs.
+Local release verification is green. The current GitHub Actions run did not start because GitHub reports an account-level billing lock; see [CI attestation](docs/CI_ATTESTATION.md) for the zero-step job evidence and exact reviewer decision rule. This repository does not claim a passing hosted run until GitHub executes the jobs.
 
 ## Safety properties
 
@@ -82,5 +82,5 @@ Local release verification is green. The current GitHub Actions run did not star
 - an explicit transfer callback guard plus transaction atomicity protects settlement before accounting is committed;
 - bounded list reads and terminal-state replay protection.
 
-See [Architecture](docs/ARCHITECTURE.md), [Security](docs/SECURITY.md), [Testing](docs/TESTING.md), and [Deployment](docs/DEPLOYMENT.md).
+See [Architecture](docs/ARCHITECTURE.md), [Authority governance](docs/AUTHORITY_GOVERNANCE.md), [Security](docs/SECURITY.md), [Testing](docs/TESTING.md), [CI attestation](docs/CI_ATTESTATION.md), and [Deployment](docs/DEPLOYMENT.md).
 
