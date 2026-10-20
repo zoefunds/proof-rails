@@ -22,7 +22,7 @@ for(let index=0;index<roots.length;index++){
   if(!dryRun){await writeFile(new URL(`evidence/${content_sha256}.json`,root),artifact);await writeFile(new URL(".well-known/did.json",root),did);}
   sources.push({source_id,authority_id,url:`https://${domain}/evidence/${content_sha256}.json`,publisher_id:`did:web:${domain}`,publisher_domain:domain,did_sha256,did_http_status:200,service_path:"/evidence/",content_version,content_sha256,evidence_http_status:200,observed_from,observed_until});
 }
-const policy={schema:"proofrail.evidence-policy/v5",observed_from,observed_until,source_rule:{min_sources:2,min_verified:2,min_agreement:2},counter_rule:{min_sources:3,min_verified:3,min_agreement:2},semantic_rule:{kind:"uptime_bps",threshold_bps:9990,fulfilled_code:"FULFILLED",breached_code:"BREACHED"},sources:sources.slice(0,2)};
 const counter={schema:"proofrail.counterevidence/v1",sources:sources.slice(2)};
+const policy={schema:"proofrail.evidence-policy/v6",observed_from,observed_until,source_rule:{min_sources:2,min_verified:2,min_agreement:2},counter_rule:{min_sources:3,min_verified:3,min_agreement:2},semantic_rule:{kind:"uptime_bps",threshold_bps:9990,fulfilled_code:"FULFILLED",breached_code:"BREACHED"},sources:sources.slice(0,2),counterevidence:counter};
 if(!dryRun){await writeFile(new URL(`../artifacts/evidence-policy.${releaseId}.json`,import.meta.url),stable(policy)+"\n");await writeFile(new URL(`../artifacts/counterevidence.${releaseId}.json`,import.meta.url),stable(counter)+"\n");}
 console.log(JSON.stringify({releaseId,dryRun,sources,policy,counter},null,2));

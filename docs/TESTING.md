@@ -2,10 +2,10 @@
 
 The Direct Mode suite deploys the real `ProofRail` contract through `direct_deploy` and mocks the web boundary. Structured numerical classification remains real contract execution; deliberately false model mocks are ignored and cannot override frozen arithmetic.
 
-The hardened-v6 Direct Mode adversarial suite covers:
+The hardened-v6 candidate Direct Mode adversarial suite covers:
 
 - independent-source quorum and verified-versus-asserted provenance;
-- three authenticated counter-sources overturning a two-source provisional verdict and changing payout;
+- three authenticated counter-sources, pinned inside the funded policy, overturning a two-source provisional verdict and changing payout; dispute-time source substitution is rejected;
 - contradictory publisher assertions, false-but-confident model output, ambiguity, prompt injection, missing or inconsistent facts, forged DID, wrong service path, redirects, stale metadata, schema injection, canonical aliases, duplicated identities, conflicting sources, timeout/retry, validator disagreement, transfer rollback, replay, and fund conservation;
 - repeated deterministic validator recomputation agreeing with the captured leader result, plus a funded Studionet lifecycle whose transactions finalized with `MAJORITY_AGREE`.
 
@@ -23,24 +23,26 @@ node scripts/verify_review_evidence.mjs
 node scripts/verify_browser_wallet_evidence.mjs
 ```
 
-The current hardened-v6 local verification produces:
+The last previously recorded hardened-v6 local verification produced:
 
-- Direct Mode: 37 passed;
+- Direct Mode: 38 passed;
 - frontend protocol, autofill, and contract-client tests: 26 passed across three files;
 - TypeScript project build: passed;
 - Vite production build: passed (2,372 modules transformed).
 
-Direct Mode proves storage/runtime integration and validator equivalence with controlled inputs. `artifacts/live-e2e-4.studionet.json` remains historical V5 proof. The current source-matched technical demonstration is `artifacts/live-receipts.hardened-v6.studionet.json`, verified by `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs`: it records a finalized hardened deployment, live 2/2 primary and 3/3 counter provenance, consensus reversal, payout, bond clearing, terminal accounting, and finalized execution evidence. The publisher origins share one Vercel account, so this is not organizational-independence proof.
+The current source tree contains a post-deployment contract change: v6 now freezes the counter panel at funding. This changes contract bytes and invalidates the existing deployed-source match; no claim is made that the deployed contract at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986` has this fix. A fresh deploy, funded receipt, and production injected-wallet lifecycle are required before the stricter candidate can be called deployed evidence.
 
-The lifecycle runner accepts `PROOFRAIL_EVIDENCE_POLICY` and `PROOFRAIL_COUNTEREVIDENCE` overrides, retries within a bounded count and interval, and rejects a run unless both panels meet quorum, every recorded transaction reaches majority consensus with GenVM execution evidence, accounting conserves funds, and the expected payout reaches the recipient. The source-matched current record is `artifacts/live-receipts.hardened-v6.studionet.json`; `artifacts/live-e2e-4.studionet.json` is a historical record and must not be used as proof for the current contract.
+Direct Mode proves storage/runtime integration and validator equivalence with controlled inputs. `artifacts/live-e2e-4.studionet.json` remains historical V5 proof. `artifacts/live-receipts.hardened-v6.studionet.json` is historical deployed-source evidence: it records live 2/2 primary and 3/3 counter provenance, reversal, payout, bond clearing, and terminal accounting, but the counter panel was not frozen at initial funding. It is not evidence for the stricter pre-funded dual-panel invariant. The publisher origins share one Vercel account, so this is not organizational-independence proof.
+
+The lifecycle runner accepts `PROOFRAIL_EVIDENCE_POLICY` and `PROOFRAIL_COUNTEREVIDENCE` overrides, retries within a bounded count and interval, and rejects a run unless both panels are the same pre-funded policy, meet quorum, every recorded transaction reaches majority consensus with GenVM execution evidence, accounting conserves funds, and the expected payout reaches the recipient. Existing source-matched records are historical, not proof for the modified candidate.
 
 The production dependency audit reports zero advisories, and the full dependency graph now also reports zero: Vitest was upgraded to the npm-fixed `5.0.5` release after the earlier report of three Vitest-related advisories (1 moderate, 2 critical). The web suite still passes on Vitest 5.0.5. Current hosted workflows do not start because GitHub marks the account locked for billing; both jobs contain zero executed steps. This is recorded as an external CI blocker, not described as green CI.
 
 The frontend suite separately verifies the 24-hour schedule guard, recovery eligibility for expired draft/claim/dispute states, and the rule that a finalized wallet receipt is successful only when consensus is `MAJORITY_AGREE` and GenVM execution is explicitly `FINISHED_WITH_RETURN` or a finalized transaction provides an execution hash.
 
-The current production browser at `https://proof-rails.vercel.app` is pinned to the hardened-v6 contract. The paid Rail 1 view and five source receipts render assertions, classifications, quorum counts, and hashes. Rail 2 has completed the injected-wallet lifecycle: seven finalized Studionet transactions cover funding, claim, primary review, bonded dispute, counter review, payout, and successful bond return. `node scripts/verify_browser_wallet_evidence.mjs` checks the browser capture against the source-matched funded rail. The browser capture is `artifacts/browser-wallet-hardened-v6.studionet.json`; the publisher receipt record is `artifacts/live-receipts.hardened-v6.studionet.json`. `artifacts/browser-wallet-pr2.studionet.json` is historical V5 only. The contract record and explorer receipts, rather than UI state alone, are authoritative.
+The production browser at `https://proof-rails.vercel.app` previously completed a V6 injected-wallet lifecycle. Seven finalized Studionet transactions cover funding, claim, primary review, bonded dispute, counter review, payout, and bond return. This capture reflects the historical implementation where the counter panel was supplied at dispute time, so it is not proof for the fixed candidate. The account owner supplied its transaction hashes; contract/explorer records remain authoritative. A new browser run must follow redeployment of the candidate.
 
 ### Latest local follow-up (2026-10-20)
 
-After the production-interface wording and browser-status documentation update, `pytest -q` passed (37), `npm test --prefix apps/web` passed (26), TypeScript typecheck passed, and the production web build passed. The live-receipt, source-equivalence, and governance evidence verifiers passed. Registry connectivity was restored for the final check: the publisher verifier passed for all 10 pinned objects (HTTP 200, no redirects, exact URL and SHA-256), and both full and production `npm audit` reported zero vulnerabilities after the Vitest update. Earlier DNS failures were transient and are not the current verification result. These local results do not change hosted CI status: GitHub still did not start either job because of the account billing lock. The subsequent V6 browser rail-2 transactions are recorded separately in `artifacts/browser-wallet-hardened-v6.studionet.json` and verified against the explorer.
+The latest candidate local verification on 2026-10-20 passed `pytest -q` (38), frontend tests (26), TypeScript typecheck, production build (2,372 modules), contract lint (3 checks), browser capture integrity, and CI blocker/governance evidence. The build emits a non-fatal chunk-size advisory. Current candidate source intentionally does not match old deployed receipt hashes. Live publisher retrieval could not be re-run in this turn because DNS was unavailable. GitHub hosted jobs remain blocked at runner startup by billing; no hosted check was triggered.
 

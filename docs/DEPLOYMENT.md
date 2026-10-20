@@ -2,7 +2,7 @@
 
 ## Current hardened-v6 deployment and evidence status — 2026-10-20
 
-> **Scope:** hardened-v6 is source-matched and funded for a technical demonstration. Its five publishers are distinct Vercel origins but share one Vercel account; it must not be represented as a demonstration of independent real-world organizations.
+> **Historical scope:** the deployed hardened-v6 address below has funded technical evidence, but it did not freeze the counter panel at funding time. The current source candidate fixes that gap and is not deployed. Its publisher fixtures share one Vercel account and do not establish real-world organizational independence.
 
 - Hardened-v6 contract: `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`
 - Deployment transaction: `0x99f66b9fa54d4f319a10ee06d416f25b9e1ed9c4a59e984005d63e1e8fcc9c12`
@@ -21,7 +21,7 @@
 - Production browser: [`https://proof-rails.vercel.app`](https://proof-rails.vercel.app) (Vercel project name `nw3`, attached production domain)
 - Current Vercel production deployment: `dpl_HjNW898pzPWkG3EXj85rDeUrGWxY` (`READY`, production alias `https://proof-rails.vercel.app` applied)
 
-The two current V6 records serve complementary purposes. Rail 1 is the source-matched runner record with publisher evidence, execution hashes, and conservation accounting. Rail 2 is the production-browser injected-wallet write-path record with seven finalized transactions and terminal accounting. Historical V5 records remain audit-only. See [evidence-record status](EVIDENCE_STATUS.md) for record scope.
+The two historical V6 records serve complementary purposes. Rail 1 is the source-matched runner record with publisher evidence, execution hashes, and conservation accounting. Rail 2 is the production-browser injected-wallet write-path record with seven finalized transactions and terminal accounting. Neither proves the corrected candidate. Historical V5 records remain audit-only. See [evidence-record status](EVIDENCE_STATUS.md) for record scope.
 
 ## Hardened-v6 deployed-source equivalence
 
@@ -29,7 +29,7 @@ The hardened-v6 deployment transaction finalized with `MAJORITY_AGREE`. Its `con
 
 ## Hardened V6 funded lifecycle — Rail 1
 
-Rail 1 is the current source-matched runner demonstration, funded with `0.01 GEN`. The contract persisted an authenticated 2/2 primary receipt classified `FULFILLED` while both publishers asserted `BREACHED`; the separately authenticated 3/3 counter panel classified `BREACHED` while all three publishers asserted `FULFILLED`. The counter result reversed the provisional verdict and paid the recipient. The successful challenge bond was returned, and the terminal contract accounting records zero principal and bond locked. `artifacts/live-receipts.hardened-v6.studionet.json` contains the deployment/source comparison, policy, source-matched receipt data, finalized transactions, and terminal accounting; `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` verifies the artifact.
+Rail 1 is the historical source-matched runner demonstration, funded with `0.01 GEN`. It records an authenticated 2/2 primary receipt classified `FULFILLED` while both publishers asserted `BREACHED`; the 3/3 counter panel classified `BREACHED` while all three publishers asserted `FULFILLED`. That result reversed the provisional verdict and paid the recipient, returning the successful challenge bond and leaving zero locked. However, that deployed contract received the counter panel at dispute time, not at funding; it cannot evidence the corrected candidate invariant. The old artifact remains immutable historical proof only.
 
 ## Hardened V6 production browser lifecycle — Rail 2
 

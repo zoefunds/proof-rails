@@ -18,7 +18,9 @@ const validateSource=(source,period)=>{
   if(!digest.test(source.did_sha256)||!digest.test(source.content_sha256)||source.did_http_status!==200||source.evidence_http_status!==200)throw Error(`${source.source_id}: digest or pinned HTTP status rejected`);
   if(source.observed_from!==period.observed_from||source.observed_until!==period.observed_until)throw Error(`${source.source_id}: observation period rejected`);
 };
-if(policy.schema!=="proofrail.evidence-policy/v5"||counter.schema!=="proofrail.counterevidence/v1")throw Error("policy schema rejected");
+if(policy.schema!=="proofrail.evidence-policy/v6"||counter.schema!=="proofrail.counterevidence/v1")throw Error("policy schema rejected");
+if(JSON.stringify(policy.counterevidence)!==JSON.stringify(counter))throw Error("separately published counterevidence differs from pre-funded policy commitment");
+if(policy.sources.length<policy.source_rule?.min_sources||counter.sources.length<policy.counter_rule?.min_sources)throw Error("source panel cannot meet its frozen minimum");
 const seen={domains:new Set(),publishers:new Set(),authorities:new Set(),sources:new Set()};
 for(const source of [...policy.sources,...counter.sources]){
   validateSource(source,policy);
@@ -37,4 +39,4 @@ for(const [url,expected,expectedStatus] of checks){
   const bytes=Buffer.from(await response.arrayBuffer()),observed=createHash("sha256").update(bytes).digest("hex");
   if(observed!==expected)throw Error(`${url}: expected ${expected}, observed ${observed}`);
 }
-console.log(`Verified ${checks.length} live objects for ${releaseId||"historical-v5"} with pinned HTTP 200, no redirect, exact final URL, and matching SHA-256.`);
+console.log(`Verified ${checks.length} live objects for ${releaseId||"hardened-v6"} with pre-funded dual panels, pinned HTTP 200, no redirect, exact final URL, and matching SHA-256.`);

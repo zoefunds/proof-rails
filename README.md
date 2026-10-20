@@ -2,7 +2,7 @@
 
 > Evidence-bound settlement for obligations that live outside the chain.
 
-ProofRail is a GenLayer evidence escrow. A funder freezes a measurable criterion, payout table, observation window, and separate primary and counter-source quorums. Every source pins its publisher DID bytes, authorized HTTPS path, version, period, and evidence bytes. Validators evaluate authenticated structured measurements against the frozen numerical rule; deterministic contract logic alone maps consensus to payout.
+ProofRail is a GenLayer evidence escrow. A funder freezes a measurable criterion, payout table, observation window, and both primary and counter-source quorums in one policy before funding. Every source in both panels pins its publisher DID bytes, authorized HTTPS path, expected status, version, period, and evidence digest. Validators evaluate authenticated structured measurements against the frozen numerical rule; deterministic contract logic alone maps consensus to payout.
 
 ## Why GenLayer
 
@@ -62,13 +62,13 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-The current Studionet technical demonstration is hardened-v6 at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986` (chain ID `61999`). It pins DID and evidence HTTP success statuses, hashes retrieved response bytes directly, and has source SHA-256 `4610fccc254641a69eefbf47dc4ad9fd398be79380513de3959a228d8720c22e`.
+The historical Studionet demonstration is deployed at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986` (chain ID `61999`). Its source SHA-256 was `4610fccc254641a69eefbf47dc4ad9fd398be79380513de3959a228d8720c22e`. The current local candidate now requires the complete counter panel to be frozen before funding and is not yet deployed; the old address and receipts must not be represented as containing this fix.
 
-`artifacts/live-receipts.hardened-v6.studionet.json` is the source-matched funded record. It captures live publisher verification, a 2/2 primary `FULFILLED` result despite `BREACHED` publisher assertions, a separate 3/3 counter panel that classified `BREACHED` despite `FULFILLED` publisher assertions, deterministic payout, returned successful-challenger bond, and zero terminal locks. Verify it with `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs`.
+`artifacts/live-receipts.hardened-v6.studionet.json` is a historical source-matched funded record for the deployed implementation. It demonstrates consensus reversal and payout, but its counter panel was committed at dispute time rather than when funding occurred. It is not evidence for the current pre-funded dual-panel invariant.
 
 The five current publisher origins are technically distinct but run from one Vercel account. They are `DEMONSTRATION_ONLY`, not proof of independent organizations. [Authority governance](docs/AUTHORITY_GOVERNANCE.md) defines the separately operated, credentialed publisher admission requirement. Hosted CI is likewise not green: its jobs are blocked before steps begin by a GitHub account billing lock; see [CI attestation](docs/CI_ATTESTATION.md).
 
-The V6 production injected-wallet flow has completed on Studionet for rail 2: issuer funding, recipient claim and primary review, bonded dispute, counter review, 0.01 GEN payout, and 0.0005 GEN successful-challenger bond return. The browser capture is mechanically checked with `node scripts/verify_browser_wallet_evidence.mjs`; it records the finalized browser receipts and terminal accounting in `artifacts/browser-wallet-hardened-v6.studionet.json`. Source-matched DID and evidence receipts are in `artifacts/live-receipts.hardened-v6.studionet.json`. Historical V5 browser artifacts remain audit-only; see [browser walkthrough](docs/BROWSER_WALKTHROUGH.md).
+The V6 production injected-wallet flow has completed on Studionet for rail 2 under that historical implementation: issuer funding, recipient claim and primary review, bonded dispute, counter review, 0.01 GEN payout, and 0.0005 GEN bond return. Its capture remains useful historical evidence and passes structural verification, but cannot prove the candidate's corrected funding-time counter-panel freeze; a new deployment and wallet-signed lifecycle are still required.
 
 Historical V5 artifacts are retained for audit only: `artifacts/live-e2e-4.studionet.json`, `artifacts/browser-wallet-pr2.studionet.json`, and `artifacts/release-verification.v5.json`. They must not be treated as hardened-v6 transaction evidence.
 

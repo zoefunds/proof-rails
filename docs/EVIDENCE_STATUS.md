@@ -2,7 +2,7 @@
 
 ## Current production records
 
-> **Current technical demonstration:** hardened-v6 is deployed at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`. Its source-matched deployed bytes and funded lifecycle are captured in `artifacts/deployment.studionet.json` and `artifacts/live-receipts.hardened-v6.studionet.json`. The five publishers are still controlled through one Vercel account, so this is not organizational-independence evidence.
+> **Historical technical demonstration:** hardened-v6 is deployed at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`. Its source-matched bytes and funded lifecycle are captured in the deployment and receipt artifacts. That implementation supplied counterevidence at dispute time, not funding time. The current local candidate fixes this invariant but has not been redeployed or funded. The five publishers share one Vercel account, so neither old nor candidate fixtures establish organizational independence.
 
 ProofRail v5 has two historical funded-lifecycle records for the retired contract, `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` on GenLayer Studionet (chain ID `61999`):
 
@@ -10,9 +10,9 @@ ProofRail v5 has two historical funded-lifecycle records for the retired contrac
 | --- | --- | --- |
 | `artifacts/live-e2e-4.studionet.json` | Rail 1, source-matched runner | Deployment/source equivalence, finalized GenVM execution hashes, authenticated primary and counter evidence, consensus reversal, payout, bond clearing, and conservation accounting. |
 | `artifacts/browser-wallet-pr2.studionet.json` | PR-2, production Chrome UI | A real injected-wallet browser write lifecycle: fund, claim, primary review, bonded challenge, counter review, and payout. |
-| `artifacts/browser-wallet-hardened-v6.studionet.json` | Rail 2, production Chrome UI | Current V6 injected-wallet lifecycle with seven finalized transaction receipts, counterevidence reversal, principal payout, returned challenge bond, and zero terminal contract balance/locks. |
+| `artifacts/browser-wallet-hardened-v6.studionet.json` | Rail 2, production Chrome UI | Historical V6 injected-wallet lifecycle with seven finalized transaction receipts, counterevidence reversal, principal payout, returned challenge bond, and zero terminal contract balance/locks. The counter panel was supplied at dispute time. |
 
-The two V6 records are complementary: Rail 1 is the source-matched runner record with detailed publisher receipts and execution/accounting evidence; rail 2 establishes the production injected-wallet write path for the same hardened V6 contract. They must not be conflated: each has its own rail ID, transaction hashes, issuer, recipient, and lifecycle. See [Deployment](DEPLOYMENT.md) and [Browser walkthrough](BROWSER_WALKTHROUGH.md) for receipts and scope.
+The two historical V6 records are complementary: Rail 1 is the source-matched runner record with detailed publisher receipts and execution/accounting evidence; rail 2 establishes the production injected-wallet write path for that same historical contract. Neither proves the current candidate's funding-time freeze. They must not be conflated: each has its own rail ID, transaction hashes, issuer, recipient, and lifecycle. See [Deployment](DEPLOYMENT.md) and [Browser walkthrough](BROWSER_WALKTHROUGH.md) for receipts and scope.
 
 ## Preserved historical display-label discrepancy
 

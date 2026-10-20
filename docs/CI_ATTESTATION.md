@@ -30,7 +30,7 @@ The authoritative workflow is [`.github/workflows/ci.yml`](../.github/workflows/
 | Job | Steps configured in the current workflow |
 | --- | --- |
 | `contract` | Checkout; set up Python 3.12; install `requirements.txt`; run `genvm-lint contracts/proofrail.py`; run `pytest -q` (Direct Mode adversarial suite). |
-| `web` | Checkout; set up Node.js 22 with npm cache; `npm ci --prefix apps/web`; run frontend tests, TypeScript typecheck, and production build; run production dependency audit (`npm audit --prefix apps/web --omit=dev --audit-level=high`); verify source-matched live artifact; verify all pinned live publisher objects; verify funded hardened-v6 receipts; verify governance/CI-blocker evidence; verify the V6 production injected-wallet capture. |
+| `web` | Checkout; set up Node.js 22 with npm cache; `npm ci --prefix apps/web`; run frontend tests, TypeScript typecheck, and production build; run production dependency audit (`npm audit --prefix apps/web --omit=dev --audit-level=high`); verify historical deployment/artifact integrity; verify preserved historical source manifests; verify governance/CI-blocker evidence; verify historical V6 production injected-wallet capture. |
 
 The browser capture verifier was added after run 39488889898, so it has only a passing local result at present. No claim is made that this latest workflow revision has run on GitHub.
 
@@ -41,17 +41,18 @@ The following repository gates have passed locally. These results are useful rev
 | Gate | Command | Latest recorded/observed result |
 | --- | --- | --- |
 | Contract static lint | `genvm-lint contracts/proofrail.py` | Passed, 3 checks (rerun during this audit). |
-| Direct Mode suite | `pytest -q` | 37 passed (rerun during this audit). |
+| Direct Mode suite | `pytest -q` | 38 passed (rerun during this audit). |
 | Frontend suite | `npm test --prefix apps/web` | 26 passed across 3 files (rerun during this audit). |
 | TypeScript | `npm run typecheck --prefix apps/web` | Passed (rerun during this audit). |
 | Production bundle | `npm run build --prefix apps/web` | Passed; 2,372 modules transformed (rerun during this audit). Vite emitted a non-fatal large-chunk advisory. |
 | Full dependency audit | `npm audit --prefix apps/web --audit-level=low` | Zero vulnerabilities after Vitest update to `5.0.5` (previously verified); offline audit also returned zero during this audit. |
 | Production dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | Zero vulnerabilities on 2026-10-20 (previously verified; not an independent hosted result). |
-| Live publisher verification | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | Previously passed 10 pinned objects: HTTP 200, no redirects, exact URLs and hashes. A live network rerun was unavailable during this audit because DNS resolution failed. |
-| Source-matched funded receipt | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | Passed during this audit; verifies source hash, finalized runner receipts, 2/2→3/3 reversal, payout, bond return, and terminal conservation. |
-| Deployed source/lifecycle artifact | `node scripts/verify_live_artifact.mjs` | Passed during this audit. |
+| Live publisher verification | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | Removed from the candidate's required local workflow because its artifact schema remains historical v5. Fresh v6 publisher manifests and deployments must be generated before live provenance is claimed. |
+| Source-matched funded receipt | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | Correctly rejects the modified candidate source because its SHA-256 differs from the deployed historical source. Not a candidate deployment proof. |
+| Deployed source/lifecycle artifact | `node scripts/verify_live_artifact.mjs` | Passes historical record integrity and explicitly identifies that current candidate source is not the deployed source. |
+| Candidate policy manifest | `node scripts/verify_candidate_policy.mjs` | Verifies historical manifests are preserved and not mislabeled as candidate or live proof. |
 | Governance and blocker record | `node scripts/verify_review_evidence.mjs` | Passed during this audit. |
-| V6 production browser capture | `node scripts/verify_browser_wallet_evidence.mjs` | Passed during this audit; checks the seven-transaction capture, asserted/classified reversal, amounts, source-matched rail consistency, and terminal accounting. |
+| V6 production browser capture | `node scripts/verify_browser_wallet_evidence.mjs` | Passes as a historical capture; it is not source-matched to the current candidate contract. |
 
 The locally executed Direct Mode suite covers forged DID content, wrong/unauthorized paths, redirects, stale or inconsistent metadata, malformed schemas, prompt injection, conflicting sources, unavailable retrieval, bounded retries, validator disagreement, rollback, replay, bond routing/recovery, and principal conservation. The V6 browser capture is a separate production wallet lifecycle from the source-matched runner rail; both have dedicated evidence records and verifiers.
 

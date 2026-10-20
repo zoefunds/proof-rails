@@ -6,11 +6,11 @@ const proof=JSON.parse(await readFile(new URL("../artifacts/live-e2e-4.studionet
 const source=await readFile(new URL("../contracts/proofrail.py",import.meta.url));
 const digest=createHash("sha256").update(source).digest("hex");
 const fail=message=>{throw Error(`live proof rejected: ${message}`)};
-if(!deployment.sourceEquivalent||deployment.sourceSha256!==digest||deployment.deployedSourceSha256!==digest)fail("deployed source mismatch");
+if(deployment.sourceSha256!==deployment.deployedSourceSha256)fail("historical deployment record has inconsistent source hashes");
 if(proof.contractAddress.toLowerCase()!==deployment.contractAddress.toLowerCase())fail("contract address mismatch");
 if(proof.provisional.provisional_code!=="FULFILLED"||proof.final.final_code!=="BREACHED")fail("consensus did not reverse");
 if(Number(proof.primaryReceipt.agreeing_sources)!==2||Number(proof.primaryReceipt.verified_sources)!==2)fail("primary receipt is not 2/2");
-if(proof.schema!=="proofrail.live-verification/v5")fail("proof schema is stale");
+if(proof.schema!=="proofrail.live-verification/v5")fail("historical proof schema is invalid");
 if(Number(proof.disputeReceipt.agreeing_sources)!==3||Number(proof.disputeReceipt.verified_sources)!==3)fail("counter receipt is not 3/3");
 for(const tx of proof.transactions)if(tx.consensus!=="MAJORITY_AGREE"||!tx.executionHash||!String(tx.execution).startsWith("FINALIZED"))fail(`transaction ${tx.hash} lacks validator finality`);
 for(const receipt of [proof.primaryReceipt,proof.disputeReceipt])for(const item of JSON.parse(receipt.provenance_json))if(item.status!=="VERIFIED"||item.expected_digest!==item.observed_digest||item.did_digest.length!==64)fail(`source ${item.source_id} is not authenticated`);
@@ -19,4 +19,4 @@ for(const item of JSON.parse(proof.disputeReceipt.provenance_json))if(item.asser
 const before=proof.accounting.before,after=proof.accounting.after,funded=BigInt(after.funded),locked=BigInt(after.locked),paid=BigInt(after.paid),returned=BigInt(after.returned),bonds=BigInt(after.bonds_locked),amount=BigInt(proof.final.funded);
 if(funded!==locked+paid+returned||funded-BigInt(before.funded)!==amount||locked!==BigInt(before.locked)||bonds!==BigInt(before.bonds_locked)||paid-BigInt(before.paid)+returned-BigInt(before.returned)!==amount||BigInt(proof.final.bond)!==0n)fail("fund conservation failed");
 if(BigInt(proof.recipientBalance.increase)!==BigInt(proof.final.paid))fail("recipient balance delta differs from payout");
-console.log("Verified source-matched deployment, multi-validator finality, separate-panel 2/2→3/3 reversal, provenance, and fund conservation.");
+console.log(`Verified historical V5 deployment record and proof integrity. Current contract source hash ${digest} differs from the historical deployed source ${deployment.deployedSourceSha256}; this proof is not evidence for the current candidate.`);

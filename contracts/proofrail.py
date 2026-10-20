@@ -71,14 +71,16 @@ class ProofRail(gl.Contract):
 
  def _validate_policy(self,evidence_json:str,outcomes_json:str)->dict:
   evidence=json.loads(evidence_json); outcomes=json.loads(outcomes_json)
-  assert isinstance(evidence,dict) and set(evidence)=={"schema","observed_from","observed_until","source_rule","counter_rule","semantic_rule","sources"}
-  assert evidence["schema"]=="proofrail.evidence-policy/v5" and type(evidence["observed_from"]) is int and type(evidence["observed_until"]) is int and 0<=evidence["observed_from"]<evidence["observed_until"]<2**64
+  assert isinstance(evidence,dict) and set(evidence)=={"schema","observed_from","observed_until","source_rule","counter_rule","semantic_rule","sources","counterevidence"}
+  assert evidence["schema"]=="proofrail.evidence-policy/v6" and type(evidence["observed_from"]) is int and type(evidence["observed_until"]) is int and 0<=evidence["observed_from"]<evidence["observed_until"]<2**64
   rule=evidence["source_rule"];counter_rule=evidence["counter_rule"]
   for x in (rule,counter_rule):assert isinstance(x,dict) and set(x)=={"min_sources","min_verified","min_agreement"} and type(x["min_sources"]) is int and type(x["min_verified"]) is int and type(x["min_agreement"]) is int and 2<=x["min_agreement"]<=x["min_verified"]<=x["min_sources"]<=5
   semantic=evidence["semantic_rule"];assert isinstance(semantic,dict) and set(semantic)=={"kind","threshold_bps","fulfilled_code","breached_code"} and semantic["kind"]=="uptime_bps" and type(semantic["threshold_bps"]) is int and 1<=semantic["threshold_bps"]<=10000 and isinstance(semantic["fulfilled_code"],str) and isinstance(semantic["breached_code"],str) and semantic["fulfilled_code"]!=semantic["breached_code"]
   sources=evidence["sources"];assert isinstance(sources,list) and rule["min_sources"]<=len(sources)<=5
+  counter=evidence["counterevidence"];assert isinstance(counter,dict) and set(counter)=={"schema","sources"} and counter["schema"]=="proofrail.counterevidence/v1"
+  counter_sources=counter["sources"];assert isinstance(counter_sources,list) and counter_rule["min_sources"]<=len(counter_sources)<=5
   domains=[];ids=[];authorities=[];source_ids=[]
-  for s in sources:
+  for s in sources+counter_sources:
    self._validate_source(s,evidence["observed_from"],evidence["observed_until"]);domain=s["publisher_domain"].lower().rstrip(".")
    assert domain not in domains and s["publisher_id"] not in ids and s["authority_id"] not in authorities and s["source_id"] not in source_ids,"sources must be independent"
    domains.append(domain);ids.append(s["publisher_id"]);authorities.append(s["authority_id"]);source_ids.append(s["source_id"])
@@ -169,7 +171,7 @@ class ProofRail(gl.Contract):
  def open_rail(self,recipient:Address,name:str,criterion:str,opens_at:u256,closes_at:u256,amount:u256,evidence_json:str,outcomes_json:str):
   assert not self.transfer_active and recipient not in (self._zero(),gl.message.sender_address) and gl.message.value==amount and amount>0 and amount*BOND_BPS//u256(10000)>0 and 0<len(name)<=120 and 0<len(criterion)<=2400 and len(evidence_json)<=30000 and len(outcomes_json)<=5000 and opens_at<closes_at
   spec=self._validate_policy(evidence_json,outcomes_json);assert spec["observed_from"]>=int(opens_at) and u256(spec["observed_until"])+MIN_CLAIM_WINDOW<=closes_at
-  i=self.next_id;self.next_id+=u256(1);self.rails[i]=Rail(gl.message.sender_address,recipient,name,criterion,evidence_json,"",outcomes_json,amount,amount,u256(0),u256(0),u8(DRAFT),opens_at,closes_at,u256(0),u8(0),u256(0),"",u256(0),u256(0),self._zero(),u256(0),u256(0),"","",u16(0),"");self.total_funded+=amount;self.total_locked+=amount
+  i=self.next_id;self.next_id+=u256(1);self.rails[i]=Rail(gl.message.sender_address,recipient,name,criterion,evidence_json,json.dumps(spec["counterevidence"],sort_keys=True),outcomes_json,amount,amount,u256(0),u256(0),u8(DRAFT),opens_at,closes_at,u256(0),u8(0),u256(0),"",u256(0),u256(0),self._zero(),u256(0),u256(0),"","",u16(0),"");self.total_funded+=amount;self.total_locked+=amount
 
  @gl.public.write
  def lodge_claim(self,i:u256):
@@ -180,13 +182,8 @@ class ProofRail(gl.Contract):
  @gl.public.write.payable
  def dispute(self,i:u256,reason:str,counterevidence_json:str):
   assert not self.transfer_active,"transfer callback forbidden";r=self._get(i);assert len(counterevidence_json)<=30000;bond=r.funded*BOND_BPS//u256(10000);base=json.loads(r.evidence_json);counter=json.loads(counterevidence_json)
-  assert isinstance(counter,dict) and set(counter)=={"schema","sources"} and counter["schema"]=="proofrail.counterevidence/v1" and base["counter_rule"]["min_sources"]<=len(counter["sources"])<=5
-  domains=[x["publisher_domain"].lower().rstrip(".") for x in base["sources"]];ids=[x["publisher_id"] for x in base["sources"]];authorities=[x["authority_id"] for x in base["sources"]];source_ids=[x["source_id"] for x in base["sources"]]
-  for s in counter["sources"]:
-   self._validate_source(s,base["observed_from"],base["observed_until"]);domain=s["publisher_domain"].lower().rstrip(".")
-   assert domain not in domains and s["publisher_id"] not in ids and s["authority_id"] not in authorities and s["source_id"] not in source_ids,"counterevidence must be independent"
-   domains.append(domain);ids.append(s["publisher_id"]);authorities.append(s["authority_id"]);source_ids.append(s["source_id"])
-  assert r.status==u8(PROVISIONAL) and self._now()<r.challenge_until and gl.message.sender_address in (r.issuer,r.recipient) and gl.message.value==bond and 0<len(reason)<=600;r.status=u8(DISPUTED);r.challenger=gl.message.sender_address;r.bond=bond;r.dispute_deadline=self._now()+DISPUTE_WINDOW;r.challenge_reason=reason;r.counterevidence_json=counterevidence_json;r.attempts=u8(0);self.bonds_locked+=bond;self.rails[i]=r
+  assert counter==json.loads(r.counterevidence_json),"counterevidence must match the pre-funded frozen panel"
+  assert r.status==u8(PROVISIONAL) and self._now()<r.challenge_until and gl.message.sender_address in (r.issuer,r.recipient) and gl.message.value==bond and 0<len(reason)<=600;r.status=u8(DISPUTED);r.challenger=gl.message.sender_address;r.bond=bond;r.dispute_deadline=self._now()+DISPUTE_WINDOW;r.challenge_reason=reason;r.attempts=u8(0);self.bonds_locked+=bond;self.rails[i]=r
  @gl.public.write
  def review_dispute(self,i:u256):assert not self.transfer_active,"transfer callback forbidden";r=self._get(i);assert r.status==u8(DISPUTED) and r.attempts<u8(MAX_ATTEMPTS) and self._now()<=r.dispute_deadline and (r.attempts==u8(0) or self._now()>=r.last_attempt+RETRY_INTERVAL);self._apply_review(i,True)
  @gl.public.write

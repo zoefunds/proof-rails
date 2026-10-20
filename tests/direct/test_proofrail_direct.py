@@ -8,7 +8,7 @@ def artifact(n,outcome="BREACH",**overrides):
 def source(n,body=None):
  domain=f"source{n}.test";path="/attestations/";d=did(domain,path);body=body or artifact(n);digest=h(body)
  return {"source_id":f"source-{n}","authority_id":f"authority-{n}","url":f"https://{domain}{path}{digest}.json","publisher_id":"did:web:"+domain,"publisher_domain":domain,"did_sha256":h(d),"did_http_status":200,"service_path":path,"content_version":"2030-01/v1","content_sha256":digest,"evidence_http_status":200,"observed_from":START,"observed_until":END}
-def policy(sources=None):return json.dumps({"schema":"proofrail.evidence-policy/v5","observed_from":START,"observed_until":END,"source_rule":{"min_sources":2,"min_verified":2,"min_agreement":2},"counter_rule":{"min_sources":3,"min_verified":3,"min_agreement":2},"semantic_rule":{"kind":"uptime_bps","threshold_bps":9990,"fulfilled_code":"PASS","breached_code":"BREACH"},"sources":sources or [source(1),source(2)]},sort_keys=True)
+def policy(sources=None,counter_sources=None):return json.dumps({"schema":"proofrail.evidence-policy/v6","observed_from":START,"observed_until":END,"source_rule":{"min_sources":2,"min_verified":2,"min_agreement":2},"counter_rule":{"min_sources":3,"min_verified":3,"min_agreement":2},"semantic_rule":{"kind":"uptime_bps","threshold_bps":9990,"fulfilled_code":"PASS","breached_code":"BREACH"},"sources":sources or [source(1),source(2)],"counterevidence":{"schema":"proofrail.counterevidence/v1","sources":counter_sources or [source(3),source(4),source(5)]}},sort_keys=True)
 def answer(code,confidence="HIGH"):return json.dumps({"schema":"proofrail.semantic-classification/v1","code":code,"confidence":confidence})
 def addr(c,x):return type(c._zero())(x)
 def warp(vm,t):vm.warp(t);sys.modules["genlayer.gl"].message_raw["datetime"]=t
@@ -25,17 +25,17 @@ def test_independent_sources_reach_payout_and_receipt_has_verified_provenance(di
 
 @pytest.mark.direct
 def test_authenticated_counterevidence_changes_consensus_and_payout(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- c=direct_deploy("contracts/proofrail.py");base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);assert c.get_rail(1).provisional_code=="PASS"
- counter=[source(3),source(4),source(5)];direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"Independent monitors contradict the provisional result.",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));direct_vm.clear_mocks();mock_all(direct_vm,base+counter,["PASS","PASS","BREACH","BREACH","BREACH"]);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.final_code=="BREACH" and r.paid==20000 and r.bond==0;assert c.accounting()["bonds_locked"]==0
+ c=direct_deploy("contracts/proofrail.py");base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];counter=[source(3),source(4),source(5)];create(direct_vm,c,direct_alice,direct_bob,policy(base,counter));assert json.loads(c.get_rail(1).counterevidence_json)=={"schema":"proofrail.counterevidence/v1","sources":counter};claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);assert c.get_rail(1).provisional_code=="PASS"
+ direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"Independent monitors contradict the provisional result.",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));direct_vm.clear_mocks();mock_all(direct_vm,base+counter,["PASS","PASS","BREACH","BREACH","BREACH"]);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.final_code=="BREACH" and r.paid==20000 and r.bond==0;assert c.accounting()["bonds_locked"]==0
 
 @pytest.mark.direct
 @pytest.mark.parametrize("challenger_role,counter_code,expected",[("issuer","PASS","PASS"),("recipient","PASS","PASS")])
 def test_both_parties_can_challenge_and_unchanged_outcome_forfeits_bond(challenger_role,counter_code,expected,direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);counter=[source(3,artifact(3,"PASS")),source(4,artifact(4,"PASS")),source(5,artifact(5,"PASS"))];direct_vm.sender=addr(c,direct_alice if challenger_role=="issuer" else direct_bob);direct_vm.value=1000;c.dispute(1,"request neutral re-review",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));direct_vm.clear_mocks();mock_all(direct_vm,counter,[counter_code]*3);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.final_code==expected and r.bond==0 and c.accounting()["bonds_locked"]==0
+ base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];counter=[source(3,artifact(3,"PASS")),source(4,artifact(4,"PASS")),source(5,artifact(5,"PASS"))];c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob,policy(base,counter));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);direct_vm.sender=addr(c,direct_alice if challenger_role=="issuer" else direct_bob);direct_vm.value=1000;c.dispute(1,"request neutral re-review",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));direct_vm.clear_mocks();mock_all(direct_vm,counter,[counter_code]*3);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.final_code==expected and r.bond==0 and c.accounting()["bonds_locked"]==0
 
 @pytest.mark.direct
 def test_unresolved_dispute_deadline_preserves_provisional_and_refunds_bond(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);counter=[source(3),source(4),source(5)];direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"external services unavailable",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));deadline=int(c.get_rail(1).dispute_deadline);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);assert c.get_receipt(1,True,1).result=="UNAVAILABLE";warp(direct_vm,datetime.datetime.fromtimestamp(deadline+1,datetime.timezone.utc).isoformat());c.recover(1);r=c.get_rail(1);assert r.final_code=="PASS" and r.bond==0 and r.locked==0 and c.accounting()["bonds_locked"]==0
+ base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);counter=json.loads(c.get_rail(1).counterevidence_json);direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"external services unavailable",json.dumps(counter));deadline=int(c.get_rail(1).dispute_deadline);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);assert c.get_receipt(1,True,1).result=="UNAVAILABLE";warp(direct_vm,datetime.datetime.fromtimestamp(deadline+1,datetime.timezone.utc).isoformat());c.recover(1);r=c.get_rail(1);assert r.final_code=="PASS" and r.bond==0 and r.locked==0 and c.accounting()["bonds_locked"]==0
 
 @pytest.mark.direct
 @pytest.mark.parametrize("mutation",["forged_did","wrong_path","redirect","stale_did"])
@@ -101,13 +101,19 @@ def test_duplicate_publishers_replay_and_fund_conservation(direct_vm,direct_depl
 @pytest.mark.direct
 @pytest.mark.parametrize("alias",["SOURCE1.TEST","source1.test."])
 def test_counterevidence_rejects_canonical_domain_aliases(alias,direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- c=direct_deploy("contracts/proofrail.py");sources=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];create(direct_vm,c,direct_alice,direct_bob,policy(sources));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,sources,["PASS","PASS"]);c.review_claim(1);duplicate=source(1);duplicate["publisher_domain"]=alias;direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000
- with pytest.raises(AssertionError):c.dispute(1,"alias replay",json.dumps({"schema":"proofrail.counterevidence/v1","sources":[duplicate]}))
+ c=direct_deploy("contracts/proofrail.py");sources=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];duplicate=source(3);duplicate["publisher_domain"]=alias
+ with pytest.raises(AssertionError):create(direct_vm,c,direct_alice,direct_bob,policy(sources,[duplicate,source(4),source(5)]))
 
 @pytest.mark.direct
 def test_counterevidence_rejects_duplicate_authority_and_publisher_id(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- c=direct_deploy("contracts/proofrail.py");sources=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];create(direct_vm,c,direct_alice,direct_bob,policy(sources));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,sources,["PASS","PASS"]);c.review_claim(1);duplicate=source(3);duplicate["authority_id"]=sources[0]["authority_id"];direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000
- with pytest.raises(AssertionError):c.dispute(1,"authority replay",json.dumps({"schema":"proofrail.counterevidence/v1","sources":[duplicate]}))
+ c=direct_deploy("contracts/proofrail.py");sources=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];duplicate=source(3);duplicate["authority_id"]=sources[0]["authority_id"]
+ with pytest.raises(AssertionError):create(direct_vm,c,direct_alice,direct_bob,policy(sources,[duplicate,source(4),source(5)]))
+
+@pytest.mark.direct
+def test_dispute_cannot_replace_precommitted_counterevidence(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ c=direct_deploy("contracts/proofrail.py");base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);replacement=[source(3),source(4),source(5)];replacement[0]["content_version"]="attacker-selected-after-funding";direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000
+ with pytest.raises(AssertionError):c.dispute(1,"substitute counter panel",json.dumps({"schema":"proofrail.counterevidence/v1","sources":replacement}))
+ rail=c.get_rail(1);assert rail.status==3 and rail.bond==0 and rail.counterevidence_json==json.dumps(json.loads(policy(base))["counterevidence"],sort_keys=True);assert c.accounting()["bonds_locked"]==0
 
 @pytest.mark.direct
 def test_failed_transfer_rolls_back_settlement(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
@@ -120,7 +126,7 @@ def test_failed_transfer_rolls_back_settlement(direct_vm,direct_deploy,direct_al
 
 @pytest.mark.direct
 def test_failed_dispute_transfer_preserves_escrow_and_bond(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- c=direct_deploy("contracts/proofrail.py");base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);counter=[source(3),source(4),source(5)];direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"contested",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));direct_vm.clear_mocks();mock_all(direct_vm,base+counter,["PASS","PASS","BREACH","BREACH","BREACH"]);direct_vm.sender=addr(c,direct_charlie)
+ c=direct_deploy("contracts/proofrail.py");base=[source(1,artifact(1,"PASS")),source(2,artifact(2,"PASS"))];create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["PASS","PASS"]);c.review_claim(1);counter=json.loads(c.get_rail(1).counterevidence_json);direct_vm.sender=addr(c,direct_bob);direct_vm.value=1000;c.dispute(1,"contested",json.dumps(counter));direct_vm.clear_mocks();mock_all(direct_vm,base+counter["sources"],["PASS","PASS","BREACH","BREACH","BREACH"]);direct_vm.sender=addr(c,direct_charlie)
  def fail(vm,request):
   if "EthSend" in request:raise RuntimeError("simulated dispute transfer failure")
  direct_vm._gl_call_hook=fail
@@ -148,8 +154,8 @@ def test_multiple_validators_recompute_identical_provenance(direct_vm,direct_dep
 
 @pytest.mark.direct
 def test_issuer_successfully_challenges_overpayment(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
- c=direct_deploy("contracts/proofrail.py");base=[source(1),source(2)];create(direct_vm,c,direct_alice,direct_bob,policy(base));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["BREACH","BREACH"]);c.review_claim(1);assert c.get_rail(1).provisional_code=="BREACH"
- counter=[source(3,artifact(3,"PASS")),source(4,artifact(4,"PASS")),source(5,artifact(5,"PASS"))];direct_vm.sender=addr(c,direct_alice);direct_vm.value=1000;c.dispute(1,"authenticated sources show the obligation was met",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));direct_vm.clear_mocks();mock_all(direct_vm,counter,["PASS"]*3);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.final_code=="PASS" and r.returned==20000 and r.paid==0 and r.bond==0;assert c.accounting()=={"funded":20000,"locked":0,"paid":0,"returned":20000,"bonds_locked":0}
+ c=direct_deploy("contracts/proofrail.py");base=[source(1),source(2)];counter=[source(3,artifact(3,"PASS")),source(4,artifact(4,"PASS")),source(5,artifact(5,"PASS"))];create(direct_vm,c,direct_alice,direct_bob,policy(base,counter));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,base,["BREACH","BREACH"]);c.review_claim(1);assert c.get_rail(1).provisional_code=="BREACH"
+ direct_vm.sender=addr(c,direct_alice);direct_vm.value=1000;c.dispute(1,"authenticated sources show the obligation was met",json.dumps({"schema":"proofrail.counterevidence/v1","sources":counter}));direct_vm.clear_mocks();mock_all(direct_vm,counter,["PASS"]*3);direct_vm.sender=addr(c,direct_charlie);c.review_dispute(1);r=c.get_rail(1);assert r.final_code=="PASS" and r.returned==20000 and r.paid==0 and r.bond==0;assert c.accounting()=={"funded":20000,"locked":0,"paid":0,"returned":20000,"bonds_locked":0}
 
 @pytest.mark.direct
 def test_retry_cap_receipt_boundaries_and_late_review(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):

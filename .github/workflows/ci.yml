@@ -22,7 +22,6 @@ jobs:
       - run: npm run build --prefix apps/web
       - run: npm audit --prefix apps/web --omit=dev --audit-level=high
       - run: node scripts/verify_live_artifact.mjs
-      - run: PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs
-      - run: PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs
+      - run: node scripts/verify_candidate_policy.mjs
       - run: node scripts/verify_review_evidence.mjs
       - run: node scripts/verify_browser_wallet_evidence.mjs
