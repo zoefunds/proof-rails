@@ -1,1 +1,1 @@
-{"id":"did:web:source-4-kappa.vercel.app","service":[{"id":"did:web:source-4-kappa.vercel.app#evidence","type":"LinkedDomains","serviceEndpoint":"https://source-4-kappa.vercel.app/evidence/"}]}
+{"id":"did:web:proofrail-source4.pages.dev","service":[{"id":"did:web:proofrail-source4.pages.dev#evidence","type":"LinkedDomains","serviceEndpoint":"https://proofrail-source4.pages.dev/evidence/"}]}

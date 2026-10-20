@@ -1,8 +1,8 @@
 # Deployment
 
-## Current hardened-v6 deployment and evidence status — 2026-10-20
+## Retired hardened-v6 deployment and evidence status — 2026-10-20
 
-> **Historical scope:** the deployed hardened-v6 address below has funded technical evidence, but it did not freeze the counter panel at funding time. The current source candidate fixes that gap and is not deployed. Its publisher fixtures share one Vercel account and do not establish real-world organizational independence.
+> **Historical scope:** the deployed hardened-v6 address below has funded technical evidence, but it did not freeze the counter panel at funding time. It is retired: the production browser no longer points at it. The source candidate that fixes this gap is deployed, funded, and now live in production as hardened-v8 (see below), which also spreads its publisher fixtures across three distinct hosting providers instead of one shared Vercel account. This still does not establish real-world organizational independence — see [Authority governance](AUTHORITY_GOVERNANCE.md).
 
 - Hardened-v6 contract: `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`
 - Deployment transaction: `0x99f66b9fa54d4f319a10ee06d416f25b9e1ed9c4a59e984005d63e1e8fcc9c12`
@@ -10,11 +10,37 @@
 - Funded technical demonstration: `artifacts/live-receipts.hardened-v6.studionet.json`
 - Production injected-wallet lifecycle: `artifacts/browser-wallet-hardened-v6.studionet.json` (rail 2)
 
-## Corrected candidate release — hardened-v7
+## Corrected candidate release — hardened-v7 (single-provider, superseded)
 
-`hardened-v7` is the published, pre-funded dual-panel candidate policy for the corrected source. Its policy includes the three-source counter panel before an issuer can fund escrow; `scripts/verify_candidate_policy.mjs` validates this locally and `PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_publishers.mjs` verified all ten live DID/evidence objects with no redirects, exact final URLs, HTTP 200, and matching SHA-256 digests. The candidate is **not deployed or funded**. The approved browser remains intentionally bound to the historical address and disables new V6 rail submission until a source-matched corrected address is installed.
+`hardened-v7` was the published, pre-funded dual-panel candidate policy for the corrected source, deployed and funded at `0xC217A00E471368E005A624B926bC5A13B267c7F4` (deployment `0xde5cbd37896ebb9ac05bf79de5d78030de9a24d36d096eee969c22721d103c11`, source SHA-256 `5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c`). Its funded reversal is recorded in `artifacts/live-e2e-hardened-v7-4.studionet.json`. It is retired in favor of hardened-v8 below, which uses the identical corrected source but spreads its five publisher sources across three hosting providers instead of one.
 
-Before a funded deployment, run `PROOFRAIL_RELEASE_ID=hardened-v7 npm run preflight-funded-release --prefix scripts`. A release deployment writes `artifacts/deployment.<release-id>.studionet.json`; it never overwrites the preserved historical `artifacts/deployment.studionet.json`. After finalization, run the lifecycle with the new address, capture the receipts, update the browser’s reviewed address binding, and require `verify_browser_wallet_candidate.mjs` for the injected-wallet evidence. Each contract write requires the wallet owner’s explicit confirmation.
+## Corrected candidate release — hardened-v8 (multi-provider sources, current)
+
+`hardened-v8` uses the exact same `contracts/proofrail.py` source as hardened-v7 (identical SHA-256 `5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c`) with a new publisher-source policy whose five sources are hosted on three distinct providers/accounts instead of one shared Vercel account:
+
+| Source | Role | Provider/account | Domain |
+| --- | --- | --- | --- |
+| publisher-1 | Primary | Vercel (existing team account) | `source-1-inky.vercel.app` |
+| publisher-2 | Primary | Vercel (existing team account) | `source-2-ten.vercel.app` |
+| publisher-3 | Counter | Cloudflare Pages (separate Cloudflare account) | `proofrail-source3.pages.dev` |
+| publisher-4 | Counter | Cloudflare Pages (separate Cloudflare account) | `proofrail-source4.pages.dev` |
+| publisher-5 | Counter | GitHub Pages (separate GitHub account, `zoefunds`) | `zoefunds.github.io` |
+
+`scripts/verify_candidate_policy.mjs` validates the manifest shape locally and `PROOFRAIL_RELEASE_ID=hardened-v8 node scripts/verify_publishers.mjs` verified all ten live DID/evidence objects across all three providers with no redirects, exact final URLs, HTTP 200, and matching SHA-256 digests.
+
+The candidate is **deployed and funded** on Studionet:
+
+- Hardened-v8 contract: `0xE91096019eBf3a4E96654a2Ab7649d6002E073b6`
+- Deployment transaction: `0x42b41db1daa29cd38b620eb3012d6de9ed75fc4068217a133e36189994f9dbd5`
+- Local and deployed source SHA-256: `5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c`
+- Deployment record: `artifacts/deployment.hardened-v8.studionet.json`
+- Funding-time-frozen, multi-provider funded lifecycle: `artifacts/live-e2e-hardened-v8-4.studionet.json` (rail 1; see below)
+
+The production browser (`https://proof-rails.vercel.app`) is rebound to the hardened-v8 address: `apps/web/src/contract.ts` pins `CONTRACT=0xE91096019eBf3a4E96654a2Ab7649d6002E073b6` and `DEPLOYMENT_SUPPORTS_PRE_FUNDED_COUNTEREVIDENCE=true`. Frontend lint/tests (26 passed), typecheck, and production build were rerun before deploy; the deployed bundle was confirmed byte-matched to the build that embeds the v8 address.
+
+**What this does and does not establish:** removing the single-shared-Vercel-account correlation is a real infrastructure improvement — GenVM's own nondeterministic validators now independently retrieve and authenticate evidence from three unrelated hosting platforms, not one. It is **not** organizational independence: all three hosting accounts (Vercel, Cloudflare, GitHub) are controlled by the same operator. See [Authority governance](AUTHORITY_GOVERNANCE.md) for the credentialed-admission rule that actually establishes independence, which still requires real separate organizations to be onboarded.
+
+`scripts/verify_browser_wallet_candidate.mjs` for the currently live contract is **still outstanding**: it requires a real injected-wallet lifecycle, captured the same way as the historical V6 browser walkthrough — by the wallet owner personally funding, claiming, reviewing, disputing, and settling a rail through the production UI, then supplying the resulting transaction hashes. That cannot be produced by an automated key, only by the account owner's own injected wallet.
 
 - Historical v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC`
 - Deployment transaction: `0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98`
@@ -28,6 +54,10 @@ Before a funded deployment, run `PROOFRAIL_RELEASE_ID=hardened-v7 npm run prefli
 - Current Vercel production deployment: `dpl_4xB7tPKwyqU6kTxqVCyJCZoo22pz` (`READY`, production alias `https://proof-rails.vercel.app` applied)
 
 The two historical V6 records serve complementary purposes. Rail 1 is the source-matched runner record with publisher evidence, execution hashes, and conservation accounting. Rail 2 is the production-browser injected-wallet write-path record with seven finalized transactions and terminal accounting. Neither proves the corrected candidate. Historical V5 records remain audit-only. See [evidence-record status](EVIDENCE_STATUS.md) for record scope.
+
+## Hardened-v7 funded lifecycle — Rail 1 (funding-time-frozen counter panel)
+
+Rail 1 on the hardened-v7 contract was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF680375653c69FC` for recipient `0x53705Bb2B34ff7CEcC93F79a1D91aDa1185D87Dd`, using the frozen dual-panel policy (`artifacts/evidence-policy.hardened-v7.json`) committed at `open_rail` time — the three-source counter panel was part of the funded escrow from the start, not supplied later at dispute time. The 2/2 primary review classified `FULFILLED`; the challenger then disputed with the *same pre-committed* three-source counter panel (the contract rejects any other panel at dispute time), and the 3/3 counter review classified `BREACHED`, reversing the provisional verdict and deterministically changing the payout. The recipient balance increased by exactly `0.01 GEN`; the challenge bond was returned to the successful challenger; `funded == locked + paid + returned` held with zero residual lock. This is the first funded, on-chain demonstration that a distinct, separately authenticated counterevidence panel can reverse a provisional consensus result under the funding-time freeze. See `artifacts/live-e2e-hardened-v7-4.studionet.json` for every transaction hash, execution hash, and receipt.
 
 ## Hardened-v6 deployed-source equivalence
 
@@ -72,11 +102,11 @@ The earlier PR-2 browser recording used the retired V5 contract and is preserved
 
 ## Production web origin
 
-The production console is served from `https://proof-rails.vercel.app`, attached to the Vercel project named `nw3`. The deployed bundle points to the hardened-v6 contract address above. Five publisher origins expose a pinned `/.well-known/did.json` and immutable `/evidence/<sha256>.json` artifacts. They use distinct technical origins but share one Vercel account, so organizational independence is not established.
+The production console is served from `https://proof-rails.vercel.app`, attached to the Vercel project named `nw3`. The deployed bundle points to the hardened-v8 contract address above. Five publisher origins expose a pinned `/.well-known/did.json` and immutable `/evidence/<sha256>.json` artifacts, now spread across three distinct hosting providers (Vercel, Cloudflare Pages, GitHub Pages) instead of one. They use distinct technical origins and separate hosting accounts, but all are controlled by the same operator, so organizational independence is still not established.
 
 No private key belongs in this repository or browser bundle.
 
 ## CI status
 
-For the hardened-v6 implementation, contract lint, 37 Direct Mode tests, 26 frontend tests on Vitest `5.0.5`, TypeScript, production build, live publisher verification, funded receipt verification, and both full and production dependency audits pass locally. The full dependency audit is now clean after resolving the three former Vitest-related advisories. The latest hosted run, attached to commit `35bd3d1`, failed before executing any steps because GitHub reports an account billing lock. The hosted status is not green CI; that external status is separate from passing local gates and the finalized V6 browser lifecycle. See [CI attestation](CI_ATTESTATION.md) for the latest run and job IDs.
+For the current hardened-v8 source tree, contract lint, 38 Direct Mode tests, 26 frontend tests on Vitest `5.0.5`, TypeScript, production build, live multi-provider publisher verification, and both full and production dependency audits pass locally. The full dependency audit is clean after resolving the three former Vitest-related advisories. The latest hosted run, attached to commit `35bd3d1`, failed before executing any steps because GitHub reports an account billing lock; that status predates the v7/v8 work and has not changed since — no new hosted run has been possible. The hosted status is not green CI; that external status is separate from passing local gates and the finalized hardened-v8 funded on-chain lifecycle. See [CI attestation](CI_ATTESTATION.md) for the latest run and job IDs.
 

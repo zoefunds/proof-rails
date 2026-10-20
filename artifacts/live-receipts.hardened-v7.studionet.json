@@ -1,0 +1,261 @@
+{
+  "schema": "proofrail.live-receipt-capture/v1",
+  "releaseId": "hardened-v7",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0xC217A00E471368E005A624B926bC5A13B267c7F4",
+  "railId": "1",
+  "deployment": {
+    "schema": "proofrail.deployment/v2",
+    "releaseId": "hardened-v7",
+    "network": "GenLayer Studionet",
+    "chainId": 61999,
+    "source": "contracts/proofrail.py",
+    "sourceSha256": "5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c",
+    "deployedSourceSha256": "5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c",
+    "sourceBytes": 20433,
+    "sourceEquivalent": true,
+    "sourceEquivalence": "The SHA-256 is computed over the exact local UTF-8 source and over finalized transaction contract_code decoded from base64.",
+    "deployer": "0x9e75694e204B03997D55B5A664a924aDaE3F43D1",
+    "startedAt": "2026-10-20T23:02:58.324Z",
+    "finalizedAt": "2026-10-20T23:03:39.935Z",
+    "txHash": "0xde5cbd37896ebb9ac05bf79de5d78030de9a24d36d096eee969c22721d103c11",
+    "contractAddress": "0xC217A00E471368E005A624B926bC5A13B267c7F4",
+    "consensus": "MAJORITY_AGREE",
+    "execution": "FINALIZED_WITH_EXECUTION_HASH",
+    "txExecutionHash": "0x737bf5dc4b94f1afa0741c95dee4bb538584c8b89e9250be8c3f1fe1c6e6e33b",
+    "transactionStatus": "FINALIZED"
+  },
+  "evidencePolicy": {
+    "schema": "proofrail.evidence-policy/v6",
+    "observed_from": 1792504200,
+    "observed_until": 1792507800,
+    "source_rule": {
+      "min_sources": 2,
+      "min_verified": 2,
+      "min_agreement": 2
+    },
+    "counter_rule": {
+      "min_sources": 3,
+      "min_verified": 3,
+      "min_agreement": 2
+    },
+    "semantic_rule": {
+      "kind": "uptime_bps",
+      "threshold_bps": 9990,
+      "fulfilled_code": "FULFILLED",
+      "breached_code": "BREACHED"
+    },
+    "sources": [
+      {
+        "source_id": "publisher-1",
+        "authority_id": "urn:proofrail:independent-authority:1",
+        "url": "https://source-1-inky.vercel.app/evidence/f2645b086aa2ca7cdedb8c4898462557581d88da2b6b83ace9a10cef8743cec3.json",
+        "publisher_id": "did:web:source-1-inky.vercel.app",
+        "publisher_domain": "source-1-inky.vercel.app",
+        "did_sha256": "83e00096ff50d3511530f4843a55b5aba22c8ce14e1f54dc3a82c8a9c5ee3b66",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v7/uptime-primary-1",
+        "content_sha256": "f2645b086aa2ca7cdedb8c4898462557581d88da2b6b83ace9a10cef8743cec3",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      },
+      {
+        "source_id": "publisher-2",
+        "authority_id": "urn:proofrail:independent-authority:2",
+        "url": "https://source-2-ten.vercel.app/evidence/774dfe0be9810ca42751bc77effc5031053761208fd3cc6ba000313d8e2db782.json",
+        "publisher_id": "did:web:source-2-ten.vercel.app",
+        "publisher_domain": "source-2-ten.vercel.app",
+        "did_sha256": "c3f38772e6e7449d3579b411cb414a48d108191edb50b6c611947ce051a7bf65",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v7/uptime-primary-2",
+        "content_sha256": "774dfe0be9810ca42751bc77effc5031053761208fd3cc6ba000313d8e2db782",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      }
+    ],
+    "counterevidence": {
+      "schema": "proofrail.counterevidence/v1",
+      "sources": [
+        {
+          "source_id": "publisher-3",
+          "authority_id": "urn:proofrail:independent-authority:3",
+          "url": "https://source-3-five.vercel.app/evidence/5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301.json",
+          "publisher_id": "did:web:source-3-five.vercel.app",
+          "publisher_domain": "source-3-five.vercel.app",
+          "did_sha256": "147ba1d69071eb5a5faced97cf15932ee2d588b6182e5a32162731374a417464",
+          "did_http_status": 200,
+          "service_path": "/evidence/",
+          "content_version": "proofrail-hardened-v7/uptime-counter-3",
+          "content_sha256": "5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301",
+          "evidence_http_status": 200,
+          "observed_from": 1792504200,
+          "observed_until": 1792507800
+        },
+        {
+          "source_id": "publisher-4",
+          "authority_id": "urn:proofrail:independent-authority:4",
+          "url": "https://source-4-kappa.vercel.app/evidence/e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5.json",
+          "publisher_id": "did:web:source-4-kappa.vercel.app",
+          "publisher_domain": "source-4-kappa.vercel.app",
+          "did_sha256": "3f6c2551db50e0eebbd18c001d04caed92d042d38142fac783a653741484fa84",
+          "did_http_status": 200,
+          "service_path": "/evidence/",
+          "content_version": "proofrail-hardened-v7/uptime-counter-4",
+          "content_sha256": "e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5",
+          "evidence_http_status": 200,
+          "observed_from": 1792504200,
+          "observed_until": 1792507800
+        },
+        {
+          "source_id": "publisher-5",
+          "authority_id": "urn:proofrail:independent-authority:5",
+          "url": "https://source-5-three.vercel.app/evidence/5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a.json",
+          "publisher_id": "did:web:source-5-three.vercel.app",
+          "publisher_domain": "source-5-three.vercel.app",
+          "did_sha256": "0ffa0ed89a9b86599c8ed5fbc0cffd06127c15c48c088d5f7895facba1824068",
+          "did_http_status": 200,
+          "service_path": "/evidence/",
+          "content_version": "proofrail-hardened-v7/uptime-counter-5",
+          "content_sha256": "5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a",
+          "evidence_http_status": 200,
+          "observed_from": 1792504200,
+          "observed_until": 1792507800
+        }
+      ]
+    }
+  },
+  "counterevidence": {
+    "schema": "proofrail.counterevidence/v1",
+    "sources": [
+      {
+        "source_id": "publisher-3",
+        "authority_id": "urn:proofrail:independent-authority:3",
+        "url": "https://source-3-five.vercel.app/evidence/5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301.json",
+        "publisher_id": "did:web:source-3-five.vercel.app",
+        "publisher_domain": "source-3-five.vercel.app",
+        "did_sha256": "147ba1d69071eb5a5faced97cf15932ee2d588b6182e5a32162731374a417464",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v7/uptime-counter-3",
+        "content_sha256": "5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      },
+      {
+        "source_id": "publisher-4",
+        "authority_id": "urn:proofrail:independent-authority:4",
+        "url": "https://source-4-kappa.vercel.app/evidence/e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5.json",
+        "publisher_id": "did:web:source-4-kappa.vercel.app",
+        "publisher_domain": "source-4-kappa.vercel.app",
+        "did_sha256": "3f6c2551db50e0eebbd18c001d04caed92d042d38142fac783a653741484fa84",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v7/uptime-counter-4",
+        "content_sha256": "e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      },
+      {
+        "source_id": "publisher-5",
+        "authority_id": "urn:proofrail:independent-authority:5",
+        "url": "https://source-5-three.vercel.app/evidence/5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a.json",
+        "publisher_id": "did:web:source-5-three.vercel.app",
+        "publisher_domain": "source-5-three.vercel.app",
+        "did_sha256": "0ffa0ed89a9b86599c8ed5fbc0cffd06127c15c48c088d5f7895facba1824068",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v7/uptime-counter-5",
+        "content_sha256": "5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      }
+    ]
+  },
+  "finalizedTransactions": [
+    {
+      "label": "funded rail open",
+      "hash": "0x1da70a8d69628ddc9104407cbce3581fd12e596757c048a4defe3fc444f19ca4",
+      "consensus": "MAJORITY_AGREE",
+      "execution": "FINALIZED_WITH_EXECUTION_HASH",
+      "executionHash": "0xb8a48591e1a5f4ae83456335729f460b81f35e5ec6b091d8bb74f43705ebd649"
+    },
+    {
+      "label": "counterevidence review and settlement",
+      "hash": "0xba543b37c2793b59874766167398e4db86c00d647e673cf0bfd586bc474991af",
+      "consensus": "MAJORITY_AGREE",
+      "execution": "FINALIZED_WITH_EXECUTION_HASH",
+      "executionHash": "0xac684ea0210461ecc6797cbc3a71f0d6ed82080026abda52555f545cd64c3211"
+    }
+  ],
+  "rail": {
+    "attempts": 1,
+    "bond": 0,
+    "challenge_reason": "Authenticated independent sources contest the provisional result.",
+    "challenge_until": 1792710311,
+    "challenger": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
+    "claimed_at": 1792537472,
+    "closes_at": 1792710227,
+    "counterevidence_json": "{\"schema\": \"proofrail.counterevidence/v1\", \"sources\": [{\"authority_id\": \"urn:proofrail:independent-authority:3\", \"content_sha256\": \"5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301\", \"content_version\": \"proofrail-hardened-v7/uptime-counter-3\", \"did_http_status\": 200, \"did_sha256\": \"147ba1d69071eb5a5faced97cf15932ee2d588b6182e5a32162731374a417464\", \"evidence_http_status\": 200, \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_domain\": \"source-3-five.vercel.app\", \"publisher_id\": \"did:web:source-3-five.vercel.app\", \"service_path\": \"/evidence/\", \"source_id\": \"publisher-3\", \"url\": \"https://source-3-five.vercel.app/evidence/5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301.json\"}, {\"authority_id\": \"urn:proofrail:independent-authority:4\", \"content_sha256\": \"e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5\", \"content_version\": \"proofrail-hardened-v7/uptime-counter-4\", \"did_http_status\": 200, \"did_sha256\": \"3f6c2551db50e0eebbd18c001d04caed92d042d38142fac783a653741484fa84\", \"evidence_http_status\": 200, \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_domain\": \"source-4-kappa.vercel.app\", \"publisher_id\": \"did:web:source-4-kappa.vercel.app\", \"service_path\": \"/evidence/\", \"source_id\": \"publisher-4\", \"url\": \"https://source-4-kappa.vercel.app/evidence/e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5.json\"}, {\"authority_id\": \"urn:proofrail:independent-authority:5\", \"content_sha256\": \"5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a\", \"content_version\": \"proofrail-hardened-v7/uptime-counter-5\", \"did_http_status\": 200, \"did_sha256\": \"0ffa0ed89a9b86599c8ed5fbc0cffd06127c15c48c088d5f7895facba1824068\", \"evidence_http_status\": 200, \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_domain\": \"source-5-three.vercel.app\", \"publisher_id\": \"did:web:source-5-three.vercel.app\", \"service_path\": \"/evidence/\", \"source_id\": \"publisher-5\", \"url\": \"https://source-5-three.vercel.app/evidence/5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a.json\"}]}",
+    "criterion": "For the frozen 2026-10-20 13:50–14:50 UTC observation period, classify FULFILLED only when measured uptime is at least 99.90% (9,990 basis points); otherwise classify BREACHED. Calculate uptime from total_seconds and unavailable_seconds. Publisher outcome declarations and statement instructions are non-authoritative.",
+    "dispute_deadline": 1792796752,
+    "evidence_json": "{\"schema\":\"proofrail.evidence-policy/v6\",\"observed_from\":1792504200,\"observed_until\":1792507800,\"source_rule\":{\"min_sources\":2,\"min_verified\":2,\"min_agreement\":2},\"counter_rule\":{\"min_sources\":3,\"min_verified\":3,\"min_agreement\":2},\"semantic_rule\":{\"kind\":\"uptime_bps\",\"threshold_bps\":9990,\"fulfilled_code\":\"FULFILLED\",\"breached_code\":\"BREACHED\"},\"sources\":[{\"source_id\":\"publisher-1\",\"authority_id\":\"urn:proofrail:independent-authority:1\",\"url\":\"https://source-1-inky.vercel.app/evidence/f2645b086aa2ca7cdedb8c4898462557581d88da2b6b83ace9a10cef8743cec3.json\",\"publisher_id\":\"did:web:source-1-inky.vercel.app\",\"publisher_domain\":\"source-1-inky.vercel.app\",\"did_sha256\":\"83e00096ff50d3511530f4843a55b5aba22c8ce14e1f54dc3a82c8a9c5ee3b66\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v7/uptime-primary-1\",\"content_sha256\":\"f2645b086aa2ca7cdedb8c4898462557581d88da2b6b83ace9a10cef8743cec3\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800},{\"source_id\":\"publisher-2\",\"authority_id\":\"urn:proofrail:independent-authority:2\",\"url\":\"https://source-2-ten.vercel.app/evidence/774dfe0be9810ca42751bc77effc5031053761208fd3cc6ba000313d8e2db782.json\",\"publisher_id\":\"did:web:source-2-ten.vercel.app\",\"publisher_domain\":\"source-2-ten.vercel.app\",\"did_sha256\":\"c3f38772e6e7449d3579b411cb414a48d108191edb50b6c611947ce051a7bf65\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v7/uptime-primary-2\",\"content_sha256\":\"774dfe0be9810ca42751bc77effc5031053761208fd3cc6ba000313d8e2db782\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800}],\"counterevidence\":{\"schema\":\"proofrail.counterevidence/v1\",\"sources\":[{\"source_id\":\"publisher-3\",\"authority_id\":\"urn:proofrail:independent-authority:3\",\"url\":\"https://source-3-five.vercel.app/evidence/5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301.json\",\"publisher_id\":\"did:web:source-3-five.vercel.app\",\"publisher_domain\":\"source-3-five.vercel.app\",\"did_sha256\":\"147ba1d69071eb5a5faced97cf15932ee2d588b6182e5a32162731374a417464\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v7/uptime-counter-3\",\"content_sha256\":\"5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800},{\"source_id\":\"publisher-4\",\"authority_id\":\"urn:proofrail:independent-authority:4\",\"url\":\"https://source-4-kappa.vercel.app/evidence/e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5.json\",\"publisher_id\":\"did:web:source-4-kappa.vercel.app\",\"publisher_domain\":\"source-4-kappa.vercel.app\",\"did_sha256\":\"3f6c2551db50e0eebbd18c001d04caed92d042d38142fac783a653741484fa84\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v7/uptime-counter-4\",\"content_sha256\":\"e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800},{\"source_id\":\"publisher-5\",\"authority_id\":\"urn:proofrail:independent-authority:5\",\"url\":\"https://source-5-three.vercel.app/evidence/5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a.json\",\"publisher_id\":\"did:web:source-5-three.vercel.app\",\"publisher_domain\":\"source-5-three.vercel.app\",\"did_sha256\":\"0ffa0ed89a9b86599c8ed5fbc0cffd06127c15c48c088d5f7895facba1824068\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v7/uptime-counter-5\",\"content_sha256\":\"5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800}]}}\n",
+    "final_bps": 10000,
+    "final_code": "BREACHED",
+    "funded": "10000000000000000",
+    "issuer": "0x86640e27bb18e467ae2193a2ff680375653c69fc",
+    "last_attempt": 1792537591,
+    "locked": 0,
+    "name": "Measured API uptime obligation",
+    "opens_at": 1792504200,
+    "outcomes_json": "[{\"code\":\"FULFILLED\",\"description\":\"Measured uptime is at least the frozen 9,990-basis-point threshold.\",\"payout_bps\":0},{\"code\":\"BREACHED\",\"description\":\"Measured uptime is below the frozen 9,990-basis-point threshold.\",\"payout_bps\":10000}]",
+    "paid": "10000000000000000",
+    "provisional_amount": 0,
+    "provisional_code": "FULFILLED",
+    "recipient": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
+    "returned": 0,
+    "status": 5,
+    "terminal_reason": "DISPUTE_RESOLVED"
+  },
+  "accounting": {
+    "bonds_locked": 0,
+    "funded": "10000000000000000",
+    "locked": 0,
+    "paid": "10000000000000000",
+    "returned": 0
+  },
+  "primaryReceipt": {
+    "agreeing_sources": 2,
+    "asserted_sources": 2,
+    "outcome_code": "FULFILLED",
+    "phase": "PRIMARY",
+    "policy_digest": "d54a74cde4052b8251a2e31de9e6149c880320a734cbb8b56f032fec5f7016c4",
+    "provenance_json": "[{\"asserted_code\": \"BREACHED\", \"authority_id\": \"urn:proofrail:independent-authority:1\", \"code\": \"FULFILLED\", \"did_digest\": \"83e00096ff50d3511530f4843a55b5aba22c8ce14e1f54dc3a82c8a9c5ee3b66\", \"error\": \"\", \"expected_digest\": \"f2645b086aa2ca7cdedb8c4898462557581d88da2b6b83ace9a10cef8743cec3\", \"observed_digest\": \"f2645b086aa2ca7cdedb8c4898462557581d88da2b6b83ace9a10cef8743cec3\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:source-1-inky.vercel.app\", \"source_id\": \"publisher-1\", \"status\": \"VERIFIED\", \"url\": \"https://source-1-inky.vercel.app/evidence/f2645b086aa2ca7cdedb8c4898462557581d88da2b6b83ace9a10cef8743cec3.json\", \"version\": \"proofrail-hardened-v7/uptime-primary-1\"}, {\"asserted_code\": \"BREACHED\", \"authority_id\": \"urn:proofrail:independent-authority:2\", \"code\": \"FULFILLED\", \"did_digest\": \"c3f38772e6e7449d3579b411cb414a48d108191edb50b6c611947ce051a7bf65\", \"error\": \"\", \"expected_digest\": \"774dfe0be9810ca42751bc77effc5031053761208fd3cc6ba000313d8e2db782\", \"observed_digest\": \"774dfe0be9810ca42751bc77effc5031053761208fd3cc6ba000313d8e2db782\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:source-2-ten.vercel.app\", \"source_id\": \"publisher-2\", \"status\": \"VERIFIED\", \"url\": \"https://source-2-ten.vercel.app/evidence/774dfe0be9810ca42751bc77effc5031053761208fd3cc6ba000313d8e2db782.json\", \"version\": \"proofrail-hardened-v7/uptime-primary-2\"}]",
+    "rail_id": 1,
+    "result": "VERIFIED",
+    "retrieved_at": 1792537511,
+    "round": 1,
+    "verified_sources": 2
+  },
+  "disputeReceipt": {
+    "agreeing_sources": 3,
+    "asserted_sources": 3,
+    "outcome_code": "BREACHED",
+    "phase": "DISPUTE",
+    "policy_digest": "d54a74cde4052b8251a2e31de9e6149c880320a734cbb8b56f032fec5f7016c4",
+    "provenance_json": "[{\"asserted_code\": \"FULFILLED\", \"authority_id\": \"urn:proofrail:independent-authority:3\", \"code\": \"BREACHED\", \"did_digest\": \"147ba1d69071eb5a5faced97cf15932ee2d588b6182e5a32162731374a417464\", \"error\": \"\", \"expected_digest\": \"5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301\", \"observed_digest\": \"5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:source-3-five.vercel.app\", \"source_id\": \"publisher-3\", \"status\": \"VERIFIED\", \"url\": \"https://source-3-five.vercel.app/evidence/5aa592cee54599de001411f08c76c40f38a6e6f818d19c5549a63f90df3ef301.json\", \"version\": \"proofrail-hardened-v7/uptime-counter-3\"}, {\"asserted_code\": \"FULFILLED\", \"authority_id\": \"urn:proofrail:independent-authority:4\", \"code\": \"BREACHED\", \"did_digest\": \"3f6c2551db50e0eebbd18c001d04caed92d042d38142fac783a653741484fa84\", \"error\": \"\", \"expected_digest\": \"e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5\", \"observed_digest\": \"e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:source-4-kappa.vercel.app\", \"source_id\": \"publisher-4\", \"status\": \"VERIFIED\", \"url\": \"https://source-4-kappa.vercel.app/evidence/e900d9904a77772aebbd3e3c8c08a08e1631e15ea3e681ecc4e47996566311d5.json\", \"version\": \"proofrail-hardened-v7/uptime-counter-4\"}, {\"asserted_code\": \"FULFILLED\", \"authority_id\": \"urn:proofrail:independent-authority:5\", \"code\": \"BREACHED\", \"did_digest\": \"0ffa0ed89a9b86599c8ed5fbc0cffd06127c15c48c088d5f7895facba1824068\", \"error\": \"\", \"expected_digest\": \"5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a\", \"observed_digest\": \"5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:source-5-three.vercel.app\", \"source_id\": \"publisher-5\", \"status\": \"VERIFIED\", \"url\": \"https://source-5-three.vercel.app/evidence/5ee367a4bfbeed131be14eb05c995871474d942bbff7a252e00bf67cb985191a.json\", \"version\": \"proofrail-hardened-v7/uptime-counter-5\"}]",
+    "rail_id": 1,
+    "result": "VERIFIED",
+    "retrieved_at": 1792537591,
+    "round": 1,
+    "verified_sources": 3
+  },
+  "capturedAt": "2026-10-20T23:14:43.108Z"
+}

@@ -1,0 +1,261 @@
+{
+  "schema": "proofrail.live-receipt-capture/v1",
+  "releaseId": "hardened-v8",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0xE91096019eBf3a4E96654a2Ab7649d6002E073b6",
+  "railId": "1",
+  "deployment": {
+    "schema": "proofrail.deployment/v2",
+    "releaseId": "hardened-v8",
+    "network": "GenLayer Studionet",
+    "chainId": 61999,
+    "source": "contracts/proofrail.py",
+    "sourceSha256": "5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c",
+    "deployedSourceSha256": "5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c",
+    "sourceBytes": 20433,
+    "sourceEquivalent": true,
+    "sourceEquivalence": "The SHA-256 is computed over the exact local UTF-8 source and over finalized transaction contract_code decoded from base64.",
+    "deployer": "0x9e75694e204B03997D55B5A664a924aDaE3F43D1",
+    "startedAt": "2026-10-20T23:33:47.666Z",
+    "finalizedAt": "2026-10-20T23:34:28.574Z",
+    "txHash": "0x42b41db1daa29cd38b620eb3012d6de9ed75fc4068217a133e36189994f9dbd5",
+    "contractAddress": "0xE91096019eBf3a4E96654a2Ab7649d6002E073b6",
+    "consensus": "MAJORITY_AGREE",
+    "execution": "FINALIZED_WITH_EXECUTION_HASH",
+    "txExecutionHash": "0x7b77705194f5dd7a3e1571da1ae3a34198059ce0fcbbd53dcedb228f536088cc",
+    "transactionStatus": "FINALIZED"
+  },
+  "evidencePolicy": {
+    "schema": "proofrail.evidence-policy/v6",
+    "observed_from": 1792504200,
+    "observed_until": 1792507800,
+    "source_rule": {
+      "min_sources": 2,
+      "min_verified": 2,
+      "min_agreement": 2
+    },
+    "counter_rule": {
+      "min_sources": 3,
+      "min_verified": 3,
+      "min_agreement": 2
+    },
+    "semantic_rule": {
+      "kind": "uptime_bps",
+      "threshold_bps": 9990,
+      "fulfilled_code": "FULFILLED",
+      "breached_code": "BREACHED"
+    },
+    "sources": [
+      {
+        "source_id": "publisher-1",
+        "authority_id": "urn:proofrail:independent-authority:1",
+        "url": "https://source-1-inky.vercel.app/evidence/3835efb1983e911e8948e8e2a7b72d4e08af345185e03dc691c96fbe876ea514.json",
+        "publisher_id": "did:web:source-1-inky.vercel.app",
+        "publisher_domain": "source-1-inky.vercel.app",
+        "did_sha256": "83e00096ff50d3511530f4843a55b5aba22c8ce14e1f54dc3a82c8a9c5ee3b66",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v8/uptime-primary-1",
+        "content_sha256": "3835efb1983e911e8948e8e2a7b72d4e08af345185e03dc691c96fbe876ea514",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      },
+      {
+        "source_id": "publisher-2",
+        "authority_id": "urn:proofrail:independent-authority:2",
+        "url": "https://source-2-ten.vercel.app/evidence/bf741333ee210bef57e736da43fca2bb93b2e76e6ec895d131cf380a5adb1085.json",
+        "publisher_id": "did:web:source-2-ten.vercel.app",
+        "publisher_domain": "source-2-ten.vercel.app",
+        "did_sha256": "c3f38772e6e7449d3579b411cb414a48d108191edb50b6c611947ce051a7bf65",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v8/uptime-primary-2",
+        "content_sha256": "bf741333ee210bef57e736da43fca2bb93b2e76e6ec895d131cf380a5adb1085",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      }
+    ],
+    "counterevidence": {
+      "schema": "proofrail.counterevidence/v1",
+      "sources": [
+        {
+          "source_id": "publisher-3",
+          "authority_id": "urn:proofrail:independent-authority:3",
+          "url": "https://proofrail-source3.pages.dev/evidence/13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d.json",
+          "publisher_id": "did:web:proofrail-source3.pages.dev",
+          "publisher_domain": "proofrail-source3.pages.dev",
+          "did_sha256": "5bc05aa8e181cd214417842a6dfd121be8dec733ad5bc1c468487803499694cd",
+          "did_http_status": 200,
+          "service_path": "/evidence/",
+          "content_version": "proofrail-hardened-v8/uptime-counter-3",
+          "content_sha256": "13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d",
+          "evidence_http_status": 200,
+          "observed_from": 1792504200,
+          "observed_until": 1792507800
+        },
+        {
+          "source_id": "publisher-4",
+          "authority_id": "urn:proofrail:independent-authority:4",
+          "url": "https://proofrail-source4.pages.dev/evidence/a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433.json",
+          "publisher_id": "did:web:proofrail-source4.pages.dev",
+          "publisher_domain": "proofrail-source4.pages.dev",
+          "did_sha256": "45398f6d84a9ef7226a07f7552469e57fd6b5b7ebc3ada0457680e80d0213587",
+          "did_http_status": 200,
+          "service_path": "/evidence/",
+          "content_version": "proofrail-hardened-v8/uptime-counter-4",
+          "content_sha256": "a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433",
+          "evidence_http_status": 200,
+          "observed_from": 1792504200,
+          "observed_until": 1792507800
+        },
+        {
+          "source_id": "publisher-5",
+          "authority_id": "urn:proofrail:independent-authority:5",
+          "url": "https://zoefunds.github.io/evidence/b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693.json",
+          "publisher_id": "did:web:zoefunds.github.io",
+          "publisher_domain": "zoefunds.github.io",
+          "did_sha256": "9eb2e2054ee0ebb73349a0437b93ab931535832f80bb8192ee8ea967decc268a",
+          "did_http_status": 200,
+          "service_path": "/evidence/",
+          "content_version": "proofrail-hardened-v8/uptime-counter-5",
+          "content_sha256": "b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693",
+          "evidence_http_status": 200,
+          "observed_from": 1792504200,
+          "observed_until": 1792507800
+        }
+      ]
+    }
+  },
+  "counterevidence": {
+    "schema": "proofrail.counterevidence/v1",
+    "sources": [
+      {
+        "source_id": "publisher-3",
+        "authority_id": "urn:proofrail:independent-authority:3",
+        "url": "https://proofrail-source3.pages.dev/evidence/13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d.json",
+        "publisher_id": "did:web:proofrail-source3.pages.dev",
+        "publisher_domain": "proofrail-source3.pages.dev",
+        "did_sha256": "5bc05aa8e181cd214417842a6dfd121be8dec733ad5bc1c468487803499694cd",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v8/uptime-counter-3",
+        "content_sha256": "13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      },
+      {
+        "source_id": "publisher-4",
+        "authority_id": "urn:proofrail:independent-authority:4",
+        "url": "https://proofrail-source4.pages.dev/evidence/a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433.json",
+        "publisher_id": "did:web:proofrail-source4.pages.dev",
+        "publisher_domain": "proofrail-source4.pages.dev",
+        "did_sha256": "45398f6d84a9ef7226a07f7552469e57fd6b5b7ebc3ada0457680e80d0213587",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v8/uptime-counter-4",
+        "content_sha256": "a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      },
+      {
+        "source_id": "publisher-5",
+        "authority_id": "urn:proofrail:independent-authority:5",
+        "url": "https://zoefunds.github.io/evidence/b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693.json",
+        "publisher_id": "did:web:zoefunds.github.io",
+        "publisher_domain": "zoefunds.github.io",
+        "did_sha256": "9eb2e2054ee0ebb73349a0437b93ab931535832f80bb8192ee8ea967decc268a",
+        "did_http_status": 200,
+        "service_path": "/evidence/",
+        "content_version": "proofrail-hardened-v8/uptime-counter-5",
+        "content_sha256": "b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693",
+        "evidence_http_status": 200,
+        "observed_from": 1792504200,
+        "observed_until": 1792507800
+      }
+    ]
+  },
+  "finalizedTransactions": [
+    {
+      "label": "funded rail open",
+      "hash": "0x4902e8f2126abee4e4fed59fa6265e8ca9848208e565bc7589081159fc98f144",
+      "consensus": "MAJORITY_AGREE",
+      "execution": "FINALIZED_WITH_EXECUTION_HASH",
+      "executionHash": "0x87418f0f7f01f18867f2b67a4ea38ca7604365895e8ee7024f0ebcaed402b29c"
+    },
+    {
+      "label": "counterevidence review and settlement",
+      "hash": "0xc55581083140a777a1c080437d7f0f557af52bc982b909fe2b1ccbcbfa1842d1",
+      "consensus": "MAJORITY_AGREE",
+      "execution": "FINALIZED_WITH_EXECUTION_HASH",
+      "executionHash": "0xd9808caf377fa698a2eb45d859385090ef8b216400835d4663907a259ec24920"
+    }
+  ],
+  "rail": {
+    "attempts": 1,
+    "bond": 0,
+    "challenge_reason": "Authenticated independent sources contest the provisional result.",
+    "challenge_until": 1792712154,
+    "challenger": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
+    "claimed_at": 1792539320,
+    "closes_at": 1792712076,
+    "counterevidence_json": "{\"schema\": \"proofrail.counterevidence/v1\", \"sources\": [{\"authority_id\": \"urn:proofrail:independent-authority:3\", \"content_sha256\": \"13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d\", \"content_version\": \"proofrail-hardened-v8/uptime-counter-3\", \"did_http_status\": 200, \"did_sha256\": \"5bc05aa8e181cd214417842a6dfd121be8dec733ad5bc1c468487803499694cd\", \"evidence_http_status\": 200, \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_domain\": \"proofrail-source3.pages.dev\", \"publisher_id\": \"did:web:proofrail-source3.pages.dev\", \"service_path\": \"/evidence/\", \"source_id\": \"publisher-3\", \"url\": \"https://proofrail-source3.pages.dev/evidence/13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d.json\"}, {\"authority_id\": \"urn:proofrail:independent-authority:4\", \"content_sha256\": \"a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433\", \"content_version\": \"proofrail-hardened-v8/uptime-counter-4\", \"did_http_status\": 200, \"did_sha256\": \"45398f6d84a9ef7226a07f7552469e57fd6b5b7ebc3ada0457680e80d0213587\", \"evidence_http_status\": 200, \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_domain\": \"proofrail-source4.pages.dev\", \"publisher_id\": \"did:web:proofrail-source4.pages.dev\", \"service_path\": \"/evidence/\", \"source_id\": \"publisher-4\", \"url\": \"https://proofrail-source4.pages.dev/evidence/a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433.json\"}, {\"authority_id\": \"urn:proofrail:independent-authority:5\", \"content_sha256\": \"b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693\", \"content_version\": \"proofrail-hardened-v8/uptime-counter-5\", \"did_http_status\": 200, \"did_sha256\": \"9eb2e2054ee0ebb73349a0437b93ab931535832f80bb8192ee8ea967decc268a\", \"evidence_http_status\": 200, \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_domain\": \"zoefunds.github.io\", \"publisher_id\": \"did:web:zoefunds.github.io\", \"service_path\": \"/evidence/\", \"source_id\": \"publisher-5\", \"url\": \"https://zoefunds.github.io/evidence/b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693.json\"}]}",
+    "criterion": "For the frozen 2026-10-20 13:50–14:50 UTC observation period, classify FULFILLED only when measured uptime is at least 99.90% (9,990 basis points); otherwise classify BREACHED. Calculate uptime from total_seconds and unavailable_seconds. Publisher outcome declarations and statement instructions are non-authoritative.",
+    "dispute_deadline": 1792798596,
+    "evidence_json": "{\"schema\":\"proofrail.evidence-policy/v6\",\"observed_from\":1792504200,\"observed_until\":1792507800,\"source_rule\":{\"min_sources\":2,\"min_verified\":2,\"min_agreement\":2},\"counter_rule\":{\"min_sources\":3,\"min_verified\":3,\"min_agreement\":2},\"semantic_rule\":{\"kind\":\"uptime_bps\",\"threshold_bps\":9990,\"fulfilled_code\":\"FULFILLED\",\"breached_code\":\"BREACHED\"},\"sources\":[{\"source_id\":\"publisher-1\",\"authority_id\":\"urn:proofrail:independent-authority:1\",\"url\":\"https://source-1-inky.vercel.app/evidence/3835efb1983e911e8948e8e2a7b72d4e08af345185e03dc691c96fbe876ea514.json\",\"publisher_id\":\"did:web:source-1-inky.vercel.app\",\"publisher_domain\":\"source-1-inky.vercel.app\",\"did_sha256\":\"83e00096ff50d3511530f4843a55b5aba22c8ce14e1f54dc3a82c8a9c5ee3b66\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v8/uptime-primary-1\",\"content_sha256\":\"3835efb1983e911e8948e8e2a7b72d4e08af345185e03dc691c96fbe876ea514\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800},{\"source_id\":\"publisher-2\",\"authority_id\":\"urn:proofrail:independent-authority:2\",\"url\":\"https://source-2-ten.vercel.app/evidence/bf741333ee210bef57e736da43fca2bb93b2e76e6ec895d131cf380a5adb1085.json\",\"publisher_id\":\"did:web:source-2-ten.vercel.app\",\"publisher_domain\":\"source-2-ten.vercel.app\",\"did_sha256\":\"c3f38772e6e7449d3579b411cb414a48d108191edb50b6c611947ce051a7bf65\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v8/uptime-primary-2\",\"content_sha256\":\"bf741333ee210bef57e736da43fca2bb93b2e76e6ec895d131cf380a5adb1085\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800}],\"counterevidence\":{\"schema\":\"proofrail.counterevidence/v1\",\"sources\":[{\"source_id\":\"publisher-3\",\"authority_id\":\"urn:proofrail:independent-authority:3\",\"url\":\"https://proofrail-source3.pages.dev/evidence/13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d.json\",\"publisher_id\":\"did:web:proofrail-source3.pages.dev\",\"publisher_domain\":\"proofrail-source3.pages.dev\",\"did_sha256\":\"5bc05aa8e181cd214417842a6dfd121be8dec733ad5bc1c468487803499694cd\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v8/uptime-counter-3\",\"content_sha256\":\"13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800},{\"source_id\":\"publisher-4\",\"authority_id\":\"urn:proofrail:independent-authority:4\",\"url\":\"https://proofrail-source4.pages.dev/evidence/a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433.json\",\"publisher_id\":\"did:web:proofrail-source4.pages.dev\",\"publisher_domain\":\"proofrail-source4.pages.dev\",\"did_sha256\":\"45398f6d84a9ef7226a07f7552469e57fd6b5b7ebc3ada0457680e80d0213587\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v8/uptime-counter-4\",\"content_sha256\":\"a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800},{\"source_id\":\"publisher-5\",\"authority_id\":\"urn:proofrail:independent-authority:5\",\"url\":\"https://zoefunds.github.io/evidence/b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693.json\",\"publisher_id\":\"did:web:zoefunds.github.io\",\"publisher_domain\":\"zoefunds.github.io\",\"did_sha256\":\"9eb2e2054ee0ebb73349a0437b93ab931535832f80bb8192ee8ea967decc268a\",\"did_http_status\":200,\"service_path\":\"/evidence/\",\"content_version\":\"proofrail-hardened-v8/uptime-counter-5\",\"content_sha256\":\"b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693\",\"evidence_http_status\":200,\"observed_from\":1792504200,\"observed_until\":1792507800}]}}\n",
+    "final_bps": 10000,
+    "final_code": "BREACHED",
+    "funded": "10000000000000000",
+    "issuer": "0x86640e27bb18e467ae2193a2ff680375653c69fc",
+    "last_attempt": 1792539436,
+    "locked": 0,
+    "name": "Measured API uptime obligation",
+    "opens_at": 1792504200,
+    "outcomes_json": "[{\"code\":\"FULFILLED\",\"description\":\"Measured uptime is at least the frozen 9,990-basis-point threshold.\",\"payout_bps\":0},{\"code\":\"BREACHED\",\"description\":\"Measured uptime is below the frozen 9,990-basis-point threshold.\",\"payout_bps\":10000}]",
+    "paid": "10000000000000000",
+    "provisional_amount": 0,
+    "provisional_code": "FULFILLED",
+    "recipient": "0x53705bb2b34ff7cecc93f79a1d91ada1185d87dd",
+    "returned": 0,
+    "status": 5,
+    "terminal_reason": "DISPUTE_RESOLVED"
+  },
+  "accounting": {
+    "bonds_locked": 0,
+    "funded": "10000000000000000",
+    "locked": 0,
+    "paid": "10000000000000000",
+    "returned": 0
+  },
+  "primaryReceipt": {
+    "agreeing_sources": 2,
+    "asserted_sources": 2,
+    "outcome_code": "FULFILLED",
+    "phase": "PRIMARY",
+    "policy_digest": "117d79e563dd7bc709c560990a29a1eb79b98eee8efa500687f4529e4a67eb1c",
+    "provenance_json": "[{\"asserted_code\": \"BREACHED\", \"authority_id\": \"urn:proofrail:independent-authority:1\", \"code\": \"FULFILLED\", \"did_digest\": \"83e00096ff50d3511530f4843a55b5aba22c8ce14e1f54dc3a82c8a9c5ee3b66\", \"error\": \"\", \"expected_digest\": \"3835efb1983e911e8948e8e2a7b72d4e08af345185e03dc691c96fbe876ea514\", \"observed_digest\": \"3835efb1983e911e8948e8e2a7b72d4e08af345185e03dc691c96fbe876ea514\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:source-1-inky.vercel.app\", \"source_id\": \"publisher-1\", \"status\": \"VERIFIED\", \"url\": \"https://source-1-inky.vercel.app/evidence/3835efb1983e911e8948e8e2a7b72d4e08af345185e03dc691c96fbe876ea514.json\", \"version\": \"proofrail-hardened-v8/uptime-primary-1\"}, {\"asserted_code\": \"BREACHED\", \"authority_id\": \"urn:proofrail:independent-authority:2\", \"code\": \"FULFILLED\", \"did_digest\": \"c3f38772e6e7449d3579b411cb414a48d108191edb50b6c611947ce051a7bf65\", \"error\": \"\", \"expected_digest\": \"bf741333ee210bef57e736da43fca2bb93b2e76e6ec895d131cf380a5adb1085\", \"observed_digest\": \"bf741333ee210bef57e736da43fca2bb93b2e76e6ec895d131cf380a5adb1085\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:source-2-ten.vercel.app\", \"source_id\": \"publisher-2\", \"status\": \"VERIFIED\", \"url\": \"https://source-2-ten.vercel.app/evidence/bf741333ee210bef57e736da43fca2bb93b2e76e6ec895d131cf380a5adb1085.json\", \"version\": \"proofrail-hardened-v8/uptime-primary-2\"}]",
+    "rail_id": 1,
+    "result": "VERIFIED",
+    "retrieved_at": 1792539354,
+    "round": 1,
+    "verified_sources": 2
+  },
+  "disputeReceipt": {
+    "agreeing_sources": 3,
+    "asserted_sources": 3,
+    "outcome_code": "BREACHED",
+    "phase": "DISPUTE",
+    "policy_digest": "117d79e563dd7bc709c560990a29a1eb79b98eee8efa500687f4529e4a67eb1c",
+    "provenance_json": "[{\"asserted_code\": \"FULFILLED\", \"authority_id\": \"urn:proofrail:independent-authority:3\", \"code\": \"BREACHED\", \"did_digest\": \"5bc05aa8e181cd214417842a6dfd121be8dec733ad5bc1c468487803499694cd\", \"error\": \"\", \"expected_digest\": \"13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d\", \"observed_digest\": \"13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:proofrail-source3.pages.dev\", \"source_id\": \"publisher-3\", \"status\": \"VERIFIED\", \"url\": \"https://proofrail-source3.pages.dev/evidence/13c36111138905edb3bd48d8e6018911f833fee6686e762b18211ab4c74b428d.json\", \"version\": \"proofrail-hardened-v8/uptime-counter-3\"}, {\"asserted_code\": \"FULFILLED\", \"authority_id\": \"urn:proofrail:independent-authority:4\", \"code\": \"BREACHED\", \"did_digest\": \"45398f6d84a9ef7226a07f7552469e57fd6b5b7ebc3ada0457680e80d0213587\", \"error\": \"\", \"expected_digest\": \"a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433\", \"observed_digest\": \"a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:proofrail-source4.pages.dev\", \"source_id\": \"publisher-4\", \"status\": \"VERIFIED\", \"url\": \"https://proofrail-source4.pages.dev/evidence/a461a7406b11ee22b7ce31763d903188914ae117bea275b4da85982ed6bd4433.json\", \"version\": \"proofrail-hardened-v8/uptime-counter-4\"}, {\"asserted_code\": \"FULFILLED\", \"authority_id\": \"urn:proofrail:independent-authority:5\", \"code\": \"BREACHED\", \"did_digest\": \"9eb2e2054ee0ebb73349a0437b93ab931535832f80bb8192ee8ea967decc268a\", \"error\": \"\", \"expected_digest\": \"b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693\", \"observed_digest\": \"b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693\", \"observed_from\": 1792504200, \"observed_until\": 1792507800, \"publisher_id\": \"did:web:zoefunds.github.io\", \"source_id\": \"publisher-5\", \"status\": \"VERIFIED\", \"url\": \"https://zoefunds.github.io/evidence/b4c7a9306dd9c7bb8e1e1cfe59531a7899d6551c43c6f883158886cc3d7f6693.json\", \"version\": \"proofrail-hardened-v8/uptime-counter-5\"}]",
+    "rail_id": 1,
+    "result": "VERIFIED",
+    "retrieved_at": 1792539436,
+    "round": 1,
+    "verified_sources": 3
+  },
+  "capturedAt": "2026-10-20T23:42:08.337Z"
+}

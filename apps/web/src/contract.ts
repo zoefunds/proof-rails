@@ -1,14 +1,18 @@
 import {createClient} from "genlayer-js";
 import {studionet} from "genlayer-js/chains";
 import {CalldataAddress,ExecutionResult,TransactionStatus} from "genlayer-js/types";
-// This is the source-matched hardened-v6 Studionet deployment.  Keeping the
+// This is the source-matched hardened-v8 Studionet deployment.  Keeping the
 // address in source (rather than accepting an unreviewed browser value) stops
-// the production UI from accidentally writing to the retired v5 contract.
-export const CONTRACT="0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986" as const;
-// This address is historical: it predates the funding-time counter-panel
-// freeze. Keep it readable for evidence, but never use it to create a v6
-// rail. Switch this only after a source-matched corrected deployment exists.
-export const DEPLOYMENT_SUPPORTS_PRE_FUNDED_COUNTEREVIDENCE=false;
+// the production UI from accidentally writing to a retired contract.
+export const CONTRACT="0xE91096019eBf3a4E96654a2Ab7649d6002E073b6" as const;
+// hardened-v6 (0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986) predates the
+// funding-time counter-panel freeze; hardened-v7 (0xC217A00E471368E005A624B926bC5A13B267c7F4)
+// fixed that but sourced all five publishers from one Vercel account. Both are
+// retired; do not rebind to them. hardened-v8 is the same corrected source
+// with its five publisher sources spread across three distinct hosting
+// providers/accounts (Vercel, Cloudflare Pages, GitHub Pages) and has its own
+// funded, on-chain reversal demonstration (artifacts/live-e2e-hardened-v8-4.studionet.json).
+export const DEPLOYMENT_SUPPORTS_PRE_FUNDED_COUNTEREVIDENCE=true;
 export const EXPLORER="https://explorer-studio.genlayer.com";const reads=createClient({chain:studionet});let writes:any=null;
 export type Rail={id:number;issuer:unknown;recipient:unknown;name:string;criterion:string;evidence_json:string;counterevidence_json:string;outcomes_json:string;funded:unknown;locked:unknown;paid:unknown;returned:unknown;status:number;opens_at:unknown;closes_at:unknown;claimed_at:unknown;attempts:number;last_attempt:unknown;provisional_code:string;provisional_amount:unknown;challenge_until:unknown;challenger:unknown;bond:unknown;dispute_deadline:unknown;challenge_reason:string;final_code:string;final_bps:number;terminal_reason:string};
 export function addressText(value:unknown){if(typeof value==="string")return value;const bytes=value&&typeof value==="object"&&"bytes" in value?(value as any).bytes:value;if(bytes instanceof Uint8Array)return `0x${Array.from(bytes,x=>x.toString(16).padStart(2,"0")).join("")}`;return String(value??"")}
