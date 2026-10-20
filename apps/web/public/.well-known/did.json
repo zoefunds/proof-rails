@@ -1,1 +1,0 @@
-{"@context":["https://www.w3.org/ns/did/v1"],"id":"did:web:proof-rails.vercel.app","service":[{"id":"did:web:proof-rails.vercel.app#attestations","type":"LinkedDomains","serviceEndpoint":"https://proof-rails.vercel.app/evidence/"}]}

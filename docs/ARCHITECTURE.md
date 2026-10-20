@@ -1,12 +1,12 @@
 # Architecture
 
-ProofRail separates objective evidence integrity from semantic interpretation.
+ProofRail separates objective evidence integrity from deterministic payout policy.
 
-The issuer commits an `EvidenceSpec` JSON object containing one HTTPS URL, a `did:web` publisher identifier, a publisher domain, a content version, the lowercase SHA-256 digest of the raw response body, and an observation interval. Contract validation parses the URL authority, rejects credentials, fragments and non-default ports, canonicalizes the hostname, and requires it to equal the publisher domain. During review, every validator retrieves the publisher DID document and requires a same-origin linked service before retrieving evidence.
+The issuer commits a v4 evidence policy containing two to five HTTPS sources. Every source has a distinct canonical domain, DID, and authority identifier, plus a content version, lowercase SHA-256 digest, and observation interval. Contract validation rejects credentials, queries, fragments and non-default ports, canonicalizes the hostname, and requires the artifact URL to be exactly `<service_path><digest>.json`. During review, every validator retrieves the digest-pinned DID document and requires its exact same-origin service path before retrieving evidence.
 
 `observed_until` and `closes_at` are separate deadlines. The contract requires at least 86,400 seconds after observation completion for the named recipient to lodge a claim. The frontend exposes both fields and applies the same guard before wallet submission.
 
-During review, every validator fetches the same URL and hashes the raw UTF-8 body. Missing content and digest mismatches are typed outcomes and bypass the LLM. Only a matching artifact is inserted into the classification prompt. Validators recompute the full structured result exactly. The accepted result becomes a `Receipt` stored under `(rail, phase, round)`.
+During review, every validator fetches the same URL and hashes the raw UTF-8 body. Only an exact `proofrail.independent-attestation/v2` artifact is accepted. Publisher, authority, source, version, observation bounds, and outcome must match their frozen commitments. There is no evidence-classification prompt. Validators recompute the complete result, and a code must satisfy both the configured agreement floor and a strict majority of verified sources. The accepted result becomes a `Receipt` stored under `(rail, phase, round)`.
 
 Financial policy is independent of review. Outcome codes and basis points are immutable. Settlement, refunds, and bond routing execute after consensus in deterministic code.
 
@@ -26,11 +26,13 @@ The browser reads rails with paginated contract methods. Transaction submission 
 
 ## Trust boundaries
 
-- The issuer chooses the criterion and evidence before the counterparty claims.
+- The issuer chooses the criterion, but cannot use one source, reuse an origin/DID/authority, or bypass strict-majority corroboration.
 - TLS and canonical authority parsing bind retrieval to the frozen publisher domain.
 - The publisher DID document binds the declared identity to a same-origin evidence service, and its digest is persisted in every successful receipt.
 - SHA-256 binds retrieval to the frozen content version.
-- Validators independently retrieve, hash, and classify.
+- Validators independently retrieve, hash, schema-check, and count outcomes.
 - The contract alone computes transfers.
 - The interface is an untrusted transaction composer and read client.
+
+Distinct identifiers are a technical anti-reuse rule, not proof that publishers are unrelated legal or operational entities. The current funded demonstration uses separately addressed publisher deployments controlled by one project operator. A production trust claim therefore requires independently operated publisher domains or a separately governed authority registry; the demonstration does not relabel its five origins as organizationally independent.
 

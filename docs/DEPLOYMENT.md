@@ -1,52 +1,49 @@
 # Deployment
 
-## Current production deployment
+## Current v4 deployment — 2026-10-20
 
-- Console: `https://proof-rails.vercel.app`
-- Network: GenLayer Studionet (`61999`)
-- Contract: `0xe0eD7d02f8c0F907f342E4d3A2aF1F707EDc97dc`
-- Deployment transaction: `0x6759d35a1f8e4e30a76555064810c17321dbbf0c53f86e449bcf2cf04ae9b7d0`
-- Execution hash: `0xa2f5ec8983763d6b4bea082d10b5f7ddd879c250a5a479cb34a17bafd906deb3`
-- Exact deployed/local source SHA-256: `4705ad10c2e201d2b623b4416ccbfc37becd4d95aba8c1ab1f758eb087e961ff`
-- Current verification rail: `2` (`artifacts/live-e2e-4.studionet.json`)
-- Deployment record: `artifacts/deployment.studionet.json`
+- Contract: `0x7d61a7BaD67904Db4C46c8108b77C42D03908daC`
+- Deployment transaction: `0xdb4045b5aa314f79a2eebe99b4d94783e251ec83284c5a0ab999f9a9d9ff8813`
+- Local and deployed source SHA-256: `2ee60390f63982855417cb36c8454b06fe3dae3f660aad8b4142baedd341a259`
+- Funded proof: `artifacts/live-e2e-4.studionet.json`
+- Production browser: `https://proof-rails.vercel.app`
 
-Superseded lifecycle files from the earlier contract were removed from the current verification package. The repository now publishes only the active deployment record and the current source-equivalent contract's funded payout record. Earlier deployments remain traceable through Git history and are not presented as production evidence.
+Rail 1 locked 0.01 GEN. The primary receipt verified two asserted sources and provisionally selected `FULFILLED`. A 5% recipient bond introduced three separately addressed, DID-pinned counter-sources. The dispute receipt verified all five sources and changed consensus 3–2 to `BREACHED`; 0.01 GEN reached the recipient and both locked-principal and locked-bond accounting returned to zero. Every deployment and lifecycle transaction reports `MAJORITY_AGREE` plus a finalized GenVM execution hash.
 
 ## Deployed-source equivalence
 
-The deployment transaction finalized with `MAJORITY_AGREE`. Its `contract_code` was decoded from base64 and hashed independently from the local UTF-8 source. Both byte sequences produced `4705ad10c2e201d2b623b4416ccbfc37becd4d95aba8c1ab1f758eb087e961ff`; `artifacts/deployment.studionet.json` records both values, the byte count (`12,542`), execution hash, deployer, and finalization timestamps.
+The deployment transaction finalized with `MAJORITY_AGREE`. Its `contract_code` was decoded from base64 and hashed independently from the local UTF-8 source. Both byte sequences produced `2ee60390f63982855417cb36c8454b06fe3dae3f660aad8b4142baedd341a259`; `artifacts/deployment.studionet.json` records both values, the byte count (`16,701`), execution hash, deployer, and finalization timestamps.
 
 ## Current funded lifecycle
 
-Rail 2 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF680375653c69FC` for recipient `0x53705Bb2B34ff7CEcC93F79a1D91aDa1185D87Dd`. Both review rounds independently retrieved the content-addressed release artifact, reproduced digest `2b53a61bfe866252f075406276067da51df22080b3289721cc5ff054df711a24`, authenticated `did:web:proof-rails.vercel.app`, and recorded publisher-document digest `84d6ad4e81ffdd9119efb02b9147d852248b5601d4e40af41723cf73331517ee`.
+Rail 1 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF680375653c69FC` for recipient `0x53705Bb2B34ff7CEcC93F79a1D91aDa1185D87Dd`. The primary round authenticated two distinct origins, DIDs, and authority identifiers. The dispute round added three more and persisted matching expected/observed evidence and DID digests for all five sources.
 
 | Action | Transaction | GenVM execution hash |
 | --- | --- | --- |
-| Open funded rail | `0xa2a9ca982ef2058f4ba901bf88704f46a18f088263c2f433eb353fea93ba3f6d` | `0x00b256a833148584b55a3196de75e6315d2c4800b691bc6a8c3df6098fcf715f` |
-| Lodge recipient claim | `0x5c649dfd8e866cc91be86839999811591a024880e66cb6984e9c4cf08f6bfc57` | `0xa767e962c6a170b6981aed50d50e316312b2631280aee1aa95973e6a18b3ca8c` |
-| Primary evidence review | `0x45d26d022504ca016e43a9fae18f1b09a7bc2710c5c5d22149b66c06fad60a37` | `0x3072d097b251e3658deaa4c8e4fdfa0197990c342a7b6a5df68c211aaee0b741` |
-| Submit reasoned 5% bond | `0x018486ec9ddeedeb8dbbe718bd335da01426ca34fae67c46b07e40d80a2aa92a` | `0x9c3f2b7db09189d03b3e498c7c8b35d97ecd6cb0a72dc6b32232ef3f25c8bda3` |
-| Resolve dispute | `0xbe7f673a2bd08b86a127afdede5bf38e3b84d8f188cfa09f4d6e24003c8cfe2a` | `0xe80035b96d947a4f411d03e8e61c52b2416c6c4bfe7b6e688658760680211599` |
+| Open funded rail | `0x74b119f68d96d521e841d28c2293b85b24144128ec3c54e1a5348f08ba5ec3e2` | `0x22cb09dc39f8f25ee3a5a8481ba4cf83707de7d0d121da2c77106ce1e35df7bc` |
+| Lodge recipient claim | `0x65b198daad776a9b08e1608a3e6cebb0e3e9a8f7427ab1adacbc1c1398199cf5` | `0xa6741c743530674f89d18c38d9b6578d134920c1afcafddb82f25e31eec8a9d6` |
+| Primary evidence review | `0xa6a6a00cd5d542b82e2b2b976f44871c12840251e17603ea1ebf57031000afa6` | `0xcf4c27541abbf68626e48d1f0a6fecb6368ef7be538a52e72ab9f737a614dc21` |
+| Submit reasoned 5% bond | `0x3478ff41e9fdf7a22e147b6fe2bc4b6798cba984225d5f19c86c36aad679c9c3` | `0x6f4329dbc62b6fd3b3c121084be3cd3d4914f5a7a53dbd18d577c505462dd51e` |
+| Resolve dispute | `0xd1304a9d547afa38932d91d62145f38b5b1312ffdc9e30576fa791f76a7e13e2` | `0x6f4329dbc62b6fd3b3c121084be3cd3d4914f5a7a53dbd18d577c505462dd51e` |
 
-Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM execution evidence. The terminal code was `BREACHED` at 10,000 basis points: 0.01 GEN paid, zero principal locked, zero bond locked, and a 0.0095 GEN net recipient balance increase after the challenge bond. A fresh public read on 2026-10-16 reported two rails and aggregate accounting of 0.02 GEN funded, 0.02 GEN paid, 0 returned, and 0 locked.
+Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM execution evidence. The provisional code was `FULFILLED`; authenticated counterevidence changed the strict-majority result to `BREACHED` at 10,000 basis points. The recipient balance increased by exactly 0.01 GEN, with zero principal and bond remaining locked.
 
 ## Browser verification
 
-The public production interface at `proof-rails.vercel.app` was used to exercise the browser-originated workflow after deployment. The operator verified creation with distinct observation and claim deadlines, named-recipient claim submission, a bonded dispute carrying a written reason, settlement only after finalized GenVM success, and the deadline-gated recovery control. The immutable transaction-level proof above remains the canonical settlement record; no browser key or private signing material is stored in the repository.
+The public production interface at `proof-rails.vercel.app` was checked against the fresh deployment. It reads rail 1 and both on-chain receipts, displaying authority identity, asserted/verified state, vote code, agreeing/verified counts, and matching expected/observed digests. The immutable transaction-level proof above remains the canonical settlement record; no browser key or private signing material is stored in the repository.
 
 ## Release procedure
 
 1. Run contract lint, Direct Mode tests, frontend tests, typecheck, and build.
 2. Validate and generate the schema with the GenLayer CLI.
 3. Deploy `contracts/proofrail.py` to a fresh Studionet address.
-4. Set `VITE_PROOFRAIL_CONTRACT_ADDRESS`, `VITE_PROOFRAIL_CHAIN_ID=61999`, and the Studionet RPC URL.
+4. Update the pinned production contract address and verify chain ID `61999`.
 5. Exercise creation, claim, review, reasoned challenge, settlement, and eligible recovery through the public browser client.
 6. Record the source commit, deployment transaction, contract address, finalized lifecycle receipts, execution hashes, terminal accounting, and balance movement before publishing.
 
 ## Production web origin
 
-The production console and evidence publisher are served from `https://proof-rails.vercel.app`. The DID document is available at `/.well-known/did.json`, and immutable evidence artifacts are stored below `/evidence/<sha256>.json`.
+The production console is served from `https://proof-rails.vercel.app`. Independent publisher origins expose a pinned `/.well-known/did.json` and immutable `/evidence/<sha256>.json` artifacts.
 
 No private key belongs in this repository or browser bundle.
 
