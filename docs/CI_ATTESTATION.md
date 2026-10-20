@@ -2,7 +2,7 @@
 
 ## Current hosted result
 
-The latest inspected GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39486189923>, is attached to documentation and CI-gate commit `082e03c22cf44b6687b2c2569a8d343fdf5ef685`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted this annotation for both jobs. The hardened implementation itself is commit `2fc32738e8786f23060a23277546f6f991dfb3ff`; its run is [39482917952](https://github.com/zoefunds/proof-rails/actions/runs/39482917952) and had the same startup block.
+The latest inspected GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39488278105>, is attached to documentation commit `399730d8a8757150414334b728cf0fadac93bb86`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted the account billing-lock annotation for both jobs. The hardened implementation itself is commit `2fc32738e8786f23060a23277546f6f991dfb3ff`; its run is [39482917952](https://github.com/zoefunds/proof-rails/actions/runs/39482917952) and had the same startup block.
 
 > The job was not started because your account is locked due to a billing issue.
 
@@ -19,8 +19,8 @@ The following release-commit inputs were run successfully:
 | Frontend tests | `npm test --prefix apps/web` | 26 passed, 3 files |
 | TypeScript | `npm run typecheck --prefix apps/web` | passed |
 | Production build | `npm run build --prefix apps/web` | passed, 2,372 modules |
-| Production dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | passed on 2026-10-20: zero advisories |
-| Full dependency audit | `npm audit --prefix apps/web` | completed on 2026-10-20: 3 development-dependency advisories (1 moderate, 2 critical), in Vitest-related tooling; this is not a clean full-graph result |
+| Full dependency audit | `npm audit --prefix apps/web --audit-level=low` | passed on 2026-10-20: zero vulnerabilities after upgrading Vitest to `5.0.5` |
+| Production dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | passed on 2026-10-20: zero vulnerabilities |
 | Hardened-v6 publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | passed on 2026-10-20: 10 objects, HTTP 200, no redirects, exact final URLs, and matching SHA-256 |
 | Funded V6 receipt proof | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | passed: finalized deployment, 2/2→3/3 reversal, payout, bond return, and terminal conservation |
 | Source equivalence and lifecycle | `node scripts/verify_live_artifact.mjs` | passed: source hash, finality, provenance, reversal, and balance conservation |
