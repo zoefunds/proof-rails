@@ -20,17 +20,17 @@ Rail 1 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF6803756
 
 | Action | Transaction | GenVM execution hash |
 | --- | --- | --- |
-| Open funded rail | `0xc5db721d16b59f95bcf96a61483c8698ab885b1774f9b34ecde90846f4a25ab3` | `0x7f7476de0e18462bbe39b617ab643f57927f5bb17eeb91859fdd6990477f1c2a` |
-| Lodge recipient claim | `0x1cc54c1c2ce343047ccf2d28844464ecdaf23378ee56a4e26caaf278648ec7a8` | `0xb5d92aa4044eb34fd44363c2b9656eb99a85e76abe96141cd647d6dd83eb25aa` |
+| Open funded rail | `0xc5db721d16b59f95bcf96a61483c8698ab885b1774f9b34ecde90846f4a25ab3` | `0x35b5a08f8c509e6670af8894067f509fb9992da500d1b9d2fd976befdd281447` |
+| Lodge recipient claim | `0x1cc54c1c2ce343047ccf2d28844464ecdaf23378ee56a4e26caaf278648ec7a8` | `0x7f7476de0e18462bbe39b617ab643f57927f5bb17eeb91859fdd6990477f1c2a` |
 | Primary evidence review | `0x27a7a5c2cd253f055eeb3bbb4ce62fd3266631b1c69ab035ee98790170d3693e` | `0xb5d92aa4044eb34fd44363c2b9656eb99a85e76abe96141cd647d6dd83eb25aa` |
-| Submit reasoned 5% bond | `0x2c8216b154e293db4d595a72e0bd71b48760931c251c189ac3de2cbe7203c51b` | `0x14bbe4047ae2f9eddad16ac3a05e1e7a40ab2be1537164a343d347a141d41332` |
+| Submit reasoned 5% bond | `0x2c8216b154e293db4d595a72e0bd71b48760931c251c189ac3de2cbe7203c51b` | `0xe8a7a2ed4c7fdcc6d8af0e7247b7fbe7ff221ff4f50363ee3dd7775296d93bcd` |
 | Resolve dispute | `0x62c936795e97bef9ba52719bd0ad087d3366727a3ee07f27c0b11c0f4faf660e` | `0xb5d92aa4044eb34fd44363c2b9656eb99a85e76abe96141cd647d6dd83eb25aa` |
 
 Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM execution evidence. The provisional code was `FULFILLED`; the independent counter panel changed it to `BREACHED` at 10,000 basis points. The recipient balance increased by exactly 0.01 GEN, with zero principal and bond remaining locked.
 
 ## Browser verification
 
-The public production interface at `proof-rails.vercel.app` was checked against the fresh deployment. It reads rail 1 and both on-chain receipts, displaying authority identity, asserted/verified state, vote code, agreeing/verified counts, and matching expected/observed digests. The immutable transaction-level proof above remains the canonical settlement record; no browser key or private signing material is stored in the repository.
+The public production interface at `https://proof-rails.vercel.app` was checked against the fresh deployment. It reads rail 1 and both on-chain receipts, displaying authority identity, publisher assertion, validator classification, failure reason, agreeing/verified counts, and matching expected/observed digests. The immutable transaction-level proof above remains the canonical settlement record; no browser key or private signing material is stored in the repository.
 
 ## Release procedure
 
@@ -38,7 +38,7 @@ The public production interface at `proof-rails.vercel.app` was checked against 
 2. Validate and generate the schema with the GenLayer CLI.
 3. Deploy `contracts/proofrail.py` to a fresh Studionet address.
 4. Update the pinned production contract address and verify chain ID `61999`.
-5. Exercise creation, claim, review, reasoned challenge, settlement, and eligible recovery through the public browser client.
+5. Exercise creation, claim, review, reasoned challenge, and settlement through the public browser client; verify recovery paths in Direct Mode and use the browser when a live rail is eligible.
 6. Record the source commit, deployment transaction, contract address, finalized lifecycle receipts, execution hashes, terminal accounting, and balance movement before publishing.
 
 ## Production web origin
@@ -46,4 +46,8 @@ The public production interface at `proof-rails.vercel.app` was checked against 
 The production console is served from `https://proof-rails.vercel.app`. Independent publisher origins expose a pinned `/.well-known/did.json` and immutable `/evidence/<sha256>.json` artifacts.
 
 No private key belongs in this repository or browser bundle.
+
+## CI status
+
+The complete release gate passes locally: contract lint, 30 Direct Mode tests, 24 frontend tests, typecheck, production build, production-dependency audit, live publisher verification, and source-matched artifact verification. Current GitHub Actions jobs do not execute any steps because GitHub reports that the repository owner's account is locked for a billing issue. This is an external runner-availability failure, not a passing hosted CI result; rerun the workflow after restoring Actions billing.
 

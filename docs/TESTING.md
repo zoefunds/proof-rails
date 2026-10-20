@@ -27,7 +27,9 @@ The current v5 local verification produces:
 
 Direct Mode proves storage/runtime integration and validator equivalence with controlled inputs. The source-matched network proof is `artifacts/live-e2e-4.studionet.json`: it records the finalized hardened deployment, a funded five-transaction Studionet lifecycle, 2/2 verified primary sources, 3/3 verified counter-sources, a separate-panel 3-of-3 consensus reversal, payout, balance delta, bond clearing, fund conservation, and GenVM finality.
 
-The v5 E2E runner requires `PROOFRAIL_EVIDENCE_POLICY` and `PROOFRAIL_COUNTEREVIDENCE`. It rejects a run unless both rounds meet the frozen source quorum, every transaction reaches majority consensus with GenVM execution evidence, accounting conserves funds, and the expected payout reaches the recipient. Only its newly generated `proofrail.live-verification/v5` artifact may be used as source-matched funded proof.
+The v5 E2E runner reads `artifacts/evidence-policy.v5.json` and `artifacts/counterevidence.v5.json` by default; `PROOFRAIL_EVIDENCE_POLICY` and `PROOFRAIL_COUNTEREVIDENCE` may override them. It verifies contract state after each review, performs at most five retries separated by the frozen interval, and rejects a run unless both panels meet quorum, every recorded transaction reaches majority consensus with GenVM execution evidence, per-run accounting conserves funds, and the expected payout reaches the recipient. Only its newly generated `proofrail.live-verification/v5` artifact is source-matched funded proof.
+
+The production-dependency audit reports zero vulnerabilities. Current hosted workflows do not start because GitHub marks the account locked for billing; both jobs contain zero executed steps. This is recorded as an external CI blocker, not described as green CI.
 
 The frontend suite separately verifies the 24-hour schedule guard, recovery eligibility for expired draft/claim/dispute states, and the rule that a finalized wallet receipt is successful only when consensus is `MAJORITY_AGREE` and GenVM execution is explicitly `FINISHED_WITH_RETURN` or a finalized transaction provides an execution hash.
 

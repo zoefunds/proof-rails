@@ -66,6 +66,8 @@ Studionet v5 contract: `0xa8533cC75600637a824B9A34EB5ddE9d38A6aBe6` (chain ID `6
 
 `artifacts/live-e2e-4.studionet.json` is the funded v5 proof. Two pinned primary publishers produced `FULFILLED`; three authenticated counter-publishers changed the counter-panel consensus to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. The canonical production browser is live at `https://proof-rails.vercel.app`.
 
+Local release verification is green. The current GitHub Actions run did not start because GitHub reports an account-level billing lock; see [Deployment](docs/DEPLOYMENT.md#ci-status) for the exact status. This repository does not claim a passing hosted run until GitHub executes the jobs.
+
 ## Safety properties
 
 - exact funding and immutable payout rules;
