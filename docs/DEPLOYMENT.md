@@ -2,17 +2,17 @@
 
 ## Current v5 deployment — 2026-10-20
 
-- Contract: `0xa8533cC75600637a824B9A34EB5ddE9d38A6aBe6`
-- Deployment transaction: `0xf4370bcbf668dcfc492251af9ae964fe069d425f19d9bb477fd8d8ee3c8cbc63`
-- Local and deployed source SHA-256: `feaecbd181cca305c1f1035509eba5897da9e6a284aa6257bbf5797df0151381`
+- Contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC`
+- Deployment transaction: `0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98`
+- Local and deployed source SHA-256: `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`
 - Funded proof: `artifacts/live-e2e-4.studionet.json`
 - Production browser: `https://proof-rails.vercel.app`
 
-Rail 1 locked 0.01 GEN. Validators semantically classified two primary statements as `FULFILLED`. A 5% recipient bond opened the separately frozen three-source counter panel; all three statements classified as `BREACHED`. This replaced the provisional result without enlarging the primary electorate. The recipient received exactly 0.01 GEN and principal/bond accounting returned to zero.
+Rail 1 locked 0.01 GEN against a frozen 99.90% uptime threshold for a one-hour UTC period. The two primary publishers misleadingly asserted `BREACHED`, but their authenticated records contained only one and two unavailable seconds, so validators calculated `FULFILLED`. A 5% recipient bond opened the separate three-source counter panel. Those publishers misleadingly asserted `FULFILLED`, while their records contained 20, 24, and 18 unavailable seconds, so validators calculated `BREACHED`. The recipient received exactly 0.01 GEN and principal/bond accounting returned to zero.
 
 ## Deployed-source equivalence
 
-The deployment transaction finalized with `MAJORITY_AGREE`. Its `contract_code` was decoded from base64 and hashed independently from the local UTF-8 source. Both byte sequences produced `feaecbd181cca305c1f1035509eba5897da9e6a284aa6257bbf5797df0151381`; `artifacts/deployment.studionet.json` records both values, the byte count (`20,223`), execution hash, deployer, and finalization timestamps.
+The deployment transaction finalized with `MAJORITY_AGREE`. Its `contract_code` was decoded from base64 and hashed independently from the local UTF-8 source. Both byte sequences produced `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`; `artifacts/deployment.studionet.json` records both values, the byte count (`20,622`), execution hash, deployer, and finalization timestamps.
 
 ## Current funded lifecycle
 
@@ -20,11 +20,11 @@ Rail 1 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF6803756
 
 | Action | Transaction | GenVM execution hash |
 | --- | --- | --- |
-| Open funded rail | `0xc5db721d16b59f95bcf96a61483c8698ab885b1774f9b34ecde90846f4a25ab3` | `0x35b5a08f8c509e6670af8894067f509fb9992da500d1b9d2fd976befdd281447` |
-| Lodge recipient claim | `0x1cc54c1c2ce343047ccf2d28844464ecdaf23378ee56a4e26caaf278648ec7a8` | `0x7f7476de0e18462bbe39b617ab643f57927f5bb17eeb91859fdd6990477f1c2a` |
-| Primary evidence review | `0x27a7a5c2cd253f055eeb3bbb4ce62fd3266631b1c69ab035ee98790170d3693e` | `0xb5d92aa4044eb34fd44363c2b9656eb99a85e76abe96141cd647d6dd83eb25aa` |
-| Submit reasoned 5% bond | `0x2c8216b154e293db4d595a72e0bd71b48760931c251c189ac3de2cbe7203c51b` | `0xe8a7a2ed4c7fdcc6d8af0e7247b7fbe7ff221ff4f50363ee3dd7775296d93bcd` |
-| Resolve dispute | `0x62c936795e97bef9ba52719bd0ad087d3366727a3ee07f27c0b11c0f4faf660e` | `0xb5d92aa4044eb34fd44363c2b9656eb99a85e76abe96141cd647d6dd83eb25aa` |
+| Open funded rail | `0x3ccacc0775b1b1f11966619b32eb8716b07d129f981525eec97d6f9e59d06da0` | `0x7f7476de0e18462bbe39b617ab643f57927f5bb17eeb91859fdd6990477f1c2a` |
+| Lodge recipient claim | `0x3c765d844c0eded80003b37615b0e840a9a753895168a2be3ceb784c5da3cb81` | `0xac684ea0210461ecc6797cbc3a71f0d6ed82080026abda52555f545cd64c3211` |
+| Primary evidence review | `0xa7b9d63bde32e48fa0f48ed4f64ba7ff7e5c9e3f6120ee461ad4195db14df877` | `0x14ba267a522d88871bc0f2e3a51d134f133d6bc5bb4cb36051521e5c54d720fb` |
+| Submit reasoned 5% bond | `0x2603800d9802d4aeeac775a7180a25dc28ee52408180a56e4d0655e67af464b7` | `0x3ef4151544304da9bd4e85422f05ad1781a62500099e2c786e7a8d2f6025428e` |
+| Resolve dispute | `0x06eb4673734a149ac2742a1145b45c3bc2316163596cdf5eba8153ef2df16a3c` | `0x6f4329dbc62b6fd3b3c121084be3cd3d4914f5a7a53dbd18d577c505462dd51e` |
 
 Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM execution evidence. The provisional code was `FULFILLED`; the independent counter panel changed it to `BREACHED` at 10,000 basis points. The recipient balance increased by exactly 0.01 GEN, with zero principal and bond remaining locked.
 
@@ -49,5 +49,5 @@ No private key belongs in this repository or browser bundle.
 
 ## CI status
 
-The complete release gate passes locally: contract lint, 30 Direct Mode tests, 24 frontend tests, typecheck, production build, production-dependency audit, live publisher verification, and source-matched artifact verification. Current GitHub Actions jobs do not execute any steps because GitHub reports that the repository owner's account is locked for a billing issue. This is an external runner-availability failure, not a passing hosted CI result; rerun the workflow after restoring Actions billing.
+The complete release gate passes locally: contract lint, 34 Direct Mode tests, 24 frontend tests, typecheck, production build, production-dependency audit, live publisher verification, and source-matched artifact verification. Current GitHub Actions jobs do not execute any steps because GitHub reports that the repository owner's account is locked for a billing issue. This is an external runner-availability failure, not a passing hosted CI result; rerun the workflow after restoring Actions billing.
 

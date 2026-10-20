@@ -6,7 +6,7 @@ The issuer commits a v5 policy containing separate primary and counter rules. `m
 
 `observed_until` and `closes_at` are separate deadlines. The contract requires at least 86,400 seconds after observation completion for the named recipient to lodge a claim. The frontend exposes both fields and applies the same guard before wallet submission.
 
-During review, every validator fetches and hashes the same UTF-8 body. Only an exact `proofrail.independent-attestation/v2` artifact is accepted. Publisher, authority, source, version, and observation bounds must match. The publisher outcome is recorded only as `asserted_code`. A neutral classifier receives the frozen criterion, outcome descriptions without payout values, and subject/statement in an isolated untrusted-data object. Its exact response must select a frozen code with `HIGH` confidence. Validators recompute authentication, classification, quorum, and provenance through GenLayer consensus; ambiguity or malformed model output fails closed.
+During review, every validator fetches and hashes the same UTF-8 body. Only an exact `proofrail.independent-attestation/v2` artifact is accepted. Publisher, authority, source, version, and observation bounds must match. The publisher outcome is recorded only as `asserted_code`. For the frozen `uptime_bps` rule, validators require exact `total_seconds`, `unavailable_seconds`, `period_start`, and `period_end` facts, check the duration and bounds, and calculate `(total_seconds - unavailable_seconds) × 10,000 ÷ total_seconds` with integer arithmetic. The result maps only to the frozen fulfilled or breached code. Publisher prose, challenge text, payout values, and model output cannot affect classification.
 
 A dispute does not append votes to the primary population. It replaces the review panel with the separately frozen counter rule and submitted counter-source set. Primary and counter sources cannot reuse source IDs, origins, DIDs, or authority IDs. Challenge prose is stored for audit but never enters classification. All admitted sources have equal weight.
 
@@ -33,7 +33,7 @@ The browser reads rails with paginated contract methods. Transaction submission 
 - The publisher DID document binds the declared identity to a same-origin evidence service, and its digest is persisted in every successful receipt.
 - SHA-256 binds retrieval to the frozen content version.
 - Validators independently retrieve, hash, schema-check, and count outcomes.
-- Validators independently interpret authenticated statements; publisher codes cannot choose the result.
+- Validators independently evaluate authenticated measurements against the frozen numerical rule; publisher codes cannot choose the result.
 - The contract alone computes transfers.
 - The interface is an untrusted transaction composer and read client.
 

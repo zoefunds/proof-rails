@@ -1,12 +1,12 @@
 # Testing
 
-The Direct Mode suite deploys the real `ProofRail` contract through `direct_deploy` and mocks web and semantic-classifier boundaries. The contract still builds the isolated prompt, validates the exact response, and runs validator recomputation.
+The Direct Mode suite deploys the real `ProofRail` contract through `direct_deploy` and mocks the web boundary. Structured numerical classification remains real contract execution; deliberately false model mocks are ignored and cannot override frozen arithmetic.
 
 The v5 adversarial suite covers:
 
 - independent-source quorum and verified-versus-asserted provenance;
 - three authenticated counter-sources overturning a two-source provisional verdict and changing payout;
-- contradictory publisher assertions, ambiguity, prompt injection, forged DID, wrong service path, redirects, stale metadata, schema injection, canonical aliases, duplicated identities, conflicting sources, timeout/retry, validator disagreement, transfer rollback, replay, and fund conservation;
+- contradictory publisher assertions, false-but-confident model output, ambiguity, prompt injection, missing or inconsistent facts, forged DID, wrong service path, redirects, stale metadata, schema injection, canonical aliases, duplicated identities, conflicting sources, timeout/retry, validator disagreement, transfer rollback, replay, and fund conservation;
 - repeated deterministic validator recomputation agreeing with the captured leader result, plus a funded Studionet lifecycle whose transactions finalized with `MAJORITY_AGREE`.
 
 Run:
@@ -20,7 +20,7 @@ npm run build --prefix apps/web
 
 The current v5 local verification produces:
 
-- Direct Mode: 30 passed;
+- Direct Mode: 34 passed;
 - frontend protocol, autofill, and contract-client tests: 24 passed across three files;
 - TypeScript project build: passed;
 - Vite production build: passed (2,372 modules transformed).

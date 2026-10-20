@@ -8,12 +8,12 @@ import {addressArg,addressText,connectWallet,CONTRACT,loadAccounting,loadConstan
 const pages=[{label:"Control room",path:"/",icon:Activity},{label:"Rails",path:"/rails",icon:CircleDollarSign},{label:"Attestations",path:"/attestations",icon:Fingerprint},{label:"Activity",path:"/activity",icon:Timer},{label:"Protocol",path:"/protocol",icon:BookOpen}];
 const blank={name:"",recipient:"",criterion:"",amount:"",policy:"",from:"",until:"",claimBy:""};
 const liveTransactions=[
-  ["Hardened V5 contract deployed","0xf4370bcbf668dcfc492251af9ae964fe069d425f19d9bb477fd8d8ee3c8cbc63","Semantic-classifier, fail-closed evidence backend finalized on Studionet"],
-  ["Independent-source rail opened","0xc5db721d16b59f95bcf96a61483c8698ab885b1774f9b34ecde90846f4a25ab3","0.01 GEN locked against two pinned publisher authorities"],
-  ["Named claim lodged","0x1cc54c1c2ce343047ccf2d28844464ecdaf23378ee56a4e26caaf278648ec7a8","The beneficiary claimed after the shared observation interval ended"],
-  ["Primary quorum finalized","0x27a7a5c2cd253f055eeb3bbb4ce62fd3266631b1c69ab035ee98790170d3693e","Two validators semantically classified evidence on FULFILLED"],
-  ["Counterevidence bonded","0x2c8216b154e293db4d595a72e0bd71b48760931c251c189ac3de2cbe7203c51b","Three independently authenticated counter-sources opened a frozen 3-source review panel"],
-  ["Consensus-changing payout","0x62c936795e97bef9ba52719bd0ad087d3366727a3ee07f27c0b11c0f4faf660e","Three semantic counter-classifications overturned FULFILLED to BREACHED and paid 0.01 GEN"],
+  ["Hardened V5 contract deployed","0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98","Numerical evidence classifier with frozen arithmetic finalized on Studionet"],
+  ["Independent-source rail opened","0x3ccacc0775b1b1f11966619b32eb8716b07d129f981525eec97d6f9e59d06da0","0.01 GEN locked against two pinned publisher authorities"],
+  ["Named claim lodged","0x3c765d844c0eded80003b37615b0e840a9a753895168a2be3ceb784c5da3cb81","The beneficiary claimed after the shared observation interval ended"],
+  ["Primary quorum finalized","0xa7b9d63bde32e48fa0f48ed4f64ba7ff7e5c9e3f6120ee461ad4195db14df877","Two validators calculated uptime above 99.90% despite BREACHED publisher assertions"],
+  ["Counterevidence bonded","0x2603800d9802d4aeeac775a7180a25dc28ee52408180a56e4d0655e67af464b7","Three independently authenticated counter-sources opened a frozen 3-source review panel"],
+  ["Consensus-changing payout","0x06eb4673734a149ac2742a1145b45c3bc2316163596cdf5eba8153ef2df16a3c","Three semantic counter-classifications overturned FULFILLED to BREACHED and paid 0.01 GEN"],
 ] as const;
 function evidence(r:Rail){try{return JSON.parse(r.evidence_json)}catch{return {sources:[]}}}
 function allSources(r:Rail){const primary=evidence(r).sources||[];try{return [...primary,...(JSON.parse(r.counterevidence_json||"{}").sources||[])]}catch{return primary}}

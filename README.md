@@ -2,7 +2,7 @@
 
 > Evidence-bound settlement for obligations that live outside the chain.
 
-ProofRail is a GenLayer evidence escrow. A funder freezes a measurable criterion, payout table, observation window, and separate primary and counter-source quorums. Every source pins its publisher DID bytes, authorized HTTPS path, version, period, and evidence bytes. Validators semantically classify authenticated statements against the frozen criterion; deterministic contract logic alone maps consensus to payout.
+ProofRail is a GenLayer evidence escrow. A funder freezes a measurable criterion, payout table, observation window, and separate primary and counter-source quorums. Every source pins its publisher DID bytes, authorized HTTPS path, version, period, and evidence bytes. Validators evaluate authenticated structured measurements against the frozen numerical rule; deterministic contract logic alone maps consensus to payout.
 
 ## Why GenLayer
 
@@ -14,7 +14,7 @@ Deterministic contracts can enforce funding, permissions, time windows, and arit
 2. **Authenticate** — validators retrieve the publisher's `did:web` document, require a same-origin linked service endpoint, and record its SHA-256 digest.
 3. **Retrieve** — validators independently fetch the content-addressed artifact.
 4. **Verify** — each validator recomputes both digests. Digest mismatch yields `TAMPERED`, schema/metadata failure yields `INVALID`, and retrieval/classification failure yields `UNAVAILABLE`.
-5. **Classify** — the statement is quoted as untrusted data. Validators receive the criterion and outcome descriptions, never payout values, and must return one frozen code with `HIGH` confidence under an exact response schema.
+5. **Classify** — validators calculate uptime basis points from exact structured facts and map the result only to frozen codes. Statements, publisher declarations, model output, and payout values cannot influence classification.
 6. **Receipt** — the contract records asserted, verified, and agreeing counts plus the full per-source provenance manifest.
 7. **Settle** — contract code applies `funded × payout_bps / 10,000`.
 
@@ -62,9 +62,9 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-Studionet v5 contract: `0xa8533cC75600637a824B9A34EB5ddE9d38A6aBe6` (chain ID `61999`). The finalized deployment and local source both hash to `feaecbd181cca305c1f1035509eba5897da9e6a284aa6257bbf5797df0151381`.
+Studionet v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` (chain ID `61999`). The finalized deployment and local source both hash to `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`.
 
-`artifacts/live-e2e-4.studionet.json` is the funded v5 proof. Two pinned primary publishers produced `FULFILLED`; three authenticated counter-publishers changed the counter-panel consensus to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. The canonical production browser is live at `https://proof-rails.vercel.app`.
+`artifacts/live-e2e-4.studionet.json` is the funded v5 proof. Two primary measurements calculated above the frozen 99.90% threshold despite `BREACHED` publisher declarations; three counter-measurements calculated below it despite `FULFILLED` declarations and changed the verdict to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. The canonical production browser is live at `https://proof-rails.vercel.app`.
 
 Local release verification is green. The current GitHub Actions run did not start because GitHub reports an account-level billing lock; see [Deployment](docs/DEPLOYMENT.md#ci-status) for the exact status. This repository does not claim a passing hosted run until GitHub executes the jobs.
 

@@ -14,6 +14,8 @@ if(proof.schema!=="proofrail.live-verification/v5")fail("proof schema is stale")
 if(Number(proof.disputeReceipt.agreeing_sources)!==3||Number(proof.disputeReceipt.verified_sources)!==3)fail("counter receipt is not 3/3");
 for(const tx of proof.transactions)if(tx.consensus!=="MAJORITY_AGREE"||!tx.executionHash||!String(tx.execution).startsWith("FINALIZED"))fail(`transaction ${tx.hash} lacks validator finality`);
 for(const receipt of [proof.primaryReceipt,proof.disputeReceipt])for(const item of JSON.parse(receipt.provenance_json))if(item.status!=="VERIFIED"||item.expected_digest!==item.observed_digest||item.did_digest.length!==64)fail(`source ${item.source_id} is not authenticated`);
+for(const item of JSON.parse(proof.primaryReceipt.provenance_json))if(item.asserted_code===item.code)fail("primary publisher assertion was not adversarial");
+for(const item of JSON.parse(proof.disputeReceipt.provenance_json))if(item.asserted_code===item.code)fail("counter publisher assertion was not adversarial");
 const before=proof.accounting.before,after=proof.accounting.after,funded=BigInt(after.funded),locked=BigInt(after.locked),paid=BigInt(after.paid),returned=BigInt(after.returned),bonds=BigInt(after.bonds_locked),amount=BigInt(proof.final.funded);
 if(funded!==locked+paid+returned||funded-BigInt(before.funded)!==amount||locked!==BigInt(before.locked)||bonds!==BigInt(before.bonds_locked)||paid-BigInt(before.paid)+returned-BigInt(before.returned)!==amount||BigInt(proof.final.bond)!==0n)fail("fund conservation failed");
 if(BigInt(proof.recipientBalance.increase)!==BigInt(proof.final.paid))fail("recipient balance delta differs from payout");

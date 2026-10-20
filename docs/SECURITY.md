@@ -4,9 +4,9 @@
 
 The contract rejects issuer-selected single-source authority. A frozen v5 policy requires at least two configured, verified, and agreeing sources and separately freezes counter-panel thresholds. Counterevidence cannot reuse source IDs, domains, DIDs, or authority identities. Each source binds its publisher, authority, version, period, authorized path, DID digest, and evidence digest. Validators require HTTP 200, bounded bodies, exact pinned DID bytes, the exact `#evidence` LinkedDomains service, and exact evidence bytes. A winner must meet `min_verified`, `min_agreement`, and a strict majority. Receipts distinguish `TAMPERED`, `INVALID`, `UNAVAILABLE`, and `VERIFIED` with reasons and full provenance.
 
-## Prompt injection
+## Evidence isolation and false classifications
 
-Challenge prose never enters a model prompt. Authenticated evidence text does, but only as quoted untrusted data alongside a system constraint that it is not instruction material. Payout values are excluded. Publisher outcome codes are assertions and ignored by the classifier. Exact response keys, a frozen code, and `HIGH` confidence are mandatory; extra keys, unknown codes, ambiguity, malformed JSON, stale metadata, and instruction-bearing alternate schemas fail closed.
+Challenge prose and evidence prose never enter an instruction channel and cannot select a code. The v5 uptime rule accepts only exact structured facts—total seconds, unavailable seconds, and matching period bounds—and applies frozen integer basis-point arithmetic. Publisher outcome codes remain visible assertions but are ignored. A false or confidently wrong model response has no execution path, while missing, ambiguous, malformed, or inconsistent facts fail closed as `INVALID` or leave the panel below quorum.
 
 ## Funds and liveness
 
