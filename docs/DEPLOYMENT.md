@@ -6,6 +6,7 @@
 - Deployment transaction: `0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98`
 - Local and deployed source SHA-256: `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`
 - Funded proof: `artifacts/live-e2e-4.studionet.json`
+- Release manifest: `artifacts/release-verification.v5.json` (implementation commit `985f591710134a4222d2e234120f8ebd7a34f3d2`)
 - Production browser: `https://proof-rails.vercel.app`
 
 Rail 1 locked 0.01 GEN against a frozen 99.90% uptime threshold for a one-hour UTC period. The two primary publishers misleadingly asserted `BREACHED`, but their authenticated records contained only one and two unavailable seconds, so validators calculated `FULFILLED`. A 5% recipient bond opened the separate three-source counter panel. Those publishers misleadingly asserted `FULFILLED`, while their records contained 20, 24, and 18 unavailable seconds, so validators calculated `BREACHED`. The recipient received exactly 0.01 GEN and principal/bond accounting returned to zero.
@@ -49,5 +50,5 @@ No private key belongs in this repository or browser bundle.
 
 ## CI status
 
-The complete release gate passes locally: contract lint, 34 Direct Mode tests, 24 frontend tests, typecheck, production build, production-dependency audit, live publisher verification, and source-matched artifact verification. Current GitHub Actions jobs do not execute any steps because GitHub reports that the repository owner's account is locked for a billing issue. This is an external runner-availability failure, not a passing hosted CI result; rerun the workflow after restoring Actions billing.
+The complete release gate passes locally: contract lint, 34 Direct Mode tests, 24 frontend tests, typecheck, production build, production-dependency audit, live publisher verification, source-matched artifact verification, and release-manifest verification. The manifest hashes every release-critical artifact and binds them to implementation commit `985f591710134a4222d2e234120f8ebd7a34f3d2`. Current GitHub Actions jobs do not execute any steps because GitHub reports that the repository owner's account is locked for a billing issue. This is an external runner-availability failure, not a passing hosted CI result; rerun the workflow after restoring Actions billing.
 

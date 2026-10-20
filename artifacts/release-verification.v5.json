@@ -1,0 +1,32 @@
+{
+  "schema": "proofrail.release-verification/v1",
+  "implementationCommit": "985f591710134a4222d2e234120f8ebd7a34f3d2",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC",
+  "deploymentTransaction": "0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98",
+  "productionOrigin": "https://proof-rails.vercel.app",
+  "files": {
+    "contracts/proofrail.py": "f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59",
+    "artifacts/deployment.studionet.json": "9e6c7c75fef5fa18acbd6a6dd29471166cd23785f601b0b0f71dcdea7a702d28",
+    "artifacts/live-e2e-4.studionet.json": "f65d44bd68b12a60e0928c995279d909a4102e2dba7f2ea4f05bd1e1409b7c75",
+    "artifacts/evidence-policy.v5.json": "141dd62412c7ca8ed417adca44e99d0031f1640d007ac2de6b75e8c8db3256dd",
+    "artifacts/counterevidence.v5.json": "413e239136e3df30cdda9732636e5ab5b23b9552db0a90aba877e2b9f95e72e1",
+    "apps/web/src/contract.ts": "e01fabc09f52747930ba15bb028e46bcd5a45e6accffeda696a78c82204da60a"
+  },
+  "verifiedResults": {
+    "directMode": "34 passed",
+    "contractLint": "passed",
+    "frontend": "24 passed",
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "productionAudit": "0 vulnerabilities",
+    "livePublisherObjects": "10 verified",
+    "fundedLifecycle": "MAJORITY_AGREE",
+    "sourceEquivalent": true
+  },
+  "hostedCI": {
+    "status": "EXTERNAL_BLOCKER",
+    "reason": "GitHub Actions reports an account-level billing lock before any job step starts. This manifest does not represent that as a passing hosted run."
+  }
+}
