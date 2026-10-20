@@ -1,8 +1,8 @@
 import {createHash} from "node:crypto";
 import {readFile} from "node:fs/promises";
 
-const policy=JSON.parse(await readFile(new URL("../artifacts/evidence-policy.v4.json",import.meta.url),"utf8"));
-const counter=JSON.parse(await readFile(new URL("../artifacts/counterevidence.v4.json",import.meta.url),"utf8"));
+const policy=JSON.parse(await readFile(new URL("../artifacts/evidence-policy.v5.json",import.meta.url),"utf8"));
+const counter=JSON.parse(await readFile(new URL("../artifacts/counterevidence.v5.json",import.meta.url),"utf8"));
 const checks=[];
 for(const source of [...policy.sources,...counter.sources]){
   checks.push([`https://${source.publisher_domain}/.well-known/did.json`,source.did_sha256]);

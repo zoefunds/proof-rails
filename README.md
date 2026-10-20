@@ -2,19 +2,19 @@
 
 > Evidence-bound settlement for obligations that live outside the chain.
 
-ProofRail is a GenLayer attestation escrow. A funder freezes a measurable criterion, payout table, observation window, and an independent-source quorum. Every source pins its publisher DID bytes, authorized HTTPS path, version, period, and evidence bytes. Authenticated counterevidence can change a contested outcome; deterministic contract logic alone maps consensus to payout.
+ProofRail is a GenLayer evidence escrow. A funder freezes a measurable criterion, payout table, observation window, and separate primary and counter-source quorums. Every source pins its publisher DID bytes, authorized HTTPS path, version, period, and evidence bytes. Validators semantically classify authenticated statements against the frozen criterion; deterministic contract logic alone maps consensus to payout.
 
 ## Why GenLayer
 
-Deterministic contracts can enforce funding, permissions, time windows, and arithmetic, but external facts still require authenticated observations. A single issuer-selected backend would become a private judge. ProofRail makes independent, digest-bound retrieval part of consensus and accepts only exact-schema publisher outcomes while keeping money movement deterministic.
+Deterministic contracts can enforce funding, permissions, time windows, and arithmetic, but external facts still require authenticated observations. A single issuer-selected backend would become a private judge. ProofRail makes independent, digest-bound retrieval and semantic classification part of consensus. Publisher outcome codes remain visible assertions but never decide settlement.
 
 ## Evidence pipeline
 
 1. **Bind** — freeze the publisher ID, exact TLS origin, version, observation window, and SHA-256 digest before funding.
 2. **Authenticate** — validators retrieve the publisher's `did:web` document, require a same-origin linked service endpoint, and record its SHA-256 digest.
 3. **Retrieve** — validators independently fetch the content-addressed artifact.
-4. **Verify** — each validator recomputes both digests. Changed bytes yield `TAMPERED`; missing or malformed content yields `UNAVAILABLE`.
-5. **Validate** — only an exact `proofrail.independent-attestation/v2` object whose publisher, authority, source, version, period, and outcome match the frozen commitment can vote.
+4. **Verify** — each validator recomputes both digests. Digest mismatch yields `TAMPERED`, schema/metadata failure yields `INVALID`, and retrieval/classification failure yields `UNAVAILABLE`.
+5. **Classify** — the statement is quoted as untrusted data. Validators receive the criterion and outcome descriptions, never payout values, and must return one frozen code with `HIGH` confidence under an exact response schema.
 6. **Receipt** — the contract records asserted, verified, and agreeing counts plus the full per-source provenance manifest.
 7. **Settle** — contract code applies `funded × payout_bps / 10,000`.
 
@@ -62,20 +62,20 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-Studionet v4 contract: `0x7d61a7BaD67904Db4C46c8108b77C42D03908daC` (chain ID `61999`). The finalized deployment and local source both hash to `2ee60390f63982855417cb36c8454b06fe3dae3f660aad8b4142baedd341a259`.
+Studionet v5 contract: `0xa8533cC75600637a824B9A34EB5ddE9d38A6aBe6` (chain ID `61999`). The finalized deployment and local source both hash to `feaecbd181cca305c1f1035509eba5897da9e6a284aa6257bbf5797df0151381`.
 
-`artifacts/live-e2e-4.studionet.json` is the funded v4 proof. Two pinned primary publishers produced `FULFILLED`; three authenticated counter-publishers changed the five-source consensus to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. The canonical production browser is live at `https://proof-rails.vercel.app`.
+`artifacts/live-e2e-4.studionet.json` is the funded v5 proof. Two pinned primary publishers produced `FULFILLED`; three authenticated counter-publishers changed the counter-panel consensus to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. The canonical production browser is live at `https://proof-rails.vercel.app`.
 
 ## Safety properties
 
 - exact funding and immutable payout rules;
 - one named recipient and no admin settlement path;
 - publisher-origin and exact-byte binding;
-- evidence treated as inert data;
-- exact-schema outcome codes only—untrusted prose cannot select results or amounts;
+- evidence isolated as quoted untrusted data and challenge prose excluded from classification;
+- publisher codes are assertions only; exact-schema validator classifications select results without seeing amounts;
 - recorded retrieval receipts for every review round;
 - exact challenge bonds, bounded retry timing, and permissionless recovery;
-- external transfers complete before settlement accounting is committed, with transaction-level rollback;
+- an explicit transfer callback guard plus transaction atomicity protects settlement before accounting is committed;
 - bounded list reads and terminal-state replay protection.
 
 See [Architecture](docs/ARCHITECTURE.md), [Security](docs/SECURITY.md), [Testing](docs/TESTING.md), and [Deployment](docs/DEPLOYMENT.md).

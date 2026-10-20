@@ -2,11 +2,13 @@
 
 ProofRail separates objective evidence integrity from deterministic payout policy.
 
-The issuer commits a v4 evidence policy containing two to five HTTPS sources. Every source has a distinct canonical domain, DID, and authority identifier, plus a content version, lowercase SHA-256 digest, and observation interval. Contract validation rejects credentials, queries, fragments and non-default ports, canonicalizes the hostname, and requires the artifact URL to be exactly `<service_path><digest>.json`. During review, every validator retrieves the digest-pinned DID document and requires its exact same-origin service path before retrieving evidence.
+The issuer commits a v5 policy containing separate primary and counter rules. `min_sources` is the configured panel floor, `min_verified` is the number that must authenticate and classify successfully, and `min_agreement` is the equal-weight vote floor. Every rule also requires a strict majority of successfully verified sources. Every source has a distinct source ID, canonical domain, DID, and authority identifier, plus a version, SHA-256 digest, and observation interval. Validation rejects credentials, queries, fragments, malformed DNS labels and non-default ports, and requires exactly `<service_path><digest>.json`.
 
 `observed_until` and `closes_at` are separate deadlines. The contract requires at least 86,400 seconds after observation completion for the named recipient to lodge a claim. The frontend exposes both fields and applies the same guard before wallet submission.
 
-During review, every validator fetches the same URL and hashes the raw UTF-8 body. Only an exact `proofrail.independent-attestation/v2` artifact is accepted. Publisher, authority, source, version, observation bounds, and outcome must match their frozen commitments. There is no evidence-classification prompt. Validators recompute the complete result, and a code must satisfy both the configured agreement floor and a strict majority of verified sources. The accepted result becomes a `Receipt` stored under `(rail, phase, round)`.
+During review, every validator fetches and hashes the same UTF-8 body. Only an exact `proofrail.independent-attestation/v2` artifact is accepted. Publisher, authority, source, version, and observation bounds must match. The publisher outcome is recorded only as `asserted_code`. A neutral classifier receives the frozen criterion, outcome descriptions without payout values, and subject/statement in an isolated untrusted-data object. Its exact response must select a frozen code with `HIGH` confidence. Validators recompute authentication, classification, quorum, and provenance through GenLayer consensus; ambiguity or malformed model output fails closed.
+
+A dispute does not append votes to the primary population. It replaces the review panel with the separately frozen counter rule and submitted counter-source set. Primary and counter sources cannot reuse source IDs, origins, DIDs, or authority IDs. Challenge prose is stored for audit but never enters classification. All admitted sources have equal weight.
 
 Financial policy is independent of review. Outcome codes and basis points are immutable. Settlement, refunds, and bond routing execute after consensus in deterministic code.
 
@@ -31,6 +33,7 @@ The browser reads rails with paginated contract methods. Transaction submission 
 - The publisher DID document binds the declared identity to a same-origin evidence service, and its digest is persisted in every successful receipt.
 - SHA-256 binds retrieval to the frozen content version.
 - Validators independently retrieve, hash, schema-check, and count outcomes.
+- Validators independently interpret authenticated statements; publisher codes cannot choose the result.
 - The contract alone computes transfers.
 - The interface is an untrusted transaction composer and read client.
 

@@ -2,15 +2,15 @@
 
 ## Evidence integrity
 
-The contract rejects issuer-selected single-source authority. A frozen v4 policy requires at least two distinct canonical domains, DIDs, and authority identifiers plus an explicit agreement threshold. Counterevidence cannot reuse any of those identities through case or trailing-dot aliases. Each source binds its publisher, authority, content version, observation period, exact authorized service path, DID-document SHA-256, and evidence SHA-256. Validators require HTTP 200 (redirect statuses fail closed), reproduce the pinned DID bytes, require the exact same-origin service path, and reproduce evidence bytes before classification. A winning outcome must meet the configured threshold and a strict majority of verified sources. Receipts distinguish asserted, verified, and agreeing sources and persist the full provenance manifest.
+The contract rejects issuer-selected single-source authority. A frozen v5 policy requires at least two configured, verified, and agreeing sources and separately freezes counter-panel thresholds. Counterevidence cannot reuse source IDs, domains, DIDs, or authority identities. Each source binds its publisher, authority, version, period, authorized path, DID digest, and evidence digest. Validators require HTTP 200, bounded bodies, exact pinned DID bytes, the exact `#evidence` LinkedDomains service, and exact evidence bytes. A winner must meet `min_verified`, `min_agreement`, and a strict majority. Receipts distinguish `TAMPERED`, `INVALID`, `UNAVAILABLE`, and `VERIFIED` with reasons and full provenance.
 
 ## Prompt injection
 
-Evidence and challenge prose never enter a model prompt. After byte and DID authentication, the contract accepts only an exact `proofrail.independent-attestation/v2` object. Publisher DID, authority ID, source ID, version, observation bounds, and outcome are checked deterministically; extra keys, unknown outcomes, malformed JSON, stale metadata, and instruction-bearing alternate schemas fail closed.
+Challenge prose never enters a model prompt. Authenticated evidence text does, but only as quoted untrusted data alongside a system constraint that it is not instruction material. Payout values are excluded. Publisher outcome codes are assertions and ignored by the classifier. Exact response keys, a frozen code, and `HIGH` confidence are mandatory; extra keys, unknown codes, ambiguity, malformed JSON, stale metadata, and instruction-bearing alternate schemas fail closed.
 
 ## Funds and liveness
 
-Funding and challenge bonds must be exact. All native transfers are attempted before settlement, recovery, or bond-accounting state is committed, while GenVM transaction atomicity provides the final rollback boundary. Retry spacing, initial review windows, and dispute windows are finite; permissionless recovery closes every nonterminal flow. Terminal rails cannot be settled twice.
+Funding and challenge bonds must be exact. A storage guard rejects every write callback while native transfers are active. Transfers are attempted before settlement, recovery, or accounting state is committed, while GenVM transaction atomicity provides the final rollback boundary. Retry count and spacing, response sizes, and review windows are finite; recovery closes every nonterminal flow. Terminal rails cannot settle twice, and receipt rounds are restricted to 1–5.
 
 An unresolved dispute cannot be reviewed after its three-day deadline. Permissionless recovery preserves the last verified provisional verdict and returns the bond to the challenger. This is intentionally neutral: infrastructure unavailability does not transfer the bond to either opponent, while withdrawing evidence cannot erase or improve the already-supported provisional financial outcome.
 
