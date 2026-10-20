@@ -1,21 +1,21 @@
 {
   "schema": "proofrail.ci-blocker/v1",
   "repository": "https://github.com/zoefunds/proof-rails",
-  "releaseCommit": "2fc32738e8786f23060a23277546f6f991dfb3ff",
-  "workflowRun": "https://github.com/zoefunds/proof-rails/actions/runs/39482917952",
+  "releaseCommit": "01d9591f0e6faf141301384afe6bae0278710ca6",
+  "workflowRun": "https://github.com/zoefunds/proof-rails/actions/runs/39483030368",
   "workflow": "verify",
-  "observedAt": "2026-10-20T19:22:38Z",
+  "observedAt": "2026-10-20T19:23:24Z",
   "conclusion": "failure",
   "executionClassification": "RUNNER_STARTUP_BLOCKED",
   "jobs": [
     {
       "name": "contract",
-      "jobId": 118835835001,
+      "jobId": 118836223553,
       "executedSteps": 0
     },
     {
       "name": "web",
-      "jobId": 118835835190,
+      "jobId": 118836223890,
       "executedSteps": 0
     }
   ],

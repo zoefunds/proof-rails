@@ -2,11 +2,11 @@
 
 ## Evidence integrity
 
-The contract rejects issuer-selected single-source authority. A frozen v5 policy requires at least two configured, verified, and agreeing sources and separately freezes counter-panel thresholds. Counterevidence cannot reuse source IDs, domains, DIDs, or authority identities. Each source binds its publisher, authority, version, period, authorized path, DID digest, and evidence digest. Validators require HTTP 200, bounded bodies, exact pinned DID bytes, the exact `#evidence` LinkedDomains service, and exact evidence bytes. A winner must meet `min_verified`, `min_agreement`, and a strict majority. Receipts distinguish `TAMPERED`, `INVALID`, `UNAVAILABLE`, and `VERIFIED` with reasons and full provenance.
+The contract rejects issuer-selected single-source authority. A frozen policy requires at least two configured, verified, and agreeing sources and separately freezes counter-panel thresholds. Counterevidence cannot reuse source IDs, domains, DIDs, or authority identities. Each source binds its publisher, authority, version, period, authorized path, DID digest, evidence digest, and expected HTTP status. Validators require the frozen success status (currently 200), bounded bodies, exact pinned DID bytes, the exact `#evidence` LinkedDomains service, and exact response bytes. A winner must meet `min_verified`, `min_agreement`, and a strict majority. Receipts distinguish `TAMPERED`, `INVALID`, `UNAVAILABLE`, and `VERIFIED` with reasons and full provenance.
 
 ## Evidence isolation and false classifications
 
-Challenge prose and evidence prose never enter an instruction channel and cannot select a code. The v5 uptime rule accepts only exact structured facts—total seconds, unavailable seconds, and matching period bounds—and applies frozen integer basis-point arithmetic. Publisher outcome codes remain visible assertions but are ignored. A false or confidently wrong model response has no execution path, while missing, ambiguous, malformed, or inconsistent facts fail closed as `INVALID` or leave the panel below quorum.
+Challenge prose and evidence prose never enter an instruction channel and cannot select a code. The uptime rule accepts only exact structured facts—total seconds, unavailable seconds, and matching period bounds—and applies frozen integer basis-point arithmetic. Publisher outcome codes remain visible assertions but are ignored. A false or confidently wrong model response has no execution path, while missing, ambiguous, malformed, or inconsistent facts fail closed as `INVALID` or leave the panel below quorum.
 
 ## Funds and liveness
 

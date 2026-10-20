@@ -34,9 +34,9 @@ Normative references:
 
 ## Current demonstration classification
 
-The five v5 publisher fixtures are hosted from one deployment account. They prove exact-byte retrieval, DID/path authentication, identity-duplication rejection, separate-panel quorum, misleading-assertion resistance, and consensus-changing settlement. They do **not** pass the organizational-independence admission rule above and are marked `DEMONSTRATION_ONLY` in the release evidence.
+The five hardened-v6 publisher fixtures are hosted from one deployment account. They prove exact-byte retrieval, DID/path authentication, identity-duplication rejection, separate-panel quorum, misleading-assertion resistance, and consensus-changing settlement. They do **not** pass the organizational-independence admission rule above and are marked `DEMONSTRATION_ONLY` in the release evidence.
 
-The deployed v5 contract enforces technical uniqueness of source IDs, authority IDs, DIDs, and origins. Organizational-credential admission is currently a documented release/onboarding gate verified by `scripts/verify_review_evidence.mjs`; it is not represented as on-chain credential verification. A future deployment must add credential-proof and status verification to contract execution, or consume an independently governed on-chain registry, before the contract itself can enforce this policy without an external admission process.
+The deployed hardened-v6 contract enforces technical uniqueness of source IDs, authority IDs, DIDs, and origins. Organizational-credential admission is currently a documented release/onboarding gate; it is not represented as on-chain credential verification. A future deployment must add credential-proof and status verification to contract execution, or consume an independently governed on-chain registry, before the contract itself can enforce this policy without an external admission process.
 
 No reviewer should infer independent real-world ownership from the funded demonstration. A maximum production-independence claim requires credentials from at least the minimum number of separately controlled admitted publishers. ProofRail cannot issue those credentials to itself.
 

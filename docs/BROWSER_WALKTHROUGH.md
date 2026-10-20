@@ -1,6 +1,6 @@
 # Production browser-wallet walkthrough
 
-> **Historical V5 record:** this walkthrough captures the 2026-10-20 deployment, not the current hardening revision. Hardened-v6 is deployed and its funded lifecycle is captured by `artifacts/live-receipts.hardened-v6.studionet.json`; a new browser-wallet UI capture still needs to be performed from a browser with an injected wallet.
+> **Historical V5 record:** this walkthrough captures the earlier V5 contract and browser client. It is not a V6 browser recording. The current production bundle is pinned to hardened-v6 contract `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`; its source-matched funded lifecycle is recorded by `artifacts/live-receipts.hardened-v6.studionet.json`. A fresh injected-wallet UI capture for V6 remains outstanding because browser automation is disabled in this workspace.
 
 On 2026-10-20 the production client at `https://proof-rails.vercel.app` completed rail PR-2 through an injected Chrome wallet on GenLayer Studionet (chain ID `61999`). This is a real write-path exercise, not a read-only rendering of runner-created state.
 
@@ -16,6 +16,6 @@ Captured finalized transaction receipts:
 | Primary validator review | `0xf643957c7dddf641f0701594f5474fffa6087f2ba923b326b16e067d90c79c1a` |
 | Counterevidence review and payout | `0xe6fe8ee3362a5cc5c38d4ded4e64b7e63e907ad35cccc323c210b599b449fda1` |
 
-`artifacts/browser-wallet-pr2.studionet.json` records the addresses, amounts, observation period, quorum results, assertions, classifications, and terminal state. The production Attestations view is the reproducible receipt display for all five PR-2 sources. `artifacts/live-e2e-4.studionet.json` remains the canonical source-matched artifact for complete transaction execution hashes, balance deltas, and conservation accounting.
+`artifacts/browser-wallet-pr2.studionet.json` records the historical V5 addresses, amounts, observation period, quorum results, assertions, classifications, and terminal state. The current V6 runner capture is `artifacts/live-receipts.hardened-v6.studionet.json`, which includes finalized execution evidence, accounting, payout, and source receipts. The V5 browser recording does not establish that the current V6 browser flow was exercised.
 
 No private key, seed phrase, or wallet secret is stored in the repository or browser bundle.

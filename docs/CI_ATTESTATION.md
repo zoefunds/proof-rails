@@ -2,7 +2,7 @@
 
 ## Current hosted result
 
-The latest audited GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39482917952>, is attached to hardened-release commit `2fc32738e8786f23060a23277546f6f991dfb3ff`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted this annotation for both jobs:
+The latest audited GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39483030368>, is attached to CI-attestation commit `01d9591f0e6faf141301384afe6bae0278710ca6`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted this annotation for both jobs. The hardened implementation itself is commit `2fc32738e8786f23060a23277546f6f991dfb3ff`; its run is [39482917952](https://github.com/zoefunds/proof-rails/actions/runs/39482917952) and had the same startup block.
 
 > The job was not started because your account is locked due to a billing issue.
 
@@ -22,11 +22,11 @@ The following release-commit inputs were run successfully:
 | Production dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | passed on 2026-10-20: zero advisories |
 | Full dependency audit | `npm audit --prefix apps/web` | completed on 2026-10-20: 3 development-dependency advisories (1 moderate, 2 critical), in Vitest-related tooling; this is not a clean full-graph result |
 | Hardened-v6 publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | passed on 2026-10-20: 10 objects, HTTP 200, no redirects, exact final URLs, and matching SHA-256 |
-| Historical publisher retrieval | `node scripts/verify_publishers.mjs` | currently blocked: historical fixture domains no longer resolve in DNS; do not treat the prior run as a current live check |
-| Funded proof | `node scripts/verify_live_artifact.mjs` | source, finality, provenance, reversal, and conservation verified |
-| Historical release manifest | `node scripts/verify_release_artifact.mjs` | deliberately fails after the source hardening; regenerate only after deploying and funding the new revision |
+| Funded V6 receipt proof | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | passed: finalized deployment, 2/2→3/3 reversal, payout, bond return, and terminal conservation |
+| Source equivalence and lifecycle | `node scripts/verify_live_artifact.mjs` | passed: source hash, finality, provenance, reversal, and balance conservation |
+| Governance evidence | `node scripts/verify_review_evidence.mjs` | passed: organizational-independence scope and current zero-step CI blocker |
 
-These results establish reproducibility and supply exact review evidence. They do not provide the independent execution identity that a hosted runner or separate reviewer provides.
+These results establish reproducibility and supply exact review evidence. `scripts/verify_release_artifact.mjs` and `artifacts/release-verification.v5.json` remain historical V5 records; that verifier intentionally rejects the current source because it is bound to old V5 bytes and results. The hosted workflow now runs the hardened-v6 publisher and receipt verifiers instead. Local checks do not provide the independent execution identity that a hosted runner or separate reviewer provides.
 
 ## Reviewer decision rule
 
