@@ -50,7 +50,8 @@ The following repository gates have passed locally. These results are useful rev
 | Live publisher verification | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | Removed from the candidate's required local workflow because its artifact schema remains historical v5. Fresh v6 publisher manifests and deployments must be generated before live provenance is claimed. |
 | Source-matched funded receipt | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | Correctly rejects the modified candidate source because its SHA-256 differs from the deployed historical source. Not a candidate deployment proof. |
 | Deployed source/lifecycle artifact | `node scripts/verify_live_artifact.mjs` | Passes historical record integrity and explicitly identifies that current candidate source is not the deployed source. |
-| Candidate policy manifest | `node scripts/verify_candidate_policy.mjs` | Verifies historical manifests are preserved and not mislabeled as candidate or live proof. |
+| Candidate policy manifest | `PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_candidate_policy.mjs` | Passed locally; validates the published v6 dual-panel manifest shape and cross-panel identities. It is not funded/deployed proof. |
+| Candidate publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_publishers.mjs` | Passed locally against 10 live objects after the five Vercel publisher aliases were updated: exact URL/no redirect, HTTP 200, DID and evidence SHA-256 matched. |
 | Governance and blocker record | `node scripts/verify_review_evidence.mjs` | Passed during this audit. |
 | V6 production browser capture | `node scripts/verify_browser_wallet_evidence.mjs` | Passes as a historical capture; it is not source-matched to the current candidate contract. |
 

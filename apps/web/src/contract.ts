@@ -5,6 +5,10 @@ import {CalldataAddress,ExecutionResult,TransactionStatus} from "genlayer-js/typ
 // address in source (rather than accepting an unreviewed browser value) stops
 // the production UI from accidentally writing to the retired v5 contract.
 export const CONTRACT="0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986" as const;
+// This address is historical: it predates the funding-time counter-panel
+// freeze. Keep it readable for evidence, but never use it to create a v6
+// rail. Switch this only after a source-matched corrected deployment exists.
+export const DEPLOYMENT_SUPPORTS_PRE_FUNDED_COUNTEREVIDENCE=false;
 export const EXPLORER="https://explorer-studio.genlayer.com";const reads=createClient({chain:studionet});let writes:any=null;
 export type Rail={id:number;issuer:unknown;recipient:unknown;name:string;criterion:string;evidence_json:string;counterevidence_json:string;outcomes_json:string;funded:unknown;locked:unknown;paid:unknown;returned:unknown;status:number;opens_at:unknown;closes_at:unknown;claimed_at:unknown;attempts:number;last_attempt:unknown;provisional_code:string;provisional_amount:unknown;challenge_until:unknown;challenger:unknown;bond:unknown;dispute_deadline:unknown;challenge_reason:string;final_code:string;final_bps:number;terminal_reason:string};
 export function addressText(value:unknown){if(typeof value==="string")return value;const bytes=value&&typeof value==="object"&&"bytes" in value?(value as any).bytes:value;if(bytes instanceof Uint8Array)return `0x${Array.from(bytes,x=>x.toString(16).padStart(2,"0")).join("")}`;return String(value??"")}

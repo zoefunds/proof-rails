@@ -10,6 +10,10 @@
 - Funded technical demonstration: `artifacts/live-receipts.hardened-v6.studionet.json`
 - Production injected-wallet lifecycle: `artifacts/browser-wallet-hardened-v6.studionet.json` (rail 2)
 
+## Corrected candidate release — hardened-v7
+
+`hardened-v7` is the published, pre-funded dual-panel candidate policy for the corrected source. Its policy includes the three-source counter panel before an issuer can fund escrow; `scripts/verify_candidate_policy.mjs` validates this locally and `PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_publishers.mjs` verified all ten live DID/evidence objects with no redirects, exact final URLs, HTTP 200, and matching SHA-256 digests. The candidate is **not deployed or funded**. The approved browser remains intentionally bound to the historical address and disables new V6 rail submission until a source-matched corrected address is installed.
+
 - Historical v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC`
 - Deployment transaction: `0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98`
 - Local and deployed source SHA-256: `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`

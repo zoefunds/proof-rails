@@ -16,12 +16,14 @@ pytest -q
 npm test --prefix apps/web
 npm run typecheck --prefix apps/web
 npm run build --prefix apps/web
-PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs
-PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs
+PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_candidate_policy.mjs
+PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_publishers.mjs
 node scripts/verify_live_artifact.mjs
 node scripts/verify_review_evidence.mjs
 node scripts/verify_browser_wallet_evidence.mjs
 ```
+
+The old `hardened-v6` receipt commands are intentionally historical-only: they bind to the earlier deployed bytes and correctly reject the corrected source tree. Do not use them as current release gates.
 
 The last previously recorded hardened-v6 local verification produced:
 

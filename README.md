@@ -64,6 +64,8 @@ Production console: `https://proof-rails.vercel.app`
 
 The historical Studionet demonstration is deployed at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986` (chain ID `61999`). Its source SHA-256 was `4610fccc254641a69eefbf47dc4ad9fd398be79380513de3959a228d8720c22e`. The current local candidate now requires the complete counter panel to be frozen before funding and is not yet deployed; the old address and receipts must not be represented as containing this fix.
 
+The corrected `hardened-v7` candidate policy is now published across the five technical publisher origins. `PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_candidate_policy.mjs` validates its pre-funded panels locally, and `PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_publishers.mjs` has verified all ten live DID/evidence objects with exact URLs, no redirects, HTTP 200, and matching SHA-256 values. This is publication provenance, not a funded contract proof.
+
 `artifacts/live-receipts.hardened-v6.studionet.json` is a historical source-matched funded record for the deployed implementation. It demonstrates consensus reversal and payout, but its counter panel was committed at dispute time rather than when funding occurred. It is not evidence for the current pre-funded dual-panel invariant.
 
 The five current publisher origins are technically distinct but run from one Vercel account. They are `DEMONSTRATION_ONLY`, not proof of independent organizations. [Authority governance](docs/AUTHORITY_GOVERNANCE.md) defines the separately operated, credentialed publisher admission requirement. Hosted CI is likewise not green: its jobs are blocked before steps begin by a GitHub account billing lock; see [CI attestation](docs/CI_ATTESTATION.md).

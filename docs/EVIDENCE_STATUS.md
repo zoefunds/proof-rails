@@ -4,6 +4,8 @@
 
 > **Historical technical demonstration:** hardened-v6 is deployed at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`. Its source-matched bytes and funded lifecycle are captured in the deployment and receipt artifacts. That implementation supplied counterevidence at dispute time, not funding time. The current local candidate fixes this invariant but has not been redeployed or funded. The five publishers share one Vercel account, so neither old nor candidate fixtures establish organizational independence.
 
+> **Published candidate policy:** `artifacts/evidence-policy.hardened-v7.json` and `artifacts/counterevidence.hardened-v7.json` are live at five Vercel publisher origins and passed the ten-object release verifier. They establish technical source separation and byte/path provenance only; they do not establish an on-chain funded lifecycle or organizational independence.
+
 ProofRail v5 has two historical funded-lifecycle records for the retired contract, `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` on GenLayer Studionet (chain ID `61999`):
 
 | Record | Scope | What it proves |
