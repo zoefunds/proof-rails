@@ -1,22 +1,23 @@
 # Deployment
 
-## Current v5 deployment — 2026-10-20
+## Current v5 deployment and evidence status — 2026-10-20
 
 - Contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC`
 - Deployment transaction: `0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98`
 - Local and deployed source SHA-256: `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`
-- Funded proof: `artifacts/live-e2e-4.studionet.json`
+- Source-matched runner proof: `artifacts/live-e2e-4.studionet.json`
+- Browser-wallet proof: `artifacts/browser-wallet-pr2.studionet.json`
 - Release manifest: `artifacts/release-verification.v5.json` (implementation commit `985f591710134a4222d2e234120f8ebd7a34f3d2`)
 - Authority/CI evidence commit: `f0aa0be9c98c3b9e36871c992e71307bc71d9ca5`
 - Production browser: `https://proof-rails.vercel.app`
 
-Rail 1 locked 0.01 GEN against a frozen 99.90% uptime threshold for a one-hour UTC period. The two primary publishers misleadingly asserted `BREACHED`, but their authenticated records contained only one and two unavailable seconds, so validators calculated `FULFILLED`. A 5% recipient bond opened the separate three-source counter panel. Those publishers misleadingly asserted `FULFILLED`, while their records contained 20, 24, and 18 unavailable seconds, so validators calculated `BREACHED`. The recipient received exactly 0.01 GEN and principal/bond accounting returned to zero.
+The two records serve different review purposes. Rail 1 is the source-matched runner record with complete execution hashes and conservation accounting. PR-2 is the separately captured production-browser, injected-wallet write-path record. Both show a 0.01 GEN funded escrow whose primary consensus was `FULFILLED`, then changed to terminal `BREACHED` after a separate authenticated three-source counter panel. See [evidence-record status](EVIDENCE_STATUS.md) for immutable-record handling and scope.
 
 ## Deployed-source equivalence
 
 The deployment transaction finalized with `MAJORITY_AGREE`. Its `contract_code` was decoded from base64 and hashed independently from the local UTF-8 source. Both byte sequences produced `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`; `artifacts/deployment.studionet.json` records both values, the byte count (`20,622`), execution hash, deployer, and finalization timestamps.
 
-## Current funded lifecycle
+## Source-matched funded lifecycle — Rail 1
 
 Rail 1 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF680375653c69FC` for recipient `0x53705Bb2B34ff7CEcC93F79a1D91aDa1185D87Dd`. The primary round authenticated two distinct origins, DIDs, and authority identifiers. The dispute round added three more and persisted matching expected/observed evidence and DID digests for all three counter-sources.
 
@@ -30,9 +31,9 @@ Rail 1 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF6803756
 
 Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM execution evidence. The provisional code was `FULFILLED`; the independent counter panel changed it to `BREACHED` at 10,000 basis points. The recipient balance increased by exactly 0.01 GEN, with zero principal and bond remaining locked.
 
-## Browser verification
+## Production browser-wallet lifecycle — PR-2
 
-The public production interface at `https://proof-rails.vercel.app` completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. The browser opened and funded the rail, lodged the claim, ran primary consensus, posted the 5% bond with three authenticated counter-sources, and ran dispute consensus. The finalized UI shows `FULFILLED` changing to terminal `BREACHED`, a paid 0.01 GEN escrow, and five matching expected/observed evidence digests. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. The source-matched runner artifact above remains the canonical complete execution-hash and balance-conservation record; no browser key or private signing material is stored in the repository.
+The public production interface at `https://proof-rails.vercel.app` completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. The browser opened and funded the rail, lodged the claim, ran primary consensus, posted the 5% bond with three authenticated counter-sources, and ran dispute consensus. The finalized UI showed `FULFILLED` changing to terminal `BREACHED`, a paid 0.01 GEN escrow, and five matching expected/observed evidence digests. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. The Rail 1 runner artifact remains the canonical complete execution-hash and balance-conservation record; no browser key or private signing material is stored in the repository.
 
 ## Release procedure
 

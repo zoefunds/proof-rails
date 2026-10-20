@@ -26,6 +26,8 @@ Recovery is terminal and permissionless when a deadline expires. An unclaimed ra
 
 The browser reads rails with paginated contract methods. Transaction submission is not reported as success merely because a wallet returned a hash: the client waits for finalization, requires `MAJORITY_AGREE`, and requires either `FINISHED_WITH_RETURN` or a finalized transaction carrying a GenVM execution hash. The detail page exposes the observation, claim, primary-review, challenge, and dispute deadlines; explains the applicable principal and bond consequences; accepts a written dispute reason; and shows `recover()` only when the current state and deadline make it eligible.
 
+The GenVM web-response interface used by the contract exposes status and body, but does not document a final-response URL or redirect-history field. Contract execution therefore validates the normalized, precommitted HTTPS request origin and path, HTTP status, DID binding, and exact response bytes; it fails closed when any of those checks fail. The release verifier (`scripts/verify_publishers.mjs`) separately performs manual redirect handling and requires the final URL to equal the requested URL. This makes final-redirect-origin verification an explicit external release boundary, not an unsubstantiated in-contract claim.
+
 ## Trust boundaries
 
 - The issuer chooses the criterion, but cannot use one source, reuse an origin/DID/authority, or bypass strict-majority corroboration.
