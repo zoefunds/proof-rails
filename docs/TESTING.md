@@ -48,5 +48,5 @@ For the corrected release, `PROOFRAIL_RELEASE_ID=<new-release> node scripts/veri
 
 ### Latest local follow-up (2026-10-20)
 
-The latest candidate local verification on 2026-10-20 passed `pytest -q` (38), frontend tests (26), TypeScript typecheck, production build (2,372 modules), contract lint (3 checks), browser capture integrity, and CI blocker/governance evidence. The build emits a non-fatal chunk-size advisory. Current candidate source intentionally does not match old deployed receipt hashes. Live publisher retrieval could not be re-run in this turn because DNS was unavailable. GitHub hosted jobs remain blocked at runner startup by billing; no hosted check was triggered.
+The latest candidate local verification on 2026-10-20 passed `pytest -q` (38), frontend tests (26), TypeScript typecheck, production build (2,372 modules), contract lint (3 checks), browser capture integrity, and CI blocker/governance evidence. `PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_publishers.mjs` also passed against all ten current DID/evidence objects: exact URL, no redirect, HTTP 200, and matching SHA-256 digests. The build emits a non-fatal chunk-size advisory. Current candidate source intentionally does not match old deployed receipt hashes. GitHub hosted jobs remain blocked at runner startup by billing; no hosted check was triggered.
 

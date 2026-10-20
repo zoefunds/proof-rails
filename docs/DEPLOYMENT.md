@@ -25,7 +25,7 @@ Before a funded deployment, run `PROOFRAIL_RELEASE_ID=hardened-v7 npm run prefli
 - Current implementation commit: `2fc32738e8786f23060a23277546f6f991dfb3ff`
 - Current CI-attestation commit: `01d9591f0e6faf141301384afe6bae0278710ca6`
 - Production browser: [`https://proof-rails.vercel.app`](https://proof-rails.vercel.app) (Vercel project name `nw3`, attached production domain)
-- Current Vercel production deployment: `dpl_HjNW898pzPWkG3EXj85rDeUrGWxY` (`READY`, production alias `https://proof-rails.vercel.app` applied)
+- Current Vercel production deployment: `dpl_4xB7tPKwyqU6kTxqVCyJCZoo22pz` (`READY`, production alias `https://proof-rails.vercel.app` applied)
 
 The two historical V6 records serve complementary purposes. Rail 1 is the source-matched runner record with publisher evidence, execution hashes, and conservation accounting. Rail 2 is the production-browser injected-wallet write-path record with seven finalized transactions and terminal accounting. Neither proves the corrected candidate. Historical V5 records remain audit-only. See [evidence-record status](EVIDENCE_STATUS.md) for record scope.
 
