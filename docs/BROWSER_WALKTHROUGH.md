@@ -1,6 +1,6 @@
 # Production browser-wallet walkthrough
 
-> **Historical V5 record:** this walkthrough captures the earlier V5 contract and browser client. It is not a V6 browser recording. The current production bundle is pinned to hardened-v6 contract `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`; its source-matched funded lifecycle is recorded by `artifacts/live-receipts.hardened-v6.studionet.json`. A fresh injected-wallet UI capture for V6 remains outstanding because browser automation is disabled in this workspace.
+> **Historical V5 transaction record:** the wallet transactions below were made against the earlier V5 contract. They are not a V6 wallet recording. On 2026-10-20, Chrome read-only inspection of the production V6 interface confirmed the current rail and attestation ledger render the source-matched on-chain receipts. A V6 injected-wallet transaction capture remains outstanding because the account owner must connect the wallet and approve each consequential on-chain transaction.
 
 On 2026-10-20 the production client at `https://proof-rails.vercel.app` completed rail PR-2 through an injected Chrome wallet on GenLayer Studionet (chain ID `61999`). This is a real write-path exercise, not a read-only rendering of runner-created state.
 
@@ -17,5 +17,11 @@ Captured finalized transaction receipts:
 | Counterevidence review and payout | `0xe6fe8ee3362a5cc5c38d4ded4e64b7e63e907ad35cccc323c210b599b449fda1` |
 
 `artifacts/browser-wallet-pr2.studionet.json` records the historical V5 addresses, amounts, observation period, quorum results, assertions, classifications, and terminal state. The current V6 runner capture is `artifacts/live-receipts.hardened-v6.studionet.json`, which includes finalized execution evidence, accounting, payout, and source receipts. The V5 browser recording does not establish that the current V6 browser flow was exercised.
+
+## Current V6 production read-only check
+
+The production site at `https://proof-rails.vercel.app` loaded contract `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986` on Studionet. The control room showed one terminal `PAID` rail, `0.01 GEN` total funded and paid, and zero locked principal or bonds. The rail view showed provisional `FULFILLED`, terminal `BREACHED`, a 2/2 primary quorum and 3/3 counter quorum. The Attestations page rendered all five V6 source receipts, including publisher assertion and validator classification as separate fields, each source's DID hash, and equal expected/observed artifact hashes.
+
+This was a read-only inspection of the already finalized runner-created rail. The production rail form was opened, but no wallet was connected and no transaction was signed from the browser. The owner must connect the intended issuer and recipient wallets and personally approve funding, claim, review, dispute bond, counter review, and finalization to produce the requested V6 injected-wallet transaction record. See `artifacts/live-receipts.hardened-v6.studionet.json` for the separate runner-created finalized transactions.
 
 No private key, seed phrase, or wallet secret is stored in the repository or browser bundle.

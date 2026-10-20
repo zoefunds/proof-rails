@@ -20,7 +20,7 @@
 - Production browser: [`https://proof-rails.vercel.app`](https://proof-rails.vercel.app) (Vercel project name `nw3`, attached production domain)
 - Current Vercel production deployment: `dpl_CbX1thBv5mJAFKkjiUHafbi4rDSx` (`READY`, production alias applied)
 
-The two v5 records serve different historical review purposes. Rail 1 is the source-matched runner record with complete execution hashes and conservation accounting. PR-2 is the separately captured production-browser, injected-wallet write-path record. They are not evidence that the current hardened-v6 browser build has completed a wallet lifecycle. The current source-matched V6 proof is Rail 1 in `artifacts/live-receipts.hardened-v6.studionet.json`; see [evidence-record status](EVIDENCE_STATUS.md) for immutable-record handling and scope.
+The two v5 records serve different historical review purposes. Rail 1 is the source-matched runner record with complete execution hashes and conservation accounting. PR-2 is the separately captured production-browser, injected-wallet write-path record. They do not establish a V6 browser transaction lifecycle. The current source-matched V6 proof is Rail 1 in `artifacts/live-receipts.hardened-v6.studionet.json`; Chrome has separately confirmed that the production V6 interface renders its current rail and receipt ledger. See [evidence-record status](EVIDENCE_STATUS.md) for record scope.
 
 ## Hardened-v6 deployed-source equivalence
 
@@ -46,7 +46,7 @@ Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM executi
 
 ## Historical V5 browser-wallet lifecycle — PR-2
 
-The earlier public interface completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. It is preserved as historical V5 browser evidence only. The current `https://proof-rails.vercel.app` build is pinned to the hardened-v6 address above, but a fresh injected-wallet V6 capture is still required before claiming a browser-driven V6 lifecycle. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. No browser key or private signing material is stored in the repository.
+The earlier public interface completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. It is preserved as historical V5 browser evidence only. The current `https://proof-rails.vercel.app` build is pinned to the hardened-v6 address above, and its V6 receipt ledger has been checked in Chrome against the live runner-created rail. A fresh injected-wallet V6 capture remains outstanding because the account owner must connect the intended wallets and personally approve each transaction. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. No browser key or private signing material is stored in the repository.
 
 ## Release procedure
 
@@ -67,5 +67,5 @@ No private key belongs in this repository or browser bundle.
 
 ## CI status
 
-For the hardened-v6 implementation commit, contract lint, 37 Direct Mode tests, 26 frontend tests, TypeScript, production build, live publisher verification, funded receipt verification, and production dependency audit pass locally. The full dependency audit reports 3 development-tool advisories (1 moderate, 2 critical) in Vitest-related dependencies. Hosted GitHub Actions for both implementation commit `2fc3273` and current attestation commit `01d9591` failed before executing any steps because GitHub reports an account billing lock. The hosted status is not green CI. The V6 browser-wallet lifecycle has not been recaptured; existing PR-2 browser receipts are historical V5. See [CI attestation](CI_ATTESTATION.md) for the current run and exact job IDs.
+For the hardened-v6 implementation commit, contract lint, 37 Direct Mode tests, 26 frontend tests, TypeScript, production build, live publisher verification, funded receipt verification, and production dependency audit pass locally. The full dependency audit reports 3 development-tool advisories (1 moderate, 2 critical) in Vitest-related dependencies. The latest hosted run, attached to commit `082e03c`, failed before executing any steps because GitHub reports an account billing lock. The hosted status is not green CI. The V6 receipt display has been confirmed in Chrome; the V6 browser-wallet transaction lifecycle has not been recaptured. See [CI attestation](CI_ATTESTATION.md) for the latest run and job IDs.
 
