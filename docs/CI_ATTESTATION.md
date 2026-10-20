@@ -2,7 +2,7 @@
 
 ## Current hosted result
 
-The latest audited GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39464643247>, is attached to governance-evidence commit `f0aa0be9c98c3b9e36871c992e71307bc71d9ca5`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted this annotation for both jobs:
+The latest audited GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39482917952>, is attached to hardened-release commit `2fc32738e8786f23060a23277546f6f991dfb3ff`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted this annotation for both jobs:
 
 > The job was not started because your account is locked due to a billing issue.
 
