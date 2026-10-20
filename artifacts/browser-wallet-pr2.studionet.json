@@ -1,0 +1,24 @@
+{
+  "schema": "proofrail.browser-wallet-proof/v1",
+  "capturedAt": "2026-10-20T18:00:00+01:00",
+  "productionOrigin": "https://proof-rails.vercel.app",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC",
+  "railId": 2,
+  "issuer": "0x7401c129edfc26e68fe19309fe461eb3db1058eb",
+  "recipient": "0x6f0b4ce7a1872db132b2f6b7743defb30eba698a",
+  "fundedWei": "10000000000000000",
+  "bondWei": "500000000000000",
+  "observation": {"from": 1792504200, "until": 1792507800, "utc": "2026-10-20T13:50:00Z/2026-10-20T14:50:00Z"},
+  "browserDriven": ["open_rail", "lodge_claim", "review_claim", "dispute", "review_dispute"],
+  "capturedReceipts": {
+    "lodge_claim": "0x7c72e1ba9ca29a56380ab4190df042dc239e969e003f144feb477002074d4d19",
+    "review_claim": "0xf643957c7dddf641f0701594f5474fffa6087f2ba923b326b16e067d90c79c1a",
+    "review_dispute": "0xe6fe8ee3362a5cc5c38d4ded4e64b7e63e907ad35cccc323c210b599b449fda1"
+  },
+  "primary": {"result": "FULFILLED", "verified": 2, "agreeing": 2, "publisherAssertions": ["BREACHED", "BREACHED"]},
+  "counter": {"result": "BREACHED", "verified": 3, "agreeing": 3, "publisherAssertions": ["FULFILLED", "FULFILLED", "FULFILLED"]},
+  "terminal": {"status": "PAID", "finalCode": "BREACHED", "principalPaidWei": "10000000000000000", "bondDisposition": "returned to successful challenger"},
+  "verification": "Production Rails and Attestations views read the finalized contract state after every wallet submission. The canonical source-matched runner artifact remains artifacts/live-e2e-4.studionet.json and contains all five transaction execution hashes and balance/accounting deltas."
+}

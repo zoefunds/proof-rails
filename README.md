@@ -66,6 +66,8 @@ Studionet v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` (chain ID `6
 
 `artifacts/live-e2e-4.studionet.json` is the funded v5 proof. Two primary measurements calculated above the frozen 99.90% threshold despite `BREACHED` publisher declarations; three counter-measurements calculated below it despite `FULFILLED` declarations and changed the verdict to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. The canonical production browser is live at `https://proof-rails.vercel.app`.
 
+Rail PR-2 independently exercised that lifecycle through the production Chrome UI with injected issuer and recipient wallets. It finalized a 0.01 GEN escrow, 0.0005 GEN challenge bond, 2/2 primary receipt, 3/3 counter receipt, and consensus change from `FULFILLED` to terminal `BREACHED`. See [production browser-wallet walkthrough](docs/BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`.
+
 `artifacts/release-verification.v5.json` binds the reviewed implementation commit to the exact contract, deployment, funded proof, policy, counterevidence, and frontend configuration bytes. `node scripts/verify_release_artifact.mjs` rejects any drift.
 
 The organizational-admission policy and audited CI-blocker evidence were added in commit `f0aa0be9c98c3b9e36871c992e71307bc71d9ca5`. The five hosted fixtures remain explicitly demonstration-only; production organizational independence requires separately controlled publishers holding admissible third-party credentials. This is presently an onboarding/release gate, not on-chain credential verification; the deployed contract enforces technical identity uniqueness only.
@@ -84,5 +86,5 @@ Local release verification is green. The current GitHub Actions run did not star
 - an explicit transfer callback guard plus transaction atomicity protects settlement before accounting is committed;
 - bounded list reads and terminal-state replay protection.
 
-See [Architecture](docs/ARCHITECTURE.md), [Authority governance](docs/AUTHORITY_GOVERNANCE.md), [Security](docs/SECURITY.md), [Testing](docs/TESTING.md), [CI attestation](docs/CI_ATTESTATION.md), and [Deployment](docs/DEPLOYMENT.md).
+See [Architecture](docs/ARCHITECTURE.md), [Authority governance](docs/AUTHORITY_GOVERNANCE.md), [Security](docs/SECURITY.md), [Testing](docs/TESTING.md), [CI attestation](docs/CI_ATTESTATION.md), [browser walkthrough](docs/BROWSER_WALKTHROUGH.md), and [Deployment](docs/DEPLOYMENT.md).
 

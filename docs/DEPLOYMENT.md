@@ -32,7 +32,7 @@ Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM executi
 
 ## Browser verification
 
-The public production interface at `https://proof-rails.vercel.app` was checked against the fresh deployment. It reads rail 1 and both on-chain receipts, displaying authority identity, publisher assertion, validator classification, failure reason, agreeing/verified counts, and matching expected/observed digests. The immutable transaction-level proof above remains the canonical settlement record; no browser key or private signing material is stored in the repository.
+The public production interface at `https://proof-rails.vercel.app` completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. The browser opened and funded the rail, lodged the claim, ran primary consensus, posted the 5% bond with three authenticated counter-sources, and ran dispute consensus. The finalized UI shows `FULFILLED` changing to terminal `BREACHED`, a paid 0.01 GEN escrow, and five matching expected/observed evidence digests. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. The source-matched runner artifact above remains the canonical complete execution-hash and balance-conservation record; no browser key or private signing material is stored in the repository.
 
 ## Release procedure
 
