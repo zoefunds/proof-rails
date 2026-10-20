@@ -44,6 +44,8 @@ The frontend suite separately verifies the 24-hour schedule guard, recovery elig
 
 The production browser at `https://proof-rails.vercel.app` previously completed a V6 injected-wallet lifecycle. Seven finalized Studionet transactions cover funding, claim, primary review, bonded dispute, counter review, payout, and bond return. This capture reflects the historical implementation where the counter panel was supplied at dispute time, so it is not proof for the fixed candidate. The account owner supplied its transaction hashes; contract/explorer records remain authoritative. A new browser run must follow redeployment of the candidate.
 
+For the corrected release, `PROOFRAIL_RELEASE_ID=<new-release> node scripts/verify_browser_wallet_candidate.mjs` is the required browser-evidence gate. It rejects a capture unless the deployed source hash equals the current contract bytes, the nested and stored counter panels match, every one of the seven wallet actions is finalized, the 2/2 primary result reverses to the 3/3 counter result, publisher assertions differ from validator classifications, the bond is routed correctly, and terminal accounting is zero-locked.
+
 ### Latest local follow-up (2026-10-20)
 
 The latest candidate local verification on 2026-10-20 passed `pytest -q` (38), frontend tests (26), TypeScript typecheck, production build (2,372 modules), contract lint (3 checks), browser capture integrity, and CI blocker/governance evidence. The build emits a non-fatal chunk-size advisory. Current candidate source intentionally does not match old deployed receipt hashes. Live publisher retrieval could not be re-run in this turn because DNS was unavailable. GitHub hosted jobs remain blocked at runner startup by billing; no hosted check was triggered.
