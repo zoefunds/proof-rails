@@ -1,5 +1,5 @@
-export const VERIFIED_RELEASE = {
-  name: "Browser-wallet uptime dispute proof",
+export const HISTORICAL_V5_RELEASE = {
+  name: "Historical V5 browser-wallet dispute proof",
   recipient: "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a",
   criterion: "For the frozen 2026-10-20 13:50–14:50 UTC observation period, classify FULFILLED only when measured uptime is at least 99.90%; otherwise classify BREACHED. Publisher outcome declarations are non-authoritative.",
   amount: "0.01",
@@ -14,4 +14,4 @@ export const VERIFIED_RELEASE = {
   claimBy: "2026-10-22T15:00:00Z",
 } as const;
 export function localDateTimeInput(iso:string){const d=new Date(iso),p=(v:number)=>String(v).padStart(2,"0");return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`}
-export function verifiedReleaseForm(){return{name:VERIFIED_RELEASE.name,recipient:VERIFIED_RELEASE.recipient,criterion:VERIFIED_RELEASE.criterion,amount:VERIFIED_RELEASE.amount,url:VERIFIED_RELEASE.url,domain:VERIFIED_RELEASE.domain,publisher:VERIFIED_RELEASE.publisher,servicePath:VERIFIED_RELEASE.servicePath,version:VERIFIED_RELEASE.version,digest:VERIFIED_RELEASE.digest,from:localDateTimeInput(VERIFIED_RELEASE.observedFrom),until:localDateTimeInput(VERIFIED_RELEASE.observedUntil),claimBy:localDateTimeInput(VERIFIED_RELEASE.claimBy)}}
+export function historicalV5ReleaseForm(){return{name:HISTORICAL_V5_RELEASE.name,recipient:HISTORICAL_V5_RELEASE.recipient,criterion:HISTORICAL_V5_RELEASE.criterion,amount:HISTORICAL_V5_RELEASE.amount,url:HISTORICAL_V5_RELEASE.url,domain:HISTORICAL_V5_RELEASE.domain,publisher:HISTORICAL_V5_RELEASE.publisher,servicePath:HISTORICAL_V5_RELEASE.servicePath,version:HISTORICAL_V5_RELEASE.version,digest:HISTORICAL_V5_RELEASE.digest,from:localDateTimeInput(HISTORICAL_V5_RELEASE.observedFrom),until:localDateTimeInput(HISTORICAL_V5_RELEASE.observedUntil),claimBy:localDateTimeInput(HISTORICAL_V5_RELEASE.claimBy)}}

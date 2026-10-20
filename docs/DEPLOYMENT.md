@@ -1,8 +1,15 @@
 # Deployment
 
-## Current v5 deployment and evidence status — 2026-10-20
+## Current hardened-v6 deployment and evidence status — 2026-10-20
 
-- Contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC`
+> **Scope:** hardened-v6 is source-matched and funded for a technical demonstration. Its five publishers are distinct Vercel origins but share one Vercel account; it must not be represented as a demonstration of independent real-world organizations.
+
+- Hardened-v6 contract: `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`
+- Deployment transaction: `0x99f66b9fa54d4f319a10ee06d416f25b9e1ed9c4a59e984005d63e1e8fcc9c12`
+- Source SHA-256: `4610fccc254641a69eefbf47dc4ad9fd398be79380513de3959a228d8720c22e`
+- Funded technical demonstration: `artifacts/live-receipts.hardened-v6.studionet.json`
+
+- Historical v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC`
 - Deployment transaction: `0xc54571b716e89334c98e0b5bb5b11ba49180e67fc70c5ad1edade68ea872df98`
 - Local and deployed source SHA-256: `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`
 - Source-matched runner proof: `artifacts/live-e2e-4.studionet.json`
@@ -11,13 +18,13 @@
 - Authority/CI evidence commit: `f0aa0be9c98c3b9e36871c992e71307bc71d9ca5`
 - Production browser: `https://proof-rails.vercel.app`
 
-The two records serve different review purposes. Rail 1 is the source-matched runner record with complete execution hashes and conservation accounting. PR-2 is the separately captured production-browser, injected-wallet write-path record. Both show a 0.01 GEN funded escrow whose primary consensus was `FULFILLED`, then changed to terminal `BREACHED` after a separate authenticated three-source counter panel. See [evidence-record status](EVIDENCE_STATUS.md) for immutable-record handling and scope.
+The two v5 records serve different historical review purposes. Rail 1 is the source-matched runner record with complete execution hashes and conservation accounting. PR-2 is the separately captured production-browser, injected-wallet write-path record. They are not evidence that the current hardened-v6 browser build has completed a wallet lifecycle. The current source-matched V6 proof is Rail 1 in `artifacts/live-receipts.hardened-v6.studionet.json`; see [evidence-record status](EVIDENCE_STATUS.md) for immutable-record handling and scope.
 
-## Deployed-source equivalence
+## Hardened-v6 deployed-source equivalence
 
-The deployment transaction finalized with `MAJORITY_AGREE`. Its `contract_code` was decoded from base64 and hashed independently from the local UTF-8 source. Both byte sequences produced `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`; `artifacts/deployment.studionet.json` records both values, the byte count (`20,622`), execution hash, deployer, and finalization timestamps.
+The hardened-v6 deployment transaction finalized with `MAJORITY_AGREE`. Its `contract_code` was decoded from base64 and hashed independently from the local UTF-8 source. Both byte sequences produced `4610fccc254641a69eefbf47dc4ad9fd398be79380513de3959a228d8720c22e`; `artifacts/deployment.studionet.json` records both values, the byte count (`20,883`), execution hash, deployer, and finalization timestamps.
 
-## Source-matched funded lifecycle — Rail 1
+## Historical V5 funded lifecycle — Rail 1
 
 Rail 1 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF680375653c69FC` for recipient `0x53705Bb2B34ff7CEcC93F79a1D91aDa1185D87Dd`. The primary round authenticated two distinct origins, DIDs, and authority identifiers. The dispute round added three more and persisted matching expected/observed evidence and DID digests for all three counter-sources.
 
@@ -31,18 +38,20 @@ Rail 1 was funded with `0.01 GEN` by issuer `0x86640E27BB18E467aE2193A2FF6803756
 
 Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM execution evidence. The provisional code was `FULFILLED`; the independent counter panel changed it to `BREACHED` at 10,000 basis points. The recipient balance increased by exactly 0.01 GEN, with zero principal and bond remaining locked.
 
-## Production browser-wallet lifecycle — PR-2
+## Historical V5 browser-wallet lifecycle — PR-2
 
-The public production interface at `https://proof-rails.vercel.app` completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. The browser opened and funded the rail, lodged the claim, ran primary consensus, posted the 5% bond with three authenticated counter-sources, and ran dispute consensus. The finalized UI showed `FULFILLED` changing to terminal `BREACHED`, a paid 0.01 GEN escrow, and five matching expected/observed evidence digests. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. The Rail 1 runner artifact remains the canonical complete execution-hash and balance-conservation record; no browser key or private signing material is stored in the repository.
+The earlier public interface completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. It is preserved as historical V5 browser evidence only. The current `https://proof-rails.vercel.app` build is pinned to the hardened-v6 address above, but a fresh injected-wallet V6 capture is still required before claiming a browser-driven V6 lifecycle. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. No browser key or private signing material is stored in the repository.
 
 ## Release procedure
 
 1. Run contract lint, Direct Mode tests, frontend tests, typecheck, and build.
-2. Validate and generate the schema with the GenLayer CLI.
-3. Deploy `contracts/proofrail.py` to a fresh Studionet address.
-4. Update the pinned production contract address and verify chain ID `61999`.
-5. Exercise creation, claim, review, reasoned challenge, and settlement through the public browser client; verify recovery paths in Direct Mode and use the browser when a live rail is eligible.
-6. Record the source commit, deployment transaction, contract address, finalized lifecycle receipts, execution hashes, terminal accounting, and balance movement before publishing.
+2. Obtain five separately operated publisher domains and credentials under the authority-admission policy; never reuse the historical fixture domains for a current release.
+3. Set `PROOFRAIL_RELEASE_ID` and `PROOFRAIL_PUBLISHER_DOMAINS`, then run `PROOFRAIL_DRY_RUN=1 node scripts/generate_v5_publishers.mjs`. Review the generated manifests before allowing writes; rerun with `PROOFRAIL_DRY_RUN=0` only when the publisher folders are ready to deploy. The generator appends new content-addressed evidence and never deletes historic evidence files.
+4. Publish each publisher's DID document and content-addressed evidence, then run `PROOFRAIL_RELEASE_ID=<release-id> node scripts/verify_publishers.mjs` against the fresh manifests.
+5. Deploy `contracts/proofrail.py` to a fresh Studionet address.
+6. Update the pinned production contract address and verify chain ID `61999`.
+7. Exercise creation, claim, review, reasoned challenge, and settlement through the public browser client; verify recovery paths in Direct Mode and use the browser when a live rail is eligible.
+8. Record the source commit, deployment transaction, contract address, finalized lifecycle receipts, execution hashes, terminal accounting, and balance movement before publishing.
 
 ## Production web origin
 
@@ -52,5 +61,5 @@ No private key belongs in this repository or browser bundle.
 
 ## CI status
 
-The complete release gate passes locally: contract lint, 34 Direct Mode tests, 24 frontend tests, typecheck, production build, production-dependency audit, live publisher verification, source-matched artifact verification, release-manifest verification, and review-evidence verification. The manifest hashes every release-critical artifact and binds them to implementation commit `985f591710134a4222d2e234120f8ebd7a34f3d2`. Current GitHub Actions jobs do not execute any steps because GitHub reports that the repository owner's account is locked for a billing issue. This is an external runner-availability failure, not a passing hosted CI result. The exact job IDs, annotation, and decision rule are recorded in [CI attestation](CI_ATTESTATION.md) and `artifacts/ci-blocker.v1.json`; rerun the workflow after restoring Actions billing.
+For the current hardened-v6 revision, contract lint, 37 Direct Mode tests, 26 frontend tests, TypeScript, production build, live publisher verification, on-chain receipt verification, and `npm audit --omit=dev --audit-level=high` pass. The full development-tool audit is intentionally reported separately: `npm audit --prefix apps/web` reports 3 advisories (1 moderate, 2 critical) in Vitest-related development dependencies. The historical v5 manifests lack the newly required status fields, so their historical release-manifest check is intentionally not a current-release pass. Current GitHub Actions jobs do not execute any steps because GitHub reports that the repository owner's account is locked for a billing issue. This is an external runner-availability failure, not a passing hosted CI result. The exact job IDs, annotation, and decision rule are recorded in [CI attestation](CI_ATTESTATION.md) and `artifacts/ci-blocker.v1.json`; rerun the workflow after restoring Actions billing.
 

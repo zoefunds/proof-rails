@@ -15,14 +15,16 @@ The following release-commit inputs were run successfully:
 | Gate | Command | Result |
 | --- | --- | --- |
 | Contract lint | `genvm-lint contracts/proofrail.py` | passed, 3 checks |
-| Direct Mode | `pytest -q` | 34 passed |
-| Frontend tests | `npm test --prefix apps/web` | 24 passed, 3 files |
+| Direct Mode | `pytest -q` | 37 passed |
+| Frontend tests | `npm test --prefix apps/web` | 26 passed, 3 files |
 | TypeScript | `npm run typecheck --prefix apps/web` | passed |
 | Production build | `npm run build --prefix apps/web` | passed, 2,372 modules |
-| Dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | 0 vulnerabilities |
-| Publisher retrieval | `node scripts/verify_publishers.mjs` | 10 objects verified; HTTP 200, no redirects, exact URLs and SHA-256 |
+| Production dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | passed on 2026-10-20: zero advisories |
+| Full dependency audit | `npm audit --prefix apps/web` | completed on 2026-10-20: 3 development-dependency advisories (1 moderate, 2 critical), in Vitest-related tooling; this is not a clean full-graph result |
+| Hardened-v6 publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | passed on 2026-10-20: 10 objects, HTTP 200, no redirects, exact final URLs, and matching SHA-256 |
+| Historical publisher retrieval | `node scripts/verify_publishers.mjs` | currently blocked: historical fixture domains no longer resolve in DNS; do not treat the prior run as a current live check |
 | Funded proof | `node scripts/verify_live_artifact.mjs` | source, finality, provenance, reversal, and conservation verified |
-| Release manifest | `node scripts/verify_release_artifact.mjs` | release-critical byte hashes verified |
+| Historical release manifest | `node scripts/verify_release_artifact.mjs` | deliberately fails after the source hardening; regenerate only after deploying and funding the new revision |
 
 These results establish reproducibility and supply exact review evidence. They do not provide the independent execution identity that a hosted runner or separate reviewer provides.
 

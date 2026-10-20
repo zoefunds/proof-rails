@@ -55,13 +55,15 @@ class ProofRail(gl.Contract):
   return host
 
  def _validate_source(self,s:dict,observed_from:int,observed_until:int):
-  required={"source_id","authority_id","url","publisher_id","publisher_domain","did_sha256","service_path","content_version","content_sha256","observed_from","observed_until"}
+  required={"source_id","authority_id","url","publisher_id","publisher_domain","did_sha256","did_http_status","service_path","content_version","content_sha256","evidence_http_status","observed_from","observed_until"}
   assert isinstance(s,dict) and set(s)==required
   host=self._canonical_https_host(s["url"]); domain=s["publisher_domain"].lower().rstrip(".")
   assert host==domain and s["publisher_id"]=="did:web:"+host,"publisher identity mismatch"
   assert isinstance(s["source_id"],str) and 0<len(s["source_id"])<=80 and isinstance(s["authority_id"],str) and 0<len(s["authority_id"])<=120 and isinstance(s["content_version"],str) and 0<len(s["content_version"])<=100
   assert len(s["did_sha256"])==64 and all(c in "0123456789abcdef" for c in s["did_sha256"]),"DID digest required"
   assert len(s["content_sha256"])==64 and all(c in "0123456789abcdef" for c in s["content_sha256"])
+  assert type(s["did_http_status"]) is int and s["did_http_status"]==200,"DID must pin HTTP 200"
+  assert type(s["evidence_http_status"]) is int and s["evidence_http_status"]==200,"evidence must pin HTTP 200"
   parsed=urlsplit(s["url"]);path=parsed.path;service=s["service_path"]
   assert service.startswith("/") and service.endswith("/") and "//" not in service and path.startswith(service),"unauthorized evidence path"
   assert path==service+s["content_sha256"]+".json","evidence URL must be exact content-addressed service path"
@@ -96,8 +98,8 @@ class ProofRail(gl.Contract):
    for s in sources:
     p={"source_id":s["source_id"],"authority_id":s["authority_id"],"publisher_id":s["publisher_id"],"url":s["url"],"version":s["content_version"],"observed_from":s["observed_from"],"observed_until":s["observed_until"],"expected_digest":s["content_sha256"],"status":"ASSERTED","observed_digest":"","did_digest":"","asserted_code":"","code":"","error":""}
     try:
-     did_url="https://"+s["publisher_domain"]+"/.well-known/did.json";dr=gl.nondet.web.get(did_url);assert dr.status==200
-     assert len(dr.body)<=MAX_BODY_BYTES;did_raw=dr.body.decode("utf-8");did_digest=hashlib.sha256(did_raw.encode("utf-8")).hexdigest();p["did_digest"]=did_digest
+     did_url="https://"+s["publisher_domain"]+"/.well-known/did.json";dr=gl.nondet.web.get(did_url);assert dr.status==s["did_http_status"]
+     assert len(dr.body)<=MAX_BODY_BYTES;did_digest=hashlib.sha256(dr.body).hexdigest();p["did_digest"]=did_digest;did_raw=dr.body.decode("utf-8")
      if did_digest!=s["did_sha256"]:p["status"]=TAMPERED;p["error"]="DID_DIGEST_MISMATCH";provenance.append(p);continue
      did=json.loads(did_raw);assert isinstance(did,dict) and did.get("id")==s["publisher_id"]
      services=did.get("service",[]);authorized=False
@@ -106,7 +108,7 @@ class ProofRail(gl.Contract):
        endpoint=str(x.get("serviceEndpoint",""));ep=urlsplit(endpoint)
        if x.get("id")==s["publisher_id"]+"#evidence" and x.get("type")=="LinkedDomains" and self._canonical_https_host(endpoint)==s["publisher_domain"].lower().rstrip(".") and ep.path==s["service_path"] and ep.query=="" and ep.fragment=="":authorized=True
      assert authorized
-     er=gl.nondet.web.get(s["url"]);assert er.status==200 and len(er.body)<=MAX_BODY_BYTES;raw=er.body.decode("utf-8");digest=hashlib.sha256(raw.encode("utf-8")).hexdigest();p["observed_digest"]=digest
+     er=gl.nondet.web.get(s["url"]);assert er.status==s["evidence_http_status"] and len(er.body)<=MAX_BODY_BYTES;digest=hashlib.sha256(er.body).hexdigest();p["observed_digest"]=digest;raw=er.body.decode("utf-8")
      if digest!=s["content_sha256"]:p["status"]=TAMPERED;provenance.append(p);continue
      try:
       artifact=json.loads(raw);required={"schema","publisher_id","authority_id","source_id","subject","content_version","outcome","observed_from","observed_until","statement","facts"}

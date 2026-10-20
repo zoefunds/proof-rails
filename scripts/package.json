@@ -1,1 +1,1 @@
-{"name":"proofrail-production-tools","private":true,"type":"module","scripts":{"deploy":"node deploy.mjs","e2e":"node live_e2e.mjs"},"dependencies":{"genlayer-js":"^1.1.8"}}
+{"name":"proofrail-production-tools","private":true,"type":"module","scripts":{"deploy":"node deploy.mjs","e2e":"node live_e2e.mjs","capture":"node capture_live_evidence.mjs","verify-receipts":"node verify_live_receipts.mjs"},"dependencies":{"genlayer-js":"^1.1.8"}}

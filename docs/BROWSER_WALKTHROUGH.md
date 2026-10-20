@@ -1,5 +1,7 @@
 # Production browser-wallet walkthrough
 
+> **Historical V5 record:** this walkthrough captures the 2026-10-20 deployment, not the current hardening revision. Hardened-v6 is deployed and its funded lifecycle is captured by `artifacts/live-receipts.hardened-v6.studionet.json`; a new browser-wallet UI capture still needs to be performed from a browser with an injected wallet.
+
 On 2026-10-20 the production client at `https://proof-rails.vercel.app` completed rail PR-2 through an injected Chrome wallet on GenLayer Studionet (chain ID `61999`). This is a real write-path exercise, not a read-only rendering of runner-created state.
 
 The issuer wallet `0x7401c129edfc26e68fe19309fe461eb3db1058eb` opened and funded PR-2 with `0.01 GEN` for recipient `0x6f0b4ce7a1872db132b2f6b7743defb30eba698a`. The recipient wallet then lodged the claim, ran the primary review, posted the exact `0.0005 GEN` challenge bond with the frozen three-source counterevidence manifest, and ran dispute review. Each UI action displayed submitted/pending and finalized states before the next action became available.

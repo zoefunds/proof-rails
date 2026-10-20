@@ -23,16 +23,16 @@ node scripts/verify_review_evidence.mjs
 
 The current v5 local verification produces:
 
-- Direct Mode: 34 passed;
-- frontend protocol, autofill, and contract-client tests: 24 passed across three files;
+- Direct Mode: 37 passed;
+- frontend protocol, autofill, and contract-client tests: 26 passed across three files;
 - TypeScript project build: passed;
 - Vite production build: passed (2,372 modules transformed).
 
-Direct Mode proves storage/runtime integration and validator equivalence with controlled inputs. The source-matched network proof is `artifacts/live-e2e-4.studionet.json`: it records the finalized hardened deployment, a funded five-transaction Studionet lifecycle, 2/2 verified primary sources, 3/3 verified counter-sources, a separate-panel 3-of-3 consensus reversal, payout, balance delta, bond clearing, fund conservation, and GenVM finality.
+Direct Mode proves storage/runtime integration and validator equivalence with controlled inputs. `artifacts/live-e2e-4.studionet.json` remains historical V5 proof. The current source-matched technical demonstration is `artifacts/live-receipts.hardened-v6.studionet.json`, verified by `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs`: it records a finalized hardened deployment, live 2/2 primary and 3/3 counter provenance, consensus reversal, payout, bond clearing, terminal accounting, and finalized execution evidence. The publisher origins share one Vercel account, so this is not organizational-independence proof.
 
 The v5 E2E runner reads `artifacts/evidence-policy.v5.json` and `artifacts/counterevidence.v5.json` by default; `PROOFRAIL_EVIDENCE_POLICY` and `PROOFRAIL_COUNTEREVIDENCE` may override them. It verifies contract state after each review, performs at most five retries separated by the frozen interval, and rejects a run unless both panels meet quorum, every recorded transaction reaches majority consensus with GenVM execution evidence, per-run accounting conserves funds, and the expected payout reaches the recipient. Only its newly generated `proofrail.live-verification/v5` artifact is source-matched funded proof.
 
-The production-dependency audit reports zero vulnerabilities. Current hosted workflows do not start because GitHub marks the account locked for billing; both jobs contain zero executed steps. This is recorded as an external CI blocker, not described as green CI.
+The production dependency audit passes: `npm audit --prefix apps/web --omit=dev --audit-level=high` reports zero advisories. This does not make the complete development-tool dependency graph clean: `npm audit --prefix apps/web` reports 3 advisories (1 moderate, 2 critical) in Vitest-related development dependencies. Current hosted workflows do not start because GitHub marks the account locked for billing; both jobs contain zero executed steps. This is recorded as an external CI blocker, not described as green CI.
 
 The frontend suite separately verifies the 24-hour schedule guard, recovery eligibility for expired draft/claim/dispute states, and the rule that a finalized wallet receipt is successful only when consensus is `MAJORITY_AGREE` and GenVM execution is explicitly `FINISHED_WITH_RETURN` or a finalized transaction provides an execution hash.
 

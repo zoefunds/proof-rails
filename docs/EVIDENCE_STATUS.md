@@ -2,14 +2,16 @@
 
 ## Current production records
 
-ProofRail v5 has two complementary funded-lifecycle records for the same deployed contract, `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` on GenLayer Studionet (chain ID `61999`):
+> **Current technical demonstration:** hardened-v6 is deployed at `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`. Its source-matched deployed bytes and funded lifecycle are captured in `artifacts/deployment.studionet.json` and `artifacts/live-receipts.hardened-v6.studionet.json`. The five publishers are still controlled through one Vercel account, so this is not organizational-independence evidence.
+
+ProofRail v5 has two historical funded-lifecycle records for the retired contract, `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` on GenLayer Studionet (chain ID `61999`):
 
 | Record | Scope | What it proves |
 | --- | --- | --- |
 | `artifacts/live-e2e-4.studionet.json` | Rail 1, source-matched runner | Deployment/source equivalence, finalized GenVM execution hashes, authenticated primary and counter evidence, consensus reversal, payout, bond clearing, and conservation accounting. |
 | `artifacts/browser-wallet-pr2.studionet.json` | PR-2, production Chrome UI | A real injected-wallet browser write lifecycle: fund, claim, primary review, bonded challenge, counter review, and payout. |
 
-The records must not be relabelled as one another. Rail 1 is the complete source-matched accounting and execution record; PR-2 establishes that the public production client can drive the lifecycle with external wallets. See [Deployment](DEPLOYMENT.md) and [Browser walkthrough](BROWSER_WALKTHROUGH.md) for receipts and scope.
+The records must not be relabelled as one another or as hardened-v6 proof. Rail 1 is the complete source-matched accounting and execution record; PR-2 establishes that the prior public client could drive the lifecycle with external wallets. A fresh V6 injected-wallet recording remains required. See [Deployment](DEPLOYMENT.md) and [Browser walkthrough](BROWSER_WALKTHROUGH.md) for receipts and scope.
 
 ## Preserved historical display-label discrepancy
 
@@ -22,5 +24,5 @@ The historic bytes and their wording are deliberately preserved. Editing them wo
 ## Trust and release boundaries
 
 - The five demonstration publishers are technically distinct but operated through one deployment account. They are `DEMONSTRATION_ONLY`, not proof of independent real-world organizations. [Authority governance](AUTHORITY_GOVERNANCE.md) defines the credentialed admission policy needed for production independence.
-- GenVM execution validates the requested origin/path, HTTP status, DID binding, and exact response bytes. The runtime interface does not document response-level final URL or redirect-history access. `scripts/verify_publishers.mjs` supplies the separate release check that rejects redirects and requires final URL equality.
-- GitHub Actions remains `HOSTED_CI_NOT_EXECUTED` because the account billing lock prevents jobs from starting. The local release gate is green, but it is not represented as hosted CI. See [CI attestation](CI_ATTESTATION.md).
+- GenVM execution validates the requested origin/path, pinned HTTP status, DID binding, and exact response bytes. The runtime interface does not document response-level final URL or redirect-history access. `scripts/verify_publishers.mjs` supplies the separate release check that rejects redirects and requires final URL equality. The frozen SHA-256 value remains the in-contract transport-independent boundary when redirect history is unavailable.
+- GitHub Actions remains `HOSTED_CI_NOT_EXECUTED` because the account billing lock prevents jobs from starting. The current local implementation checks are green, but a current release gate cannot be green until this revision has fresh published sources, a deployment, and funded proof. See [CI attestation](CI_ATTESTATION.md).

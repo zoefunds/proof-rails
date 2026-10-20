@@ -8,3 +8,4 @@ __pycache__/
 .gltest-artifacts/
 
 .vercel
+.env*

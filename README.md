@@ -62,9 +62,9 @@ Copy `.env.example` to `.env` and provide the deployed address. The browser uses
 
 Production console: `https://proof-rails.vercel.app`
 
-Studionet v5 contract: `0x3D320749926Ef3E4258adb404B25bc8d29ACF0CC` (chain ID `61999`). The finalized deployment and local source both hash to `f460ea0a246772894f710760899ec4416e76ad0ae48a67149eb3bb5af875cc59`.
+Studionet hardened-v6 demonstration contract: `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986` (chain ID `61999`). It pins both DID and evidence HTTP success statuses and hashes retrieved bytes directly. The finalized deployment/source SHA-256 is `4610fccc254641a69eefbf47dc4ad9fd398be79380513de3959a228d8720c22e`.
 
-ProofRail keeps two complementary, non-interchangeable records of its funded v5 lifecycle. `artifacts/live-e2e-4.studionet.json` is the source-matched runner record: two primary measurements calculated above the frozen 99.90% threshold despite `BREACHED` publisher declarations; three counter-measurements calculated below it despite `FULFILLED` declarations and changed the verdict to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. The canonical production browser is live at `https://proof-rails.vercel.app`.
+ProofRail keeps two complementary, non-interchangeable records of its funded v5 lifecycle. `artifacts/live-e2e-4.studionet.json` is the source-matched runner record for the historical v5 deployment: two primary measurements calculated above the frozen 99.90% threshold despite `BREACHED` publisher declarations; three counter-measurements calculated below it despite `FULFILLED` declarations and changed the verdict to `BREACHED`. All five transactions reached majority agreement with GenVM execution hashes, 0.01 GEN was paid, and no principal or bond remained locked. It is not a funded proof for the current un-deployed revision. The canonical production browser is live at `https://proof-rails.vercel.app`.
 
 Rail PR-2 independently exercised that lifecycle through the production Chrome UI with injected issuer and recipient wallets. It finalized a 0.01 GEN escrow, 0.0005 GEN challenge bond, 2/2 primary receipt, 3/3 counter receipt, and consensus change from `FULFILLED` to terminal `BREACHED`. See [production browser-wallet walkthrough](docs/BROWSER_WALKTHROUGH.md), [evidence-record status](docs/EVIDENCE_STATUS.md), and `artifacts/browser-wallet-pr2.studionet.json`.
 
@@ -72,7 +72,7 @@ Rail PR-2 independently exercised that lifecycle through the production Chrome U
 
 The organizational-admission policy and audited CI-blocker evidence were added in commit `f0aa0be9c98c3b9e36871c992e71307bc71d9ca5`. The five hosted fixtures remain explicitly demonstration-only; production organizational independence requires separately controlled publishers holding admissible third-party credentials. This is presently an onboarding/release gate, not on-chain credential verification; the deployed contract enforces technical identity uniqueness only.
 
-Local release verification is green. The current GitHub Actions run did not start because GitHub reports an account-level billing lock; see [CI attestation](docs/CI_ATTESTATION.md) for the zero-step job evidence and exact reviewer decision rule. This repository does not claim a passing hosted run until GitHub executes the jobs.
+`artifacts/live-receipts.hardened-v6.studionet.json` records the current source-matched technical demonstration: live publisher verification, finalized deployment, 2/2 primary `FULFILLED`, 3/3 counter `BREACHED`, payout, successful challenger-bond return, and zero terminal locks. It is not evidence of independent organizations because all publishers remain in one Vercel account. The current GitHub Actions run did not start because GitHub reports an account-level billing lock; see [CI attestation](docs/CI_ATTESTATION.md) for the zero-step job evidence and exact reviewer decision rule. This repository does not claim a passing hosted run until GitHub executes the jobs.
 
 ## Safety properties
 
