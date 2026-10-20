@@ -18,7 +18,7 @@
 - Current implementation commit: `2fc32738e8786f23060a23277546f6f991dfb3ff`
 - Current CI-attestation commit: `01d9591f0e6faf141301384afe6bae0278710ca6`
 - Production browser: [`https://proof-rails.vercel.app`](https://proof-rails.vercel.app) (Vercel project name `nw3`, attached production domain)
-- Current Vercel production deployment: `dpl_CbX1thBv5mJAFKkjiUHafbi4rDSx` (`READY`, production alias applied)
+- Current Vercel production deployment: `dpl_HjNW898pzPWkG3EXj85rDeUrGWxY` (`READY`, production alias `https://proof-rails.vercel.app` applied)
 
 The two v5 records serve different historical review purposes. Rail 1 is the source-matched runner record with complete execution hashes and conservation accounting. PR-2 is the separately captured production-browser, injected-wallet write-path record. They do not establish a V6 browser transaction lifecycle. The current source-matched V6 proof is Rail 1 in `artifacts/live-receipts.hardened-v6.studionet.json`; Chrome has separately confirmed that the production V6 interface renders its current rail and receipt ledger. See [evidence-record status](EVIDENCE_STATUS.md) for record scope.
 
@@ -67,5 +67,5 @@ No private key belongs in this repository or browser bundle.
 
 ## CI status
 
-For the hardened-v6 implementation, contract lint, 37 Direct Mode tests, 26 frontend tests on Vitest `5.0.5`, TypeScript, production build, live publisher verification, funded receipt verification, and both full and production dependency audits pass locally. The full dependency audit is now clean after resolving the three former Vitest-related advisories. The latest hosted run, attached to commit `399730d`, failed before executing any steps because GitHub reports an account billing lock. The hosted status is not green CI. The V6 receipt display has been confirmed in Chrome; the issuer wallet is connected to a prepared form, but the V6 browser-wallet transaction lifecycle remains incomplete pending user signatures. See [CI attestation](CI_ATTESTATION.md) for the latest run and job IDs.
+For the hardened-v6 implementation, contract lint, 37 Direct Mode tests, 26 frontend tests on Vitest `5.0.5`, TypeScript, production build, live publisher verification, funded receipt verification, and both full and production dependency audits pass locally. The full dependency audit is now clean after resolving the three former Vitest-related advisories. The latest hosted run, attached to commit `35bd3d1`, failed before executing any steps because GitHub reports an account billing lock. The hosted status is not green CI. The V6 receipt display has been confirmed in Chrome; the issuer wallet is connected to a prepared form, but the V6 browser-wallet transaction lifecycle remains incomplete pending user signatures. See [CI attestation](CI_ATTESTATION.md) for the latest run and job IDs.
 
