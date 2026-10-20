@@ -25,3 +25,4 @@ jobs:
       - run: PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs
       - run: PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs
       - run: node scripts/verify_review_evidence.mjs
+      - run: node scripts/verify_browser_wallet_evidence.mjs

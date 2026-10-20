@@ -1,0 +1,20 @@
+import {readFile} from "node:fs/promises";
+
+const root=new URL("../",import.meta.url);
+const capture=JSON.parse(await readFile(new URL("artifacts/browser-wallet-hardened-v6.studionet.json",root),"utf8"));
+const live=JSON.parse(await readFile(new URL("artifacts/live-receipts.hardened-v6.studionet.json",root),"utf8"));
+const fail=message=>{throw Error(`browser wallet evidence rejected: ${message}`)};
+const expectedActions=["open_rail","lodge_claim","review_claim","dispute","review_dispute","recipient_payout","successful_challenger_bond_return"];
+if(capture.schema!=="proofrail.browser-wallet-lifecycle/v1"||capture.releaseId!=="hardened-v6"||capture.network!=="GenLayer Studionet"||capture.chainId!==61999)fail("capture identity is invalid");
+if(capture.productionOrigin!=="https://proof-rails.vercel.app"||capture.contractAddress.toLowerCase()!==live.contractAddress.toLowerCase())fail("production contract binding is invalid");
+if(capture.transactions.length!==expectedActions.length||capture.transactions.some((tx,i)=>tx.action!==expectedActions[i]||!/^0x[0-9a-f]{64}$/i.test(tx.hash)||tx.status!=="FINALIZED"))fail("finalized transaction sequence is incomplete or malformed");
+if(new Set(capture.transactions.map(tx=>tx.hash.toLowerCase())).size!==expectedActions.length)fail("duplicate transaction hash");
+const [open,claim,primary,challenge,counter,payout,bond]=capture.transactions;
+if(open.sender.toLowerCase()!==capture.issuer.toLowerCase()||claim.sender.toLowerCase()!==capture.recipientAndChallenger.toLowerCase()||primary.sender.toLowerCase()!==capture.recipientAndChallenger.toLowerCase()||challenge.sender.toLowerCase()!==capture.recipientAndChallenger.toLowerCase()||counter.sender.toLowerCase()!==capture.recipientAndChallenger.toLowerCase())fail("issuer or recipient attribution mismatch");
+if(primary.result!=="FULFILLED"||primary.verified!==2||primary.agreeing!==2||counter.result!=="BREACHED"||counter.verified!==3||counter.agreeing!==3)fail("browser review results or quorum counts mismatch");
+if(challenge.bond!==capture.bond||payout.value!==capture.funded||bond.value!==capture.bond||payout.recipient.toLowerCase()!==capture.recipientAndChallenger.toLowerCase()||bond.recipient.toLowerCase()!==capture.recipientAndChallenger.toLowerCase())fail("payout or bond movement mismatch");
+if(capture.verdicts.primary.assertedByPublishers!=="BREACHED"||capture.verdicts.primary.classifiedByValidators!=="FULFILLED"||capture.verdicts.counterevidence.assertedByPublishers!=="FULFILLED"||capture.verdicts.counterevidence.classifiedByValidators!=="BREACHED"||capture.verdicts.terminal!=="BREACHED")fail("assertion/classification reversal mismatch");
+if(capture.terminalAccounting.contractBalance!=="0"||capture.terminalAccounting.funded!==capture.funded||capture.terminalAccounting.paidToRecipient!==capture.funded||capture.terminalAccounting.bondReturnedToSuccessfulChallenger!==capture.bond||capture.terminalAccounting.principalLocked!=="0"||capture.terminalAccounting.bondsLocked!=="0")fail("terminal conservation mismatch");
+if(live.rail.provisional_code!=="FULFILLED"||live.rail.final_code!=="BREACHED"||live.rail.funded!==capture.funded||live.rail.paid!==capture.funded||live.accounting.locked!==0||live.accounting.bonds_locked!==0)fail("source-matched funded receipt record disagrees with browser capture");
+if(!capture.captureNote.includes("supplied by the account owner")||!capture.sourceIdentityCaveat.includes("share one Vercel account"))fail("capture provenance or independence caveat is missing");
+console.log("Verified V6 production browser capture structure, finalized sequence, verdict reversal, payouts, source-matched rail consistency, provenance caveat, and terminal conservation.");

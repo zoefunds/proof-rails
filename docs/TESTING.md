@@ -20,6 +20,7 @@ PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs
 PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs
 node scripts/verify_live_artifact.mjs
 node scripts/verify_review_evidence.mjs
+node scripts/verify_browser_wallet_evidence.mjs
 ```
 
 The current hardened-v6 local verification produces:
@@ -37,7 +38,7 @@ The production dependency audit reports zero advisories, and the full dependency
 
 The frontend suite separately verifies the 24-hour schedule guard, recovery eligibility for expired draft/claim/dispute states, and the rule that a finalized wallet receipt is successful only when consensus is `MAJORITY_AGREE` and GenVM execution is explicitly `FINISHED_WITH_RETURN` or a finalized transaction provides an execution hash.
 
-The current production browser at `https://proof-rails.vercel.app` is pinned to the hardened-v6 contract. The paid Rail 1 view and five source receipts render assertions, classifications, quorum counts, and hashes. Rail 2 has completed the injected-wallet lifecycle: seven finalized Studionet transactions cover funding, claim, primary review, bonded dispute, counter review, payout, and successful bond return. The browser capture is `artifacts/browser-wallet-hardened-v6.studionet.json`; the source-matched publisher receipt record remains `artifacts/live-receipts.hardened-v6.studionet.json`. The two records are distinct rails and complementary evidence. `artifacts/browser-wallet-pr2.studionet.json` is historical V5 only. The contract record and explorer receipts, rather than UI state alone, are authoritative.
+The current production browser at `https://proof-rails.vercel.app` is pinned to the hardened-v6 contract. The paid Rail 1 view and five source receipts render assertions, classifications, quorum counts, and hashes. Rail 2 has completed the injected-wallet lifecycle: seven finalized Studionet transactions cover funding, claim, primary review, bonded dispute, counter review, payout, and successful bond return. `node scripts/verify_browser_wallet_evidence.mjs` checks the browser capture against the source-matched funded rail. The browser capture is `artifacts/browser-wallet-hardened-v6.studionet.json`; the publisher receipt record is `artifacts/live-receipts.hardened-v6.studionet.json`. `artifacts/browser-wallet-pr2.studionet.json` is historical V5 only. The contract record and explorer receipts, rather than UI state alone, are authoritative.
 
 ### Latest local follow-up (2026-10-20)
 

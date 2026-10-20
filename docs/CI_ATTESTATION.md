@@ -1,48 +1,77 @@
-# CI attestation and external runner blocker
+# CI status and release-gate record
 
-## Current hosted result
+## Status summary
 
-The latest inspected GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39488889898>, is attached to dependency-security and release-status commit `35bd3d1306c93c60e84cfedf704695216a8fa8ab`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted the account billing-lock annotation for both jobs. The hardened implementation itself is commit `2fc32738e8786f23060a23277546f6f991dfb3ff`; its run is [39482917952](https://github.com/zoefunds/proof-rails/actions/runs/39482917952) and had the same startup block. This status is reported separately from passing local release gates and finalized Studionet evidence, including the later production-browser V6 run.
-
-> The job was not started because your account is locked due to a billing issue.
-
-This is classified as `RUNNER_STARTUP_BLOCKED`, not a test failure and not a passing CI run. The machine-readable record is `artifacts/ci-blocker.v1.json`.
-
-## Equivalent release gate executed locally
-
-The following release-commit inputs were run successfully:
-
-| Gate | Command | Result |
+| Signal | Current documented state | Meaning |
 | --- | --- | --- |
-| Contract lint | `genvm-lint contracts/proofrail.py` | passed, 3 checks |
-| Direct Mode | `pytest -q` | 37 passed |
-| Frontend tests | `npm test --prefix apps/web` | 26 passed, 3 files |
-| TypeScript | `npm run typecheck --prefix apps/web` | passed |
-| Production build | `npm run build --prefix apps/web` | passed, 2,372 modules |
-| Full dependency audit | `npm audit --prefix apps/web --audit-level=low` | passed on 2026-10-20: zero vulnerabilities after upgrading Vitest to `5.0.5` |
-| Production dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | passed on 2026-10-20: zero vulnerabilities |
-| Hardened-v6 publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | passed on 2026-10-20: 10 objects, HTTP 200, no redirects, exact final URLs, and matching SHA-256 |
-| Funded V6 receipt proof | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | passed: finalized deployment, 2/2→3/3 reversal, payout, bond return, and terminal conservation |
-| Source equivalence and lifecycle | `node scripts/verify_live_artifact.mjs` | passed: source hash, finality, provenance, reversal, and balance conservation |
-| Governance evidence | `node scripts/verify_review_evidence.mjs` | passed: organizational-independence scope and current zero-step CI blocker |
+| GitHub Actions hosted CI | `HOSTED_CI_NOT_EXECUTED` | Latest inspected run never started either job; GitHub blocked runner startup on the account billing lock. This is neither a passing run nor a code-test failure. |
+| Local contract and application gates | `LOCAL_RELEASE_GATE_GREEN` | Lint, Direct Mode, frontend tests, TypeScript, production build, release evidence verifiers, and local dependency audit pass as recorded below. |
+| Independent hosted verification | `NOT_ESTABLISHED` | No hosted job execution or artifact attestation exists for the current release evidence. |
 
-These results establish reproducibility and supply exact review evidence. `scripts/verify_release_artifact.mjs` and `artifacts/release-verification.v5.json` remain historical V5 records; that verifier intentionally rejects the current source because it is bound to old V5 bytes and results. The hosted workflow now runs the hardened-v6 publisher and receipt verifiers instead. Local checks do not provide the independent execution identity that a hosted runner or separate reviewer provides.
+The repository owner has said the GitHub billing lock cannot be cleared now. Accordingly, hosted CI is documented as externally blocked and will remain unverified until GitHub permits jobs to start. No CI result is fabricated or inferred from local execution.
 
-## Reviewer decision rule
+## Latest inspected hosted run
 
-An automated or human review should evaluate the states separately:
+The latest inspected run record is [GitHub Actions run 39488889898](https://github.com/zoefunds/proof-rails/actions/runs/39488889898), workflow `verify`, attached to commit `35bd3d1306c93c60e84cfedf704695216a8fa8ab`. Inspection recorded at `2026-10-20T20:04:42Z` showed:
 
-- `LOCAL_RELEASE_GATE_GREEN`: repository commands and byte-level verifiers passed.
-- `HOSTED_CI_NOT_EXECUTED`: GitHub executed zero steps because of an account-level billing lock.
-- `HOSTED_CI_GREEN`: **not yet achieved**.
+| Job | Job ID | Result | Steps executed |
+| --- | ---: | --- | ---: |
+| `contract` | `118856415204` | Runner startup blocked | 0 |
+| `web` | `118856414910` | Runner startup blocked | 0 |
 
-The repository must never translate `RUNNER_STARTUP_BLOCKED` into a successful check. Once billing is restored, rerun the workflow at the same commit. A valid final submission includes both green jobs, nonempty step lists, and a run whose `headSha` equals the submitted commit.
+GitHub's annotation was: “The job was not started because your account is locked due to a billing issue.” The run's overall failure conclusion means the workflow could not execute; it must not be described as failed tests or as a green check. The same blocker was recorded for [run 39482917952](https://github.com/zoefunds/proof-rails/actions/runs/39482917952) on hardened implementation commit `2fc32738e8786f23060a23277546f6f991dfb3ff`.
 
-## Future provenance
+The machine-readable observation, including the run URL, commit, timestamp, job IDs, zero step counts, exact annotation, interpretation, and remediation condition, is [`artifacts/ci-blocker.v1.json`](../artifacts/ci-blocker.v1.json). The repo's current HEAD may be newer than the commit of that last inspected run; the record does not claim that the current HEAD has a hosted result. A later no-op/docs commit uses `[skip ci]`, and the latest browser evidence commit was pushed after the recorded run. The current working workflow therefore requires a new hosted run once GitHub allows it.
 
-After hosted execution is restored, the workflow should issue GitHub artifact attestations for the release manifest. GitHub artifact attestations use Sigstore, and SLSA provenance can bind produced artifacts to the hosted build identity. This requires a running GitHub job and OIDC permissions, so it cannot be truthfully generated while the account is locked.
+## Current workflow contract
 
-References:
+The authoritative workflow is [`.github/workflows/ci.yml`](../.github/workflows/ci.yml), named `verify`, triggered on pushes and pull requests. It defines two independent Ubuntu jobs:
 
-- <https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/verify-attestations-offline>
-- <https://slsa.dev/spec/v1.2/provenance>
+| Job | Steps configured in the current workflow |
+| --- | --- |
+| `contract` | Checkout; set up Python 3.12; install `requirements.txt`; run `genvm-lint contracts/proofrail.py`; run `pytest -q` (Direct Mode adversarial suite). |
+| `web` | Checkout; set up Node.js 22 with npm cache; `npm ci --prefix apps/web`; run frontend tests, TypeScript typecheck, and production build; run production dependency audit (`npm audit --prefix apps/web --omit=dev --audit-level=high`); verify source-matched live artifact; verify all pinned live publisher objects; verify funded hardened-v6 receipts; verify governance/CI-blocker evidence; verify the V6 production injected-wallet capture. |
+
+The browser capture verifier was added after run 39488889898, so it has only a passing local result at present. No claim is made that this latest workflow revision has run on GitHub.
+
+## Local release-gate results
+
+The following repository gates have passed locally. These results are useful review evidence, but they do not replace the independent runner identity of hosted CI.
+
+| Gate | Command | Latest recorded/observed result |
+| --- | --- | --- |
+| Contract static lint | `genvm-lint contracts/proofrail.py` | Passed, 3 checks (rerun during this audit). |
+| Direct Mode suite | `pytest -q` | 37 passed (rerun during this audit). |
+| Frontend suite | `npm test --prefix apps/web` | 26 passed across 3 files (rerun during this audit). |
+| TypeScript | `npm run typecheck --prefix apps/web` | Passed (rerun during this audit). |
+| Production bundle | `npm run build --prefix apps/web` | Passed; 2,372 modules transformed (rerun during this audit). Vite emitted a non-fatal large-chunk advisory. |
+| Full dependency audit | `npm audit --prefix apps/web --audit-level=low` | Zero vulnerabilities after Vitest update to `5.0.5` (previously verified); offline audit also returned zero during this audit. |
+| Production dependency audit | `npm audit --prefix apps/web --omit=dev --audit-level=high` | Zero vulnerabilities on 2026-10-20 (previously verified; not an independent hosted result). |
+| Live publisher verification | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | Previously passed 10 pinned objects: HTTP 200, no redirects, exact URLs and hashes. A live network rerun was unavailable during this audit because DNS resolution failed. |
+| Source-matched funded receipt | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | Passed during this audit; verifies source hash, finalized runner receipts, 2/2→3/3 reversal, payout, bond return, and terminal conservation. |
+| Deployed source/lifecycle artifact | `node scripts/verify_live_artifact.mjs` | Passed during this audit. |
+| Governance and blocker record | `node scripts/verify_review_evidence.mjs` | Passed during this audit. |
+| V6 production browser capture | `node scripts/verify_browser_wallet_evidence.mjs` | Passed during this audit; checks the seven-transaction capture, asserted/classified reversal, amounts, source-matched rail consistency, and terminal accounting. |
+
+The locally executed Direct Mode suite covers forged DID content, wrong/unauthorized paths, redirects, stale or inconsistent metadata, malformed schemas, prompt injection, conflicting sources, unavailable retrieval, bounded retries, validator disagreement, rollback, replay, bond routing/recovery, and principal conservation. The V6 browser capture is a separate production wallet lifecycle from the source-matched runner rail; both have dedicated evidence records and verifiers.
+
+## Resume condition and reporting rule
+
+No repository change can clear an account-level GitHub billing lock. When the owner can restore GitHub billing/service, the release commit must be pushed or a workflow rerun dispatched for the exact intended commit. Then verify that:
+
+1. the run's `headSha` is that commit;
+2. both `contract` and `web` jobs actually start and finish successfully;
+3. their step lists are nonempty and contain the configured gates above; and
+4. no new failed, skipped, or cancelled required job is treated as green.
+
+Until those conditions hold, report `HOSTED_CI_NOT_EXECUTED` separately from local results. Do not describe the billing blocker as a CI pass or as a repository test failure. This task will not retry/dispatch GitHub runs while the user has said the billing issue cannot be cleared now.
+
+## Provenance limits
+
+Because no hosted job started, there is no current-run GitHub artifact attestation, runner-generated SBOM, or hosted provenance statement. Such evidence must be generated by a successful authorized workflow with appropriate OIDC permissions; it cannot be recreated from a local run and represented as GitHub provenance. The source-matched Studionet records are chain/explorer evidence and are not hosted-CI attestations.
+
+The V6 publisher sites have distinct technical domains, DIDs, authority IDs, and source identities but share one Vercel account. Their evidence demonstrates technical source separation only, not independent real-world organizations. See [authority governance](AUTHORITY_GOVERNANCE.md).
+
+## Historical workflow records
+
+[`artifacts/release-verification.v5.json`](../artifacts/release-verification.v5.json) and `scripts/verify_release_artifact.mjs` describe a historical V5 manifest and intentionally bind to old source bytes/results. They are not evidence of the hardened V6 hosted status. Current V6 source and lifecycle checks are the workflow commands listed above.
