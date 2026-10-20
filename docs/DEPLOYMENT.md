@@ -46,7 +46,7 @@ Every transaction reached `MAJORITY_AGREE` with explicit finalized GenVM executi
 
 ## Historical V5 browser-wallet lifecycle — PR-2
 
-The earlier public interface completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. It is preserved as historical V5 browser evidence only. The current `https://proof-rails.vercel.app` build is pinned to the hardened-v6 address above, and its V6 receipt ledger has been checked in Chrome against the live runner-created rail. A fresh injected-wallet V6 capture remains outstanding because the account owner must connect the intended wallets and personally approve each transaction. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. No browser key or private signing material is stored in the repository.
+The earlier public interface completed the full write lifecycle for rail PR-2 using injected issuer and recipient wallets. It is preserved as historical V5 browser evidence only. The current `https://proof-rails.vercel.app` build is pinned to the hardened-v6 address above, and its V6 receipt ledger has been checked in Chrome against the live runner-created rail. The designated V6 issuer wallet is now connected to a prepared browser form with the two-source policy and designated recipient; the funding transaction has not been submitted or signed. Recipient claim/review/dispute actions and the remaining browser transaction receipts still require the account owner. See [BROWSER_WALKTHROUGH.md](BROWSER_WALKTHROUGH.md) and `artifacts/browser-wallet-pr2.studionet.json`. No browser key or private signing material is stored in the repository.
 
 ## Release procedure
 
