@@ -2,7 +2,7 @@
 
 ## Current hosted result
 
-The latest inspected GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39488889898>, is attached to dependency-security and release-status commit `35bd3d1306c93c60e84cfedf704695216a8fa8ab`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted the account billing-lock annotation for both jobs. The hardened implementation itself is commit `2fc32738e8786f23060a23277546f6f991dfb3ff`; its run is [39482917952](https://github.com/zoefunds/proof-rails/actions/runs/39482917952) and had the same startup block.
+The latest inspected GitHub Actions run, <https://github.com/zoefunds/proof-rails/actions/runs/39488889898>, is attached to dependency-security and release-status commit `35bd3d1306c93c60e84cfedf704695216a8fa8ab`. GitHub created the `contract` and `web` jobs, executed zero steps in each, and emitted the account billing-lock annotation for both jobs. The hardened implementation itself is commit `2fc32738e8786f23060a23277546f6f991dfb3ff`; its run is [39482917952](https://github.com/zoefunds/proof-rails/actions/runs/39482917952) and had the same startup block. This status is reported separately from passing local release gates and finalized Studionet evidence, including the later production-browser V6 run.
 
 > The job was not started because your account is locked due to a billing issue.
 

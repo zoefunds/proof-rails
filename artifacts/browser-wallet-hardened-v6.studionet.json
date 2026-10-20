@@ -1,0 +1,45 @@
+{
+  "schema": "proofrail.browser-wallet-lifecycle/v1",
+  "releaseId": "hardened-v6",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "productionOrigin": "https://proof-rails.vercel.app",
+  "contractAddress": "0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986",
+  "railId": "2",
+  "railName": "V6 browser source-matched uptime rail",
+  "issuer": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb",
+  "recipientAndChallenger": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a",
+  "funded": "10000000000000000",
+  "bond": "500000000000000",
+  "observationPeriod": {
+    "from": 1792504200,
+    "until": 1792507800,
+    "display": "2026-10-20 13:50–14:50 UTC"
+  },
+  "transactions": [
+    { "action": "open_rail", "hash": "0xa48453a3ec24a1e16015f1426e004e327ea2c8369a7529f0e0646a0988370c91", "status": "FINALIZED", "execution": "SUCCESS", "consensus": "Accepted", "sender": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb" },
+    { "action": "lodge_claim", "hash": "0xb4b50867f6b2dc7b38d7052356bc01129ecbd102983198d87c450c17b403246f", "status": "FINALIZED", "execution": "SUCCESS", "consensus": "Accepted", "sender": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a" },
+    { "action": "review_claim", "hash": "0x40b39b925e1d27728c6e34b313ed4b3d6035573fb13f940111a9a4f74c3048a3", "status": "FINALIZED", "execution": "SUCCESS", "consensus": "Accepted", "sender": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a", "result": "FULFILLED", "verified": 2, "agreeing": 2 },
+    { "action": "dispute", "hash": "0xed748281bbecebb54d553f0b65a1e5f4bdbc92602fff9b341bb7adebf1a2bb71", "status": "FINALIZED", "execution": "SUCCESS", "consensus": "Accepted", "sender": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a", "bond": "500000000000000" },
+    { "action": "review_dispute", "hash": "0x010e2a6453a0fa52d0c8d8523493453584e4359c9d0335e4e95421b500dc840b", "status": "FINALIZED", "execution": "SUCCESS", "consensus": "Accepted", "sender": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a", "result": "BREACHED", "verified": 3, "agreeing": 3 },
+    { "action": "recipient_payout", "hash": "0x97b04a993dbaec657511f69b6a229a20a8cd8b96d4b5e19db0a7db70248e12f1", "status": "FINALIZED", "type": "Send", "recipient": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a", "value": "10000000000000000" },
+    { "action": "successful_challenger_bond_return", "hash": "0xb2e25cb4b17ba9f472687425e6583c6b0ad469cad6d340cc71eb642a6506ff6d", "status": "FINALIZED", "type": "Send", "recipient": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a", "value": "500000000000000" }
+  ],
+  "verdicts": {
+    "primary": { "assertedByPublishers": "BREACHED", "classifiedByValidators": "FULFILLED", "verifiedSources": 2, "agreeingValidators": 2 },
+    "counterevidence": { "assertedByPublishers": "FULFILLED", "classifiedByValidators": "BREACHED", "verifiedSources": 3, "agreeingValidators": 3 },
+    "terminal": "BREACHED",
+    "challengeReason": "Authenticated independent sources contest the provisional result."
+  },
+  "terminalAccounting": {
+    "contractBalance": "0",
+    "funded": "10000000000000000",
+    "paidToRecipient": "10000000000000000",
+    "bondReturnedToSuccessfulChallenger": "500000000000000",
+    "principalLocked": "0",
+    "bondsLocked": "0"
+  },
+  "sourceReceiptArtifact": "artifacts/live-receipts.hardened-v6.studionet.json",
+  "sourceIdentityCaveat": "Five technically distinct domains, DIDs, authorities, and source identities are configured; publisher deployments share one Vercel account, so independent real-world organizations are not established.",
+  "captureNote": "The seven hashes and their action labels were supplied by the account owner. The contract transaction list independently shows open_rail, lodge_claim, review_claim, dispute, and review_dispute as finalized, and full detail pages independently confirm finalized SUCCESS/Accepted results for review_claim and review_dispute. Explorer transfer detail pages independently confirm finalized sends of 0.01 GEN principal and 0.0005 GEN bond to the recipient/challenger; the contract page independently reports 0 GEN and 16 transactions after settlement. The production Attestations page independently renders the five source receipts with assertions, classifications, and matching hashes. The explorer's direct detail route intermittently failed for the open, claim, and dispute entries during capture; their exact hashes and action association therefore remain user-supplied rather than independently detail-page verified."
+}
