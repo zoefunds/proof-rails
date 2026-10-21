@@ -32,7 +32,7 @@ The old `hardened-v6`, `hardened-v7`, `hardened-v8`, and `hardened-v9` release-i
 
 The last recorded local verification (2026-10-21) produced:
 
-- Direct Mode: 42 passed;
+- Direct Mode: 43 passed;
 - frontend protocol, autofill, and contract-client tests: 27 passed across three files;
 - TypeScript project build: passed;
 - Vite production build: passed.

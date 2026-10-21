@@ -1,6 +1,24 @@
 # Production browser-wallet walkthrough
 
-## Hardened V6 injected-wallet lifecycle — Studionet rail 2
+## Hardened-v10 injected-wallet lifecycle — Studionet rail 2 (current)
+
+On 2026-10-21, the production client at [`https://proof-rails.vercel.app`](https://proof-rails.vercel.app) completed a real injected-wallet lifecycle on the current `hardened-v10` contract (`0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9`, chain ID `61999`). Issuer `0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a` funded rail 2 with `1.0 GEN`; recipient/challenger `0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb` lodged the claim, triggered primary review, posted the exact `0.05 GEN` (5%) challenge bond using the same pre-committed three-source counter panel frozen into the policy at funding, triggered counter review, and received both the `1.0 GEN` principal and the full `0.05 GEN` bond back. All seven transactions were finalized.
+
+The primary review authenticated two sources, each bound to the policy's frozen `obligation_id`: both publishers asserted `BREACHED`, while validators classified the frozen numerical facts as `FULFILLED` (2 verified, 2 agreeing). The separately authenticated, pre-funded counter panel authenticated three sources: all asserted `FULFILLED`, while validators classified the facts as `BREACHED` (3 verified, 3 agreeing). This reversed the provisional result and selected the committed `BREACHED` payout.
+
+| Browser action | Finalized Studionet transaction |
+| --- | --- |
+| Open/fund rail | [`0x9b5030…f91b6555`](https://explorer-studio.genlayer.com/tx/0x9b503073c9f066c6c65529190ebbc492a6059fc3d3915676f100ccf1f91b6555) |
+| Lodge claim | [`0xc63a15…0463a263a`](https://explorer-studio.genlayer.com/tx/0xc63a15182b7ebf13e449d815ad909f11e64efe9e64932f090496d1d0463a263a) |
+| Primary review | [`0x5c819c…8c7c194eb`](https://explorer-studio.genlayer.com/tx/0x5c819c58ca54912329bb1126d9d109aedcdf8b29464ee36a72bf9ce8c7c194eb) |
+| Bonded dispute (`0.05 GEN`) | [`0xd48480…56750de90`](https://explorer-studio.genlayer.com/tx/0xd48480bc2d3379c24736e76626b2b0bc2a956ea7e3f4a8f676f237856750de90) |
+| Counter review and reversal | [`0xd9b387…91db56adf`](https://explorer-studio.genlayer.com/tx/0xd9b387eebcfa5b5f07bbebed2030ebf39896d2fa9c4debfe2585db291db56adf) |
+| Principal payout to recipient (`1.0 GEN`) | [`0xc7d2e4…8eddfef4`](https://explorer-studio.genlayer.com/tx/0xc7d2e419c274f174e08ebab62b4092f3de3829c6c8a28936c2252dae8eddfef4) |
+| Successful challenge-bond return (`0.05 GEN`) | [`0xf0b638…99104151c`](https://explorer-studio.genlayer.com/tx/0xf0b63805e07b42d9859f9a7f274c7248dde4c036ffd75d3de87cbef99104151c) |
+
+The capture is indexed in `artifacts/browser-wallet-hardened-v10.studionet.json`; rail-2-specific receipts, source URLs, DID hashes, and validator provenance are in `artifacts/live-receipts.hardened-v10.studionet.json` (rail 1's separate receipt capture is preserved at `artifacts/live-receipts.hardened-v10-rail1.studionet.json`). The account owner supplied all seven transaction hashes; `PROOFRAIL_RELEASE_ID=hardened-v10 node scripts/verify_browser_wallet_candidate.mjs` independently re-fetches every transaction from Studionet and checks finalization, GenVM consensus, sender, recipient, and exact value — it does not merely trust the supplied hashes. An earlier version of this capture recorded the challenge bond and its return as `0`; this was a real data-entry bug, caught in review and corrected against values independently re-read from the finalized transactions, and the verifier now checks exact amounts so the same mistake cannot pass silently again (see `tests/scripts/wallet_lifecycle_checks.test.mjs`).
+
+## Hardened V6 injected-wallet lifecycle — Studionet rail 2 (historical, retired contract)
 
 On 2026-10-20, the production client at [`https://proof-rails.vercel.app`](https://proof-rails.vercel.app) completed the V6 browser write lifecycle through the injected wallet on GenLayer Studionet (chain ID `61999`). The issuer wallet `0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb` funded rail 2 with `0.01 GEN`; recipient/challenger `0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a` submitted the claim, primary review, bonded dispute (`0.0005 GEN`), and counter review. All seven transactions were finalized.
 
@@ -20,10 +38,10 @@ The capture is indexed in `artifacts/browser-wallet-hardened-v6.studionet.json`.
 
 ## Scope and organizational-independence caveat
 
-The five publishers have distinct technical domains, DID documents, authorities, and source identities. Their deployments share one Vercel account, so this demonstrates technical source separation, not separately operated independent real-world organizations. Production organizational independence requires separately operated, credentialed publishers or a governed authority registry; see [Authority governance](AUTHORITY_GOVERNANCE.md).
+For hardened-v10, the five publishers have distinct technical domains, DID documents, authorities, and source identities, and are spread across three distinct hosting providers (Vercel, Cloudflare Pages, GitHub Pages) instead of one shared account. This demonstrates technical and infrastructure source separation, not separately operated independent real-world organizations: all three hosting accounts are reachable from this project's own development environment, and none has completed the credentialed admission process that would establish organizational independence. For the historical hardened-v6 walkthrough above, the five publisher deployments additionally shared a single Vercel account outright. Production organizational independence requires separately operated, credentialed publishers or a governed authority registry; see [Authority governance](AUTHORITY_GOVERNANCE.md).
 
 ## Historical V5 browser-wallet lifecycle
 
-`artifacts/browser-wallet-pr2.studionet.json` records an earlier injected-wallet lifecycle against the retired V5 contract. It is historical audit evidence only and is not needed to establish the current V6 browser path.
+`artifacts/browser-wallet-pr2.studionet.json` records an earlier injected-wallet lifecycle against the retired V5 contract. It is historical audit evidence only and is not needed to establish the current hardened-v10 browser path.
 
 No private key, seed phrase, or wallet secret is stored in the repository or browser bundle.
