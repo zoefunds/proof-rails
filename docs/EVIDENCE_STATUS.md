@@ -14,6 +14,7 @@
 
 | Record | Scope | What it proves |
 | --- | --- | --- |
+| `artifacts/browser-wallet-hardened-v10.studionet.json` | Rail 2 on the current candidate, production injected-wallet lifecycle | A real wallet-signed lifecycle (fund `1.0 GEN`, claim, primary review, bonded dispute, counter review, payout, bond return) driven by the account owner through `https://proof-rails.vercel.app`, independently verified by `scripts/verify_browser_wallet_candidate.mjs` — closes the browser-wallet gate that was outstanding since hardened-v7. |
 | `artifacts/live-e2e-hardened-v10-4.studionet.json` | Rail 1 on the current candidate, obligation-bound multi-provider source-matched runner, freshly redeployed | Everything the v9 row proves, reproduced on a brand-new contract instance and brand-new publisher evidence, plus a full live-app verification pass across every page of the production site against this real rail. |
 | `artifacts/live-e2e-hardened-v9-4.studionet.json` | Rail 1 on the retired obligation-bound candidate, source-matched runner | Every accepted evidence artifact bound to the rail's frozen `obligation_id`, and a receipt `policy_digest` covering the full evidence+payout policy, on the retired hardened-v9 contract. |
 | `artifacts/live-e2e-hardened-v8-4.studionet.json` | Rail 1 on the retired multi-provider candidate, source-matched runner | Evidence authenticated across three distinct hosting providers (Vercel, Cloudflare Pages, GitHub Pages) instead of one, on the retired hardened-v8 contract. Does not demonstrate obligation binding. |

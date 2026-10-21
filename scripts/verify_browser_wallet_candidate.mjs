@@ -17,6 +17,13 @@ if(capture.contractAddress?.toLowerCase()!==release.contractAddress?.toLowerCase
 if(release.evidencePolicy?.schema!=="proofrail.evidence-policy/v7"||canonical(release.evidencePolicy.counterevidence)!==canonical(release.counterevidence)||canonical(JSON.parse(release.rail.counterevidence_json))!==canonical(release.counterevidence))fail("counter panel was not frozen before funding");
 if(!Array.isArray(capture.transactions)||capture.transactions.length!==actions.length||capture.transactions.some((tx,index)=>tx.action!==actions[index]||tx.status!=="FINALIZED"||!/^0x[0-9a-f]{64}$/i.test(tx.hash)))fail("wallet transaction sequence is incomplete");
 if(new Set(capture.transactions.map(tx=>tx.hash.toLowerCase())).size!==actions.length)fail("wallet transaction hashes are not unique");
-if(release.rail.status!==5||release.rail.provisional_code!=="FULFILLED"||release.rail.final_code!=="BREACHED"||release.rail.final_bps!==10000||release.rail.bond!==0||release.accounting.locked!==0||release.accounting.bonds_locked!==0||release.accounting.paid!==release.rail.funded)fail("reversal or terminal accounting is invalid");
+// Per-rail reversal and settlement: this specific rail paid out its full
+// funded amount and released its own lock/bond, regardless of how many
+// other rails the contract has ever funded.
+if(release.rail.status!==5||release.rail.provisional_code!=="FULFILLED"||release.rail.final_code!=="BREACHED"||release.rail.final_bps!==10000||release.rail.bond!==0||release.rail.locked!==0||release.rail.paid!==release.rail.funded)fail("reversal or terminal accounting is invalid");
+// Global conservation: the contract-wide ledger balances. This does not
+// assume the contract has funded only one rail — accounting.funded is the
+// cumulative total across every rail this contract has ever funded.
+if(BigInt(release.accounting.funded)!==BigInt(release.accounting.locked)+BigInt(release.accounting.paid)+BigInt(release.accounting.returned))fail("global fund conservation invariant failed");
 for(const [receipt,code,count] of [[release.primaryReceipt,"FULFILLED",2],[release.disputeReceipt,"BREACHED",3]]){if(receipt.result!=="VERIFIED"||receipt.outcome_code!==code||receipt.verified_sources!==count||receipt.agreeing_sources!==count)fail("quorum receipt mismatch");for(const sourceRow of JSON.parse(receipt.provenance_json)){if(sourceRow.status!=="VERIFIED"||sourceRow.expected_digest!==sourceRow.observed_digest||sourceRow.asserted_code===sourceRow.code)fail("publisher assertion/classification evidence is incomplete")}}
 console.log(`Verified ${releaseId} injected-wallet lifecycle, source-matched deployment, pre-funded counter panel, 2/2→3/3 reversal, payout, bond return, and terminal conservation.`);

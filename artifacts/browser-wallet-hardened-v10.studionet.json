@@ -1,0 +1,76 @@
+{
+  "schema": "proofrail.browser-wallet-lifecycle/v2",
+  "releaseId": "hardened-v10",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9",
+  "railId": "2",
+  "productionOrigin": "https://proof-rails.vercel.app",
+  "issuer": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a",
+  "recipientAndChallenger": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb",
+  "funded": "1000000000000000000",
+  "bond": "0",
+  "captureNote": "All seven transaction hashes were supplied by the account owner after driving the production UI with an injected wallet.",
+  "transactions": [
+    {
+      "action": "open_rail",
+      "hash": "0x9b503073c9f066c6c65529190ebbc492a6059fc3d3915676f100ccf1f91b6555",
+      "status": "FINALIZED",
+      "sender": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a"
+    },
+    {
+      "action": "lodge_claim",
+      "hash": "0xc63a15182b7ebf13e449d815ad909f11e64efe9e64932f090496d1d0463a263a",
+      "status": "FINALIZED",
+      "sender": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb"
+    },
+    {
+      "action": "review_claim",
+      "hash": "0x5c819c58ca54912329bb1126d9d109aedcdf8b29464ee36a72bf9ce8c7c194eb",
+      "status": "FINALIZED",
+      "sender": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb"
+    },
+    {
+      "action": "dispute",
+      "hash": "0xd48480bc2d3379c24736e76626b2b0bc2a956ea7e3f4a8f676f237856750de90",
+      "status": "FINALIZED",
+      "sender": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb"
+    },
+    {
+      "action": "review_dispute",
+      "hash": "0xd9b387eebcfa5b5f07bbebed2030ebf39896d2fa9c4debfe2585db291db56adf",
+      "status": "FINALIZED",
+      "sender": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb"
+    },
+    {
+      "action": "recipient_payout",
+      "hash": "0xc7d2e419c274f174e08ebab62b4092f3de3829c6c8a28936c2252dae8eddfef4",
+      "status": "FINALIZED",
+      "sender": "0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9",
+      "recipient": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb",
+      "value": "1000000000000000000"
+    },
+    {
+      "action": "successful_challenger_bond_return",
+      "hash": "0xf0b63805e07b42d9859f9a7f274c7248dde4c036ffd75d3de87cbef99104151c",
+      "status": "FINALIZED",
+      "sender": "0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9",
+      "recipient": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb",
+      "value": "0"
+    }
+  ],
+  "verdicts": {
+    "primary": {"assertedByPublishers": "BREACHED", "classifiedByValidators": "FULFILLED"},
+    "counterevidence": {"assertedByPublishers": "FULFILLED", "classifiedByValidators": "BREACHED"},
+    "terminal": "BREACHED"
+  },
+  "terminalAccounting": {
+    "funded": "1000000000000000000",
+    "paidToRecipient": "1000000000000000000",
+    "bondReturnedToSuccessfulChallenger": "0",
+    "principalLocked": "0",
+    "bondsLocked": "0"
+  },
+  "sourceIdentityCaveat": "Publisher sources for this release are spread across three hosting providers (Vercel, Cloudflare Pages, GitHub Pages) but all are controlled by the same operator; this is not evidence of independent real-world organizations.",
+  "capturedAt": "2026-10-21T03:15:00.000Z"
+}
