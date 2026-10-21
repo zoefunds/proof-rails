@@ -29,10 +29,10 @@ The authoritative workflow is [`.github/workflows/ci.yml`](../.github/workflows/
 
 | Job | Steps configured in the current workflow |
 | --- | --- |
-| `contract` | Checkout; set up Python 3.12; install `requirements.txt`; run `genvm-lint contracts/proofrail.py`; run `pytest -q` (Direct Mode adversarial suite). |
-| `web` | Checkout; set up Node.js 22 with npm cache; `npm ci --prefix apps/web`; run frontend tests, TypeScript typecheck, and production build; run production dependency audit (`npm audit --prefix apps/web --omit=dev --audit-level=high`); verify historical deployment/artifact integrity; verify preserved historical source manifests; verify governance/CI-blocker evidence; verify historical V6 production injected-wallet capture. |
+| `contract` | Checkout; set up Python 3.12; install `requirements.txt`; run `genvm-lint contracts/proofrail.py`; run `pytest -q` (43-test Direct Mode adversarial suite). |
+| `web` | Checkout; set up Node.js 22 with npm cache; `npm ci --prefix apps/web`; run frontend tests (32), TypeScript typecheck, and production build; run production dependency audit (`npm audit --prefix apps/web --omit=dev --audit-level=high`); `npm ci --prefix scripts`; run the scripts test suite (`npm test --prefix scripts`, 30 browser-wallet-verifier corruption cases); verify historical deployment/artifact integrity (`verify_live_artifact.mjs`); verify the current `hardened-v10` candidate policy manifest and live publisher retrieval (`verify_candidate_policy.mjs`, `verify_publishers.mjs`); independently re-verify the current `hardened-v10` production browser-wallet lifecycle on-chain (`verify_browser_wallet_candidate.mjs`); verify governance/CI-blocker evidence (`verify_review_evidence.mjs`); verify the historical V6 production injected-wallet capture (`verify_browser_wallet_evidence.mjs`). |
 
-The browser capture verifier was added after run 39488889898, so it has only a passing local result at present. No claim is made that this latest workflow revision has run on GitHub.
+This entire workflow — including every `hardened-v10` verifier, the scripts test suite, and the deeper calldata/rail-ID/live-state checks added to `verify_browser_wallet_candidate.mjs` in later review rounds — has only ever run locally; it has never executed on a hosted GitHub Actions runner. It was last re-simulated locally end to end, step by step, from a clean `node_modules` reinstall for both `apps/web` and `scripts`, immediately before this document was last updated, and every step reproduced. No claim is made that this exact workflow revision has run on GitHub.
 
 ## Local release-gate results
 
