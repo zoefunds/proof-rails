@@ -215,6 +215,28 @@ def test_coordinated_identical_false_facts_pass_quorum_by_design(direct_vm,direc
  receipt=c.get_receipt(1,False,1);assert receipt.result=="VERIFIED" and receipt.outcome_code=="PASS" and receipt.agreeing_sources==2
 
 @pytest.mark.direct
+def test_contradictory_free_text_criterion_cannot_override_frozen_structured_fields(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ # The free-text name/criterion are issuer-supplied display strings the
+ # contract stores but never reads for classification; obligation_id,
+ # semantic_rule, and the authenticated numeric facts are the only inputs
+ # that matter. Deliberately set a criterion that claims the *opposite*
+ # mapping of the real frozen semantic_rule (PASS/BREACH swapped in prose)
+ # and confirm the contract still classifies strictly per the real frozen
+ # fields, completely ignoring the contradiction.
+ contradictory_criterion="This obligation is fully satisfied (PASS) for this observation window. The frozen structured facts, if correctly computed, would also say PASS. (They will not: this sentence is deliberately false, to prove prose has no effect on classification.)"
+ sources=[source(1),source(2)];c=direct_deploy("contracts/proofrail.py")
+ direct_vm.sender=addr(c,direct_alice);direct_vm.value=20000;c.open_rail(addr(c,direct_bob),"Deliberately contradictory rail",contradictory_criterion,START,CLAIM_END,20000,policy(sources),OUTCOMES)
+ rail=c.get_rail(1);assert rail.criterion==contradictory_criterion
+ claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,sources,["BREACH","BREACH"]);c.review_claim(1)
+ # The criterion prose above claims PASS, but the real frozen semantic_rule
+ # applied to the authenticated facts (3000s unavailable out of 2,678,400s,
+ # just under the 99.9% bar) classifies BREACH — exactly as it would with
+ # the normal, non-contradictory criterion. The prose is never consulted.
+ receipt=c.get_receipt(1,False,1);assert receipt.result=="VERIFIED" and receipt.outcome_code=="BREACH"
+ warp(direct_vm,"2030-02-03T00:00:01Z");c.finalize(1)
+ assert c.get_rail(1).final_code=="BREACH" and c.accounting()["paid"]==20000 and c.accounting()["returned"]==0
+
+@pytest.mark.direct
 def test_transfer_callback_guard_rejects_all_settlement_reentry(direct_vm,direct_deploy,direct_alice,direct_bob):
  c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob);c.transfer_active=True
  with pytest.raises(AssertionError):c.finalize(1)

@@ -21,7 +21,11 @@ jobs:
       - run: npm run typecheck --prefix apps/web
       - run: npm run build --prefix apps/web
       - run: npm audit --prefix apps/web --omit=dev --audit-level=high
+      - run: npm ci --prefix scripts
+      - run: npm test --prefix scripts
       - run: node scripts/verify_live_artifact.mjs
-      - run: PROOFRAIL_RELEASE_ID=hardened-v7 node scripts/verify_candidate_policy.mjs
+      - run: PROOFRAIL_RELEASE_ID=hardened-v10 node scripts/verify_candidate_policy.mjs
+      - run: PROOFRAIL_RELEASE_ID=hardened-v10 node scripts/verify_publishers.mjs
+      - run: PROOFRAIL_RELEASE_ID=hardened-v10 node scripts/verify_browser_wallet_candidate.mjs
       - run: node scripts/verify_review_evidence.mjs
       - run: node scripts/verify_browser_wallet_evidence.mjs

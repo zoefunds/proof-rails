@@ -9,14 +9,15 @@
   "issuer": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a",
   "recipientAndChallenger": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb",
   "funded": "1000000000000000000",
-  "bond": "0",
-  "captureNote": "All seven transaction hashes were supplied by the account owner after driving the production UI with an injected wallet.",
+  "bond": "50000000000000000",
+  "captureNote": "All seven transaction hashes were supplied by the account owner after driving the production UI with an injected wallet. Transaction values below (open_rail, dispute, payout, bond return) were independently re-read from each finalized transaction on Studionet, not copied from the capture note.",
   "transactions": [
     {
       "action": "open_rail",
       "hash": "0x9b503073c9f066c6c65529190ebbc492a6059fc3d3915676f100ccf1f91b6555",
       "status": "FINALIZED",
-      "sender": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a"
+      "sender": "0x6f0b4cE7a1872db132b2F6B7743deFb30eBa698a",
+      "value": "1000000000000000000"
     },
     {
       "action": "lodge_claim",
@@ -34,7 +35,8 @@
       "action": "dispute",
       "hash": "0xd48480bc2d3379c24736e76626b2b0bc2a956ea7e3f4a8f676f237856750de90",
       "status": "FINALIZED",
-      "sender": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb"
+      "sender": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb",
+      "value": "50000000000000000"
     },
     {
       "action": "review_dispute",
@@ -56,7 +58,7 @@
       "status": "FINALIZED",
       "sender": "0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9",
       "recipient": "0x7401c129EDfc26E68FE19309fE461eb3Db1058Eb",
-      "value": "0"
+      "value": "50000000000000000"
     }
   ],
   "verdicts": {
@@ -67,10 +69,10 @@
   "terminalAccounting": {
     "funded": "1000000000000000000",
     "paidToRecipient": "1000000000000000000",
-    "bondReturnedToSuccessfulChallenger": "0",
+    "bondReturnedToSuccessfulChallenger": "50000000000000000",
     "principalLocked": "0",
     "bondsLocked": "0"
   },
-  "sourceIdentityCaveat": "Publisher sources for this release are spread across three hosting providers (Vercel, Cloudflare Pages, GitHub Pages) but all are controlled by the same operator; this is not evidence of independent real-world organizations.",
-  "capturedAt": "2026-10-21T03:15:00.000Z"
+  "sourceIdentityCaveat": "Publisher sources for this release are spread across three hosting providers (Vercel, Cloudflare Pages, GitHub Pages), each under an account reachable from this project's development environment; organizational independence has not been established through the credentialed admission process this project defines, and the fixtures remain DEMONSTRATION_ONLY on that basis.",
+  "capturedAt": "2026-10-21T04:35:00.000Z"
 }

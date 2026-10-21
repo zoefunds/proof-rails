@@ -1,5 +1,8 @@
 import {createHash} from "node:crypto";
 import {readFile} from "node:fs/promises";
+import {createClient} from "genlayer-js";
+import {studionet} from "genlayer-js/chains";
+import {validateCaptureAgainstRelease, ACTIONS} from "./lib/wallet_lifecycle_checks.mjs";
 
 const releaseId=process.env.PROOFRAIL_RELEASE_ID;
 if(!/^[a-z0-9][a-z0-9-]{2,63}$/.test(releaseId||""))throw Error("PROOFRAIL_RELEASE_ID is required");
@@ -9,21 +12,47 @@ const [capture,release,source]=await Promise.all([
   readJson(`artifacts/live-receipts.${releaseId}.studionet.json`),
   readFile(new URL("contracts/proofrail.py",root)),
 ]);
-const sourceSha256=createHash("sha256").update(source).digest("hex"),canonical=value=>JSON.stringify(value,(_,item)=>item&&typeof item==="object"&&!Array.isArray(item)?Object.fromEntries(Object.entries(item).sort(([a],[b])=>a.localeCompare(b))):item);
-const actions=["open_rail","lodge_claim","review_claim","dispute","review_dispute","recipient_payout","successful_challenger_bond_return"];
-if(capture.schema!=="proofrail.browser-wallet-lifecycle/v2"||capture.releaseId!==releaseId||capture.network!=="GenLayer Studionet"||capture.chainId!==61999)fail("capture identity is invalid");
-if(release.schema!=="proofrail.live-receipt-capture/v1"||release.deployment?.sourceSha256!==sourceSha256||release.deployment?.deployedSourceSha256!==sourceSha256)fail("current source is not bound to deployment evidence");
-if(capture.contractAddress?.toLowerCase()!==release.contractAddress?.toLowerCase()||capture.railId!==release.railId)fail("browser and release rail bindings differ");
-if(release.evidencePolicy?.schema!=="proofrail.evidence-policy/v7"||canonical(release.evidencePolicy.counterevidence)!==canonical(release.counterevidence)||canonical(JSON.parse(release.rail.counterevidence_json))!==canonical(release.counterevidence))fail("counter panel was not frozen before funding");
-if(!Array.isArray(capture.transactions)||capture.transactions.length!==actions.length||capture.transactions.some((tx,index)=>tx.action!==actions[index]||tx.status!=="FINALIZED"||!/^0x[0-9a-f]{64}$/i.test(tx.hash)))fail("wallet transaction sequence is incomplete");
-if(new Set(capture.transactions.map(tx=>tx.hash.toLowerCase())).size!==actions.length)fail("wallet transaction hashes are not unique");
-// Per-rail reversal and settlement: this specific rail paid out its full
-// funded amount and released its own lock/bond, regardless of how many
-// other rails the contract has ever funded.
-if(release.rail.status!==5||release.rail.provisional_code!=="FULFILLED"||release.rail.final_code!=="BREACHED"||release.rail.final_bps!==10000||release.rail.bond!==0||release.rail.locked!==0||release.rail.paid!==release.rail.funded)fail("reversal or terminal accounting is invalid");
-// Global conservation: the contract-wide ledger balances. This does not
-// assume the contract has funded only one rail — accounting.funded is the
-// cumulative total across every rail this contract has ever funded.
-if(BigInt(release.accounting.funded)!==BigInt(release.accounting.locked)+BigInt(release.accounting.paid)+BigInt(release.accounting.returned))fail("global fund conservation invariant failed");
-for(const [receipt,code,count] of [[release.primaryReceipt,"FULFILLED",2],[release.disputeReceipt,"BREACHED",3]]){if(receipt.result!=="VERIFIED"||receipt.outcome_code!==code||receipt.verified_sources!==count||receipt.agreeing_sources!==count)fail("quorum receipt mismatch");for(const sourceRow of JSON.parse(receipt.provenance_json)){if(sourceRow.status!=="VERIFIED"||sourceRow.expected_digest!==sourceRow.observed_digest||sourceRow.asserted_code===sourceRow.code)fail("publisher assertion/classification evidence is incomplete")}}
-console.log(`Verified ${releaseId} injected-wallet lifecycle, source-matched deployment, pre-funded counter panel, 2/2→3/3 reversal, payout, bond return, and terminal conservation.`);
+const sourceSha256=createHash("sha256").update(source).digest("hex");
+
+// Layer 1: pure, network-free consistency between the two JSON records —
+// identity, rail binding, counter-panel freeze, quorum receipts, and exact
+// bond/payout amounts and recipients. See scripts/lib/wallet_lifecycle_checks.mjs;
+// this is the layer that originally let a zeroed bond/bond-return value
+// slip through unnoticed, because nothing compared the capture's claimed
+// amounts to the rail's actual funded amount and BOND_BPS.
+const expectedBond=validateCaptureAgainstRelease(capture,release,releaseId,sourceSha256);
+
+// Layer 2: independent re-verification against the chain itself. The JSON
+// capture is the account owner's claim; this layer does not trust it.
+// Every transaction hash is re-fetched and its on-chain sender, recipient,
+// value, finalization, and (for contract calls) GenVM consensus/execution
+// are checked — so a capture that was hand-edited, or simply wrong, cannot
+// pass on self-consistent arithmetic alone.
+const client=createClient({chain:studionet});
+const address=String(release.contractAddress).toLowerCase();
+const issuer=String(release.rail.issuer).toLowerCase(),recipient=String(release.rail.recipient).toLowerCase();
+const contractCallActions=new Set(["open_rail","lodge_claim","review_claim","dispute","review_dispute"]);
+const expectedSender={open_rail:issuer,lodge_claim:recipient,review_claim:recipient,dispute:recipient,review_dispute:recipient,recipient_payout:address,successful_challenger_bond_return:address};
+const expectedValue={open_rail:BigInt(release.rail.funded),dispute:expectedBond,recipient_payout:BigInt(release.rail.funded),successful_challenger_bond_return:expectedBond};
+const expectedRecipient={recipient_payout:recipient,successful_challenger_bond_return:recipient};
+
+for(const tx of capture.transactions){
+  const chainTx=await client.getTransaction({hash:tx.hash});
+  const status=chainTx.statusName,consensus=chainTx.result_name,executionHash=chainTx.tx_execution_hash;
+  const from=String(chainTx.from_address??"").toLowerCase(),to=String(chainTx.to_address??"").toLowerCase();
+  const value=chainTx.value!==undefined&&chainTx.value!==null?BigInt(chainTx.value):undefined;
+  if(status!=="FINALIZED")fail(`${tx.action} (${tx.hash}): on-chain status is ${status||"unknown"}, not FINALIZED`);
+  if(contractCallActions.has(tx.action)){
+    if(consensus!=="MAJORITY_AGREE")fail(`${tx.action} (${tx.hash}): on-chain consensus is ${consensus||"unknown"}, not MAJORITY_AGREE`);
+    if(!executionHash)fail(`${tx.action} (${tx.hash}): no GenVM execution hash recorded`);
+    if(to!==address)fail(`${tx.action} (${tx.hash}): does not target the release's contract address (transaction-to-rail correspondence failed)`);
+  }
+  if(from!==expectedSender[tx.action])fail(`${tx.action} (${tx.hash}): on-chain sender ${from} does not match the expected ${expectedSender[tx.action]}`);
+  if(expectedValue[tx.action]!==undefined){
+    if(value===undefined)fail(`${tx.action} (${tx.hash}): on-chain transaction carries no value`);
+    if(value!==expectedValue[tx.action])fail(`${tx.action} (${tx.hash}): on-chain value ${value} does not match the expected ${expectedValue[tx.action]}`);
+  }
+  if(expectedRecipient[tx.action]!==undefined&&to!==expectedRecipient[tx.action])fail(`${tx.action} (${tx.hash}): on-chain recipient ${to} does not match the rail's recorded recipient ${expectedRecipient[tx.action]}`);
+}
+
+console.log(`Verified ${releaseId} injected-wallet lifecycle: ${ACTIONS.length} transactions independently re-fetched from Studionet and checked for finalization, consensus, GenVM execution, sender/recipient, and exact value; source-matched deployment, pre-funded counter panel, 2/2→3/3 reversal, exact payout (${release.rail.funded}) and bond (${expectedBond}) routing, and terminal conservation.`);
