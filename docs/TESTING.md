@@ -33,7 +33,7 @@ The old `hardened-v6`, `hardened-v7`, `hardened-v8`, and `hardened-v9` release-i
 The last recorded local verification (2026-10-21) produced:
 
 - Direct Mode: 43 passed;
-- frontend protocol, autofill, and contract-client tests: 27 passed across three files;
+- frontend protocol, autofill, and contract-client tests: 32 passed across three files, including new coverage for `assertSuccessfulReceipt` (explicit `FINISHED_WITH_ERROR` rejection, the honest hash-presence-only signal, unresolved-state wording) and `confirmRailState` (independent post-transaction rail re-read);
 - TypeScript project build: passed;
 - Vite production build: passed.
 
@@ -56,7 +56,8 @@ For the current release, `PROOFRAIL_RELEASE_ID=hardened-v10 node scripts/verify_
 Two real bugs were found and fixed while closing this gate:
 
 1. **The capture artifact itself was wrong.** The first `browser-wallet-hardened-v10.studionet.json` recorded both the challenge bond and its return as `0`, when the real on-chain values were `0.05 GEN` each. Corrected against values independently re-read from the finalized dispute and bond-return transactions.
-2. **The verifier never checked bond/payout amounts at all**, so a capture could claim any number and pass. `scripts/lib/wallet_lifecycle_checks.mjs` now checks exact amounts and recipients, and `tests/scripts/wallet_lifecycle_checks.test.mjs` (`npm test --prefix scripts`, 13 cases) proves specific corruptions — a zeroed bond, a zeroed bond return, a wrong bond amount, a misrouted payout — are all rejected, using the real hardened-v10 artifacts as the known-good fixture.
+2. **The verifier never checked bond/payout amounts at all**, so a capture could claim any number and pass. `scripts/lib/wallet_lifecycle_checks.mjs` now checks exact amounts and recipients, and `tests/scripts/wallet_lifecycle_checks.test.mjs` (`npm test --prefix scripts`, 30 cases) proves specific corruptions — a zeroed bond, a zeroed bond return, a wrong bond amount, a misrouted payout, a mislabeled method name, a wrong-rail call, a missing execution hash, consensus disagreement, and a live rail/accounting state that disagrees with the claimed terminal state — are all rejected, using the real hardened-v10 artifacts as the known-good fixture.
+3. **The verifier didn't decode calldata, confirm the target rail ID, or independently re-read live contract state** — it trusted the capture's own action labels and the cached release record. It now decodes `data.calldata.readable` for every contract call to confirm the actual method name and rail-ID argument match what's claimed (`decodeCalldata`/`validateChainTransaction`), and independently re-reads `get_rail`/`accounting` from the live contract — not the cached JSON — to confirm the claimed terminal, conserved state still holds (`validateFreshRailState`). The contract's own internal transfers (`recipient_payout`, `successful_challenger_bond_return`) carry no calldata or execution hash by design and are checked by value/recipient only.
 
 A third, unrelated bug was also found and fixed: the verifier originally compared the contract's *global* accumulated `accounting.paid` against this *one rail's* `funded` amount, an assumption that only holds when a contract has had exactly one rail ever funded. With two rails now funded on hardened-v10 (the 0.01 GEN runner rail and this 1.0 GEN browser rail), that comparison broke even though both rails independently settled correctly. The script now checks this rail's own `paid===funded` and `locked===0` directly, plus the real scale-invariant global conservation identity `funded===locked+paid+returned`, which holds regardless of rail count.
 

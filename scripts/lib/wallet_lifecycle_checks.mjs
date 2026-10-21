@@ -85,4 +85,80 @@ export function validateCaptureAgainstRelease(capture, release, releaseId, sourc
   return expectedBond;
 }
 
+// Maps each browser-wallet action to the contract method it must have
+// called. recipient_payout and successful_challenger_bond_return are not
+// contract calls at all — they are the contract's own internal native
+// transfers (via _pay()), which carry no calldata and no GenVM execution
+// hash, so they are excluded from calldata/consensus checks and verified by
+// value/recipient alone.
+export const METHOD_BY_ACTION = { open_rail: "open_rail", lodge_claim: "lodge_claim", review_claim: "review_claim", dispute: "dispute", review_dispute: "review_dispute" };
+export const CONTRACT_CALL_ACTIONS = new Set(Object.keys(METHOD_BY_ACTION));
+
+/**
+ * Decodes genlayer-js's `data.calldata.readable` string into {method, args}.
+ * That string is not valid JSON (e.g. `{"args":[2,]"method":"lodge_claim"}`),
+ * so this parses it with targeted regexes rather than JSON.parse.
+ */
+export function decodeCalldata(readable) {
+  if (typeof readable !== "string" || !readable) return { method: null, firstArg: null };
+  const method = readable.match(/"method"\s*:\s*"([^"]+)"/)?.[1] ?? null;
+  const argsMatch = readable.match(/"args"\s*:\s*\[\s*([^,\]]*)/);
+  const rawFirstArg = argsMatch?.[1]?.trim();
+  const firstArg = rawFirstArg !== undefined && /^-?\d+$/.test(rawFirstArg) ? Number(rawFirstArg) : (rawFirstArg || null);
+  return { method, firstArg };
+}
+
+/**
+ * Validates one already-fetched chain transaction against what the browser-
+ * wallet action it claims to be requires: finalization, GenVM consensus and
+ * execution for contract calls, decoded method name and target rail ID
+ * (transaction-to-rail correspondence), sender, recipient, and value. Takes
+ * a plain chainTx object so it is testable with synthetic fixtures — no
+ * network access, no live client — exercising exactly the same logic the
+ * live verifier runs against real Studionet responses.
+ *
+ * chainTx shape (subset of genlayer-js's getTransaction() result):
+ *   { statusName, result_name, tx_execution_hash, from_address, to_address,
+ *     value, data: { calldata: { readable } } }
+ */
+export function validateChainTransaction(action, railId, chainTx, expected) {
+  const label = `${action} (${expected.hash ?? "unknown hash"})`;
+  if (chainTx.statusName !== "FINALIZED") fail(`${label}: on-chain status is ${chainTx.statusName || "unknown"}, not FINALIZED`);
+  const from = String(chainTx.from_address ?? "").toLowerCase();
+  const to = String(chainTx.to_address ?? "").toLowerCase();
+  const value = chainTx.value !== undefined && chainTx.value !== null ? BigInt(chainTx.value) : undefined;
+
+  if (CONTRACT_CALL_ACTIONS.has(action)) {
+    if (chainTx.result_name !== "MAJORITY_AGREE") fail(`${label}: on-chain consensus is ${chainTx.result_name || "unknown"}, not MAJORITY_AGREE`);
+    if (!chainTx.tx_execution_hash) fail(`${label}: no GenVM execution hash recorded — execution success cannot be confirmed`);
+    if (to !== expected.contractAddress.toLowerCase()) fail(`${label}: does not target the release's contract address (transaction-to-rail correspondence failed)`);
+    const { method, firstArg } = decodeCalldata(chainTx.data?.calldata?.readable);
+    if (method !== METHOD_BY_ACTION[action]) fail(`${label}: decoded calldata method is ${method || "undecodable"}, not the expected ${METHOD_BY_ACTION[action]} (mislabeled function call)`);
+    if (action !== "open_rail" && firstArg !== railId) fail(`${label}: decoded calldata targets rail ${firstArg}, not the expected rail ${railId} (wrong-rail call)`);
+  }
+  if (from !== expected.sender.toLowerCase()) fail(`${label}: on-chain sender ${from} does not match the expected ${expected.sender}`);
+  if (expected.value !== undefined) {
+    if (value === undefined) fail(`${label}: on-chain transaction carries no value`);
+    if (value !== expected.value) fail(`${label}: on-chain value ${value} does not match the expected ${expected.value}`);
+  }
+  if (expected.recipient !== undefined && to !== expected.recipient.toLowerCase()) fail(`${label}: on-chain recipient ${to} does not match the rail's recorded recipient ${expected.recipient}`);
+  return true;
+}
+
+/**
+ * Independently re-derives pass/fail from freshly-read, current contract
+ * state (get_rail + accounting results), rather than trusting the cached
+ * release.json. Used after re-fetching state live; also directly testable
+ * with synthetic state objects.
+ */
+export function validateFreshRailState(freshRail, freshAccounting) {
+  if (freshRail.status !== 5) fail(`independently re-read rail status is ${freshRail.status}, not PAID/RELEASED(5)`);
+  if (freshRail.final_code !== "BREACHED") fail(`independently re-read rail final_code is ${freshRail.final_code}, not BREACHED`);
+  if (freshRail.bond !== 0) fail(`independently re-read rail bond is ${freshRail.bond}, not 0`);
+  if (freshRail.locked !== 0) fail(`independently re-read rail locked is ${freshRail.locked}, not 0`);
+  if (String(freshRail.paid) !== String(freshRail.funded)) fail(`independently re-read rail paid (${freshRail.paid}) does not equal funded (${freshRail.funded})`);
+  if (BigInt(freshAccounting.funded) !== BigInt(freshAccounting.locked) + BigInt(freshAccounting.paid) + BigInt(freshAccounting.returned)) fail("independently re-read global accounting fails conservation");
+  return true;
+}
+
 export { CaptureRejected };

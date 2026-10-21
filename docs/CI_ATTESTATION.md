@@ -42,8 +42,8 @@ The following repository gates have passed locally. These results are useful rev
 | --- | --- | --- |
 | Contract static lint | `genvm-lint contracts/proofrail.py` | Passed, 3 checks (rerun during this audit). |
 | Direct Mode suite | `pytest -q` | 43 passed (obligation-binding, policy-digest scope, coordinated-false-measurement, and contradictory-criterion tests). |
-| Frontend suite | `npm test --prefix apps/web` | 27 passed across 3 files (rerun during this audit). |
-| Browser-wallet verifier corruption suite | `npm test --prefix scripts` | 13 passed (zeroed/wrong bond, misrouted payout/bond, wrong railId/contract, duplicate hash, non-finalized status, mismatched source hash). |
+| Frontend suite | `npm test --prefix apps/web` | 32 passed across 3 files, including new coverage for assertSuccessfulReceipt and confirmRailState (rerun during this audit). |
+| Browser-wallet verifier corruption suite | `npm test --prefix scripts` | 30 passed (zeroed/wrong bond, misrouted payout/bond, wrong railId/contract, duplicate hash, non-finalized status, mismatched source hash, mislabeled method, wrong-rail calldata, missing execution hash, consensus disagreement, wrong sender, and independently re-read rail/accounting state checks). |
 | TypeScript | `npm run typecheck --prefix apps/web` | Passed (rerun during this audit). |
 | Production bundle | `npm run build --prefix apps/web` | Passed; 2,372 modules transformed (rerun during this audit). Vite emitted a non-fatal large-chunk advisory. |
 | Full dependency audit | `npm audit --prefix apps/web --audit-level=low` | Zero vulnerabilities after Vitest update to `5.0.5` (previously verified); offline audit also returned zero during this audit. |

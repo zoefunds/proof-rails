@@ -28,6 +28,25 @@ export async function loadRails(){const count=Number(await read("get_counter")),
 export async function loadAccounting(){return read("accounting") as Promise<{funded:string;locked:string;paid:string;returned:string;bonds_locked:string}>}
 export async function loadConstants(){return read("constants") as Promise<{bond_bps:string;challenge_window:string;review_window:string;dispute_window:string;retry_interval:string;min_claim_window:string;max_page_size:number;dispute_mode:string;unresolved_bond_policy:string}>}
 export async function loadReceipt(id:number,dispute:boolean,round:number){return read("get_receipt",[id,dispute,round])}
-export function assertSuccessfulReceipt(receipt:any,transaction?:any){const consensus=receipt.result_name??receipt.resultName,execution=receipt.tx_execution_result_name??receipt.txExecutionResultName,executionHash=transaction?.tx_execution_hash??transaction?.txExecutionHash,finalized=transaction?.statusName==="FINALIZED"||transaction?.status_name==="FINALIZED";if(consensus!=="MAJORITY_AGREE")throw Error(`Consensus failed: ${consensus||"unknown result"}`);if(execution!==ExecutionResult.FINISHED_WITH_RETURN&&!(finalized&&executionHash))throw Error(`GenVM execution failed: ${execution||"missing execution proof"}`);return true}
+// Studionet's RPC does not populate an explicit per-transaction execution
+// result (tx_execution_result_name / txExecutionResultName) for historical
+// finalized transactions in practice -- confirmed by direct inspection, not
+// assumed. ExecutionResult.FINISHED_WITH_RETURN is checked first and used
+// whenever the chain does supply it, but the only consistently available
+// affirmative signal is: majority consensus was reached AND GenVM produced
+// an execution hash (an unsuccessful/reverted call does not finalize with
+// one). This function states that honestly rather than presenting a dead
+// "explicit success" branch as if it were the normal path. A caller that
+// needs stronger confirmation than this should pair it with
+// confirmRailState below, which independently re-reads contract state
+// after the call rather than trusting any receipt field.
+export function assertSuccessfulReceipt(receipt:any,transaction?:any){const consensus=receipt.result_name??receipt.resultName,execution=receipt.tx_execution_result_name??receipt.txExecutionResultName,executionHash=transaction?.tx_execution_hash??transaction?.txExecutionHash,finalized=transaction?.statusName==="FINALIZED"||transaction?.status_name==="FINALIZED";if(consensus!=="MAJORITY_AGREE")throw Error(`Consensus failed: ${consensus||"unknown result"}`);if(execution===ExecutionResult.FINISHED_WITH_ERROR)throw Error("GenVM execution failed: FINISHED_WITH_ERROR");if(execution!==ExecutionResult.FINISHED_WITH_RETURN&&!(finalized&&executionHash))throw Error(`Transaction state unresolved: consensus reached, but no execution hash or explicit success result is available (${execution||"no execution result reported"}) -- cannot affirmatively confirm GenVM execution succeeded`);return true}
+// Re-reads the rail directly from the contract after a transaction and
+// checks it actually shows the expected post-condition. A transaction can
+// finalize with majority consensus and a execution hash while still not
+// having produced the state change the caller intended (e.g. a contract
+// revert that still finalizes). This is independent of, and stronger than,
+// any receipt field: it is ground truth read back from the chain.
+export async function confirmRailState(id:number,predicate:(rail:Rail)=>boolean,label:string,fetchRail:(id:number)=>Promise<Rail>=(x)=>read("get_rail",[x])){const rail=await fetchRail(id);if(!predicate(rail))throw Error(`${label}: transaction finalized on-chain, but the rail's state did not change as expected -- execution success could not be independently confirmed`);return rail}
 export async function transact(functionName:string,args:any[],value=0n){if(!writes)throw Error("Connect a wallet before sending a transaction.");const hash=await writes.writeContract({address:CONTRACT,functionName,args,value});const receipt:any=await writes.waitForTransactionReceipt({hash,status:TransactionStatus.FINALIZED,retries:120,interval:3000}),execution=receipt.tx_execution_result_name??receipt.txExecutionResultName,transaction=execution?undefined:await writes.getTransaction({hash});assertSuccessfulReceipt(receipt,transaction);return{hash,receipt,transaction}}
 export function addressArg(value:string){const bytes=new Uint8Array(value.slice(2).match(/.{1,2}/g)!.map(x=>Number.parseInt(x,16)));return new CalldataAddress(bytes)}
