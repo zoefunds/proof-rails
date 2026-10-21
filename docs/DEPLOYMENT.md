@@ -2,7 +2,7 @@
 
 ## Retired hardened-v6 deployment and evidence status — 2026-10-20
 
-> **Historical scope:** the deployed hardened-v6 address below has funded technical evidence, but it did not freeze the counter panel at funding time. It is retired: the production browser no longer points at it. The current deployment is hardened-v9 (see below), which additionally binds every evidence artifact to a frozen `obligation_id` and spreads publisher fixtures across three distinct hosting providers instead of one shared Vercel account. This still does not establish real-world organizational independence — see [Authority governance](AUTHORITY_GOVERNANCE.md).
+> **Historical scope:** the deployed hardened-v6 address below has funded technical evidence, but it did not freeze the counter panel at funding time. It is retired: the production browser no longer points at it. The current deployment is hardened-v10 (see below), a fresh redeploy of the hardened-v9 source and policy shape, which binds every evidence artifact to a frozen `obligation_id` and spreads publisher fixtures across three distinct hosting providers instead of one shared Vercel account. This still does not establish real-world organizational independence — see [Authority governance](AUTHORITY_GOVERNANCE.md).
 
 - Hardened-v6 contract: `0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986`
 - Deployment transaction: `0x99f66b9fa54d4f319a10ee06d416f25b9e1ed9c4a59e984005d63e1e8fcc9c12`
@@ -18,11 +18,15 @@
 
 `hardened-v8` used the exact same `contracts/proofrail.py` source as hardened-v7 (SHA-256 `5e88ce4cc4cb88747f76a4ad1cb5ecdd960fa99e7293e00d45bb2350a6fc235c`) with its five publisher sources hosted on three distinct providers/accounts instead of one shared Vercel account, deployed and funded at `0xE91096019eBf3a4E96654a2Ab7649d6002E073b6` (deployment `0x42b41db1daa29cd38b620eb3012d6de9ed75fc4068217a133e36189994f9dbd5`). Its funded reversal is recorded in `artifacts/live-e2e-hardened-v8-4.studionet.json`. It is retired: independent review found that, like v6/v7, it bound an evidence artifact to a rail only through publisher identity, authority, version, and observation window — not to *which obligation* the rail was about. A correctly hashed, correctly signed artifact for an unrelated obligation could in principle satisfy its quorum. hardened-v9 below fixes this.
 
-## Corrected candidate release — hardened-v9 (obligation-bound, multi-provider, current)
+## Corrected candidate release — hardened-v9 (obligation-bound, multi-provider, retired)
 
-`hardened-v9` uses the same corrected `contracts/proofrail.py` lineage as v7/v8, hardened further: the evidence policy now carries a frozen `obligation_id` (schema `proofrail.evidence-policy/v7`), and every retrieved artifact must carry the identical `obligation_id` (schema `proofrail.independent-attestation/v3`) or the contract rejects it as `INVALID` regardless of correct hashing and DID authentication. Receipts also now commit to the complete material policy — evidence spec *and* payout table — not the evidence spec alone. See [Security](SECURITY.md#obligation-binding) for the full rationale and the adversarial test that demonstrates it (`test_evidence_for_a_different_obligation_is_rejected_even_when_correctly_hashed`).
+`hardened-v9` used the same corrected `contracts/proofrail.py` lineage as v7/v8, hardened further: the evidence policy carries a frozen `obligation_id` (schema `proofrail.evidence-policy/v7`), and every retrieved artifact must carry the identical `obligation_id` (schema `proofrail.independent-attestation/v3`) or the contract rejects it as `INVALID` regardless of correct hashing and DID authentication. Receipts also commit to the complete material policy — evidence spec *and* payout table — not the evidence spec alone. See [Security](SECURITY.md#obligation-binding) for the full rationale and the adversarial test that demonstrates it (`test_evidence_for_a_different_obligation_is_rejected_even_when_correctly_hashed`). Deployed at `0xC4C899Bd6A06544d56E58eFA87e96bC78eE46100` (deployment `0xe5f6ba3ac974e645de462cecc60a471be137d48082d3d8bedf5d6b2571a33f96`). Its funded reversal is recorded in `artifacts/live-e2e-hardened-v9-4.studionet.json`. It is retired in favor of a fresh redeploy of the identical source and policy shape — hardened-v10 below — done to verify the full deploy pipeline (contract + three-provider publisher infrastructure + frontend) reproduces cleanly end to end, and to run a new, independently verified funded lifecycle rather than relying on the earlier run.
 
-Publisher sources remain spread across the same three distinct providers/accounts as v8:
+## Corrected candidate release — hardened-v10 (fresh redeploy, obligation-bound, multi-provider, current)
+
+`hardened-v10` is **not a source or policy change** from hardened-v9 — it is the same reviewed `contracts/proofrail.py` (identical SHA-256 `ac524584cd74d3c968ea2aaf5c7149109718fc95e5fa515c9fa4a97061b60c8b`) and the same `proofrail.evidence-policy/v7` / `proofrail.independent-attestation/v3` schema, redeployed from scratch with newly generated publisher evidence (new content hashes, new `obligation_id`) to confirm the entire pipeline — contract deploy, three-provider publisher deploy, frontend rebind and redeploy — reproduces correctly, and to produce a fresh, independently verified funded on-chain lifecycle.
+
+Publisher sources remain spread across the same three distinct providers/accounts as v8/v9:
 
 | Source | Role | Provider/account | Domain |
 | --- | --- | --- | --- |
@@ -32,17 +36,21 @@ Publisher sources remain spread across the same three distinct providers/account
 | publisher-4 | Counter | Cloudflare Pages (separate Cloudflare account) | `proofrail-source4.pages.dev` |
 | publisher-5 | Counter | GitHub Pages (separate GitHub account, `zoefunds`) | `zoefunds.github.io` |
 
-`scripts/verify_candidate_policy.mjs` validates the manifest shape locally and `PROOFRAIL_RELEASE_ID=hardened-v9 node scripts/verify_publishers.mjs` verified all ten live DID/evidence objects across all three providers with no redirects, exact final URLs, HTTP 200, and matching SHA-256 digests.
+`scripts/verify_candidate_policy.mjs` validates the manifest shape locally and `PROOFRAIL_RELEASE_ID=hardened-v10 node scripts/verify_publishers.mjs` verified all ten live DID/evidence objects across all three providers with no redirects, exact final URLs, HTTP 200, and matching SHA-256 digests.
 
 The candidate is **deployed and funded** on Studionet:
 
-- Hardened-v9 contract: `0xC4C899Bd6A06544d56E58eFA87e96bC78eE46100`
-- Deployment transaction: `0xe5f6ba3ac974e645de462cecc60a471be137d48082d3d8bedf5d6b2571a33f96`
-- Local and deployed source SHA-256: `ac524584cd74d3c968ea2aaf5c7149109718fc95e5fa515c9fa4a97061b60c8b`
-- Deployment record: `artifacts/deployment.hardened-v9.studionet.json`
-- Funding-time-frozen, obligation-bound, multi-provider funded lifecycle: `artifacts/live-e2e-hardened-v9-4.studionet.json` (rail 1; see below)
+- Hardened-v10 contract: `0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9`
+- Deployment transaction: `0xad56e579c45f8726b31b1aedfcd87caba625b533534a9a6702b1d9edd2f1f3e9`
+- Local and deployed source SHA-256: `ac524584cd74d3c968ea2aaf5c7149109718fc95e5fa515c9fa4a97061b60c8b` (byte-identical to hardened-v9)
+- Deployment record: `artifacts/deployment.hardened-v10.studionet.json`
+- Funding-time-frozen, obligation-bound, multi-provider funded lifecycle: `artifacts/live-e2e-hardened-v10-4.studionet.json` (rail 1; see below)
 
-The production browser (`https://proof-rails.vercel.app`) is rebound to the hardened-v9 address: `apps/web/src/contract.ts` pins `CONTRACT=0xC4C899Bd6A06544d56E58eFA87e96bC78eE46100` and `DEPLOYMENT_SUPPORTS_PRE_FUNDED_COUNTEREVIDENCE=true`. Frontend lint/tests (27 passed), typecheck, and production build were rerun before deploy; the deployed bundle was confirmed byte-matched to the build that embeds the v9 address.
+The production browser (`https://proof-rails.vercel.app`) is rebound to the hardened-v10 address: `apps/web/src/contract.ts` pins `CONTRACT=0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9` and `DEPLOYMENT_SUPPORTS_PRE_FUNDED_COUNTEREVIDENCE=true`. The autofill sample data in the new-rail drawer was regenerated from the live hardened-v10 policy and round-trip verified against the frontend's own `validateEvidencePolicy`/`validateSchedule` before shipping. Frontend lint/tests (27 passed), typecheck, and production build were rerun before deploy; the deployed bundle was confirmed byte-matched to the build that embeds the v10 address.
+
+**Live-app verification (every page, real on-chain data):** after deploying, the production site was driven through the browser pane against the real funded rail above, not a mock. Control room's footer contract-id, Total Funded (`0.01 GEN`), Paid (`0.01 GEN`), Locked (`0.00 GEN`), and the operational-queue row all matched the live contract. The Rails registry, the rail detail panel (full criterion text, both quorums, all five deadlines, `Provisional result: FULFILLED` → `Final result: BREACHED`, source commitments), the Attestations ledger (all five publisher cards across all three providers, each showing the correct publisher-assertion-vs-validator-classification inversion and matching expected/observed SHA-256), Activity, and Protocol pages were all checked and matched the real contract state and the v10 copy. The new-rail drawer's autofill button was exercised and confirmed it populates the exact live policy JSON, dates, and amount.
+
+**What was not exercised live, and why:** `finalize()` on an unchallenged rail and every `recover()` variant are gated by real wall-clock windows (48h challenge, 7-day review, 3-day dispute) that cannot be waited out live in one session. These paths are proven against the identical contract bytecode by the Direct Mode suite, which time-warps a simulated VM clock rather than waiting — the suite was rerun immediately before this redeploy and passed (42/42). This is a deliberate scope decision, not an omission: see [Testing](TESTING.md).
 
 **What the multi-provider spread does and does not establish:** removing the single-shared-Vercel-account correlation is a real infrastructure improvement — GenVM's own nondeterministic validators independently retrieve and authenticate evidence from three unrelated hosting platforms, not one. It is **not** organizational independence: all three hosting accounts (Vercel, Cloudflare, GitHub) are controlled by the same operator. See [Authority governance](AUTHORITY_GOVERNANCE.md) for the credentialed-admission rule that actually establishes independence, which still requires real separate organizations to be onboarded.
 
@@ -108,11 +116,11 @@ The earlier PR-2 browser recording used the retired V5 contract and is preserved
 
 ## Production web origin
 
-The production console is served from `https://proof-rails.vercel.app`, attached to the Vercel project named `nw3`. The deployed bundle points to the hardened-v9 contract address above. Five publisher origins expose a pinned `/.well-known/did.json` and immutable `/evidence/<sha256>.json` artifacts, spread across three distinct hosting providers (Vercel, Cloudflare Pages, GitHub Pages) instead of one, and every evidence artifact is bound to the policy's frozen `obligation_id`. They use distinct technical origins and separate hosting accounts, but all are controlled by the same operator, so organizational independence is still not established.
+The production console is served from `https://proof-rails.vercel.app`, attached to the Vercel project named `nw3`. The deployed bundle points to the hardened-v10 contract address above. Five publisher origins expose a pinned `/.well-known/did.json` and immutable `/evidence/<sha256>.json` artifacts, spread across three distinct hosting providers (Vercel, Cloudflare Pages, GitHub Pages) instead of one, and every evidence artifact is bound to the policy's frozen `obligation_id`. They use distinct technical origins and separate hosting accounts, but all are controlled by the same operator, so organizational independence is still not established.
 
 No private key belongs in this repository or browser bundle.
 
 ## CI status
 
-For the current hardened-v9 source tree, contract lint, 42 Direct Mode tests, 27 frontend tests on Vitest `5.0.5`, TypeScript, production build, live multi-provider publisher verification, and both full and production dependency audits pass locally. The full dependency audit is clean after resolving the three former Vitest-related advisories. The latest hosted run, attached to commit `35bd3d1`, failed before executing any steps because GitHub reports an account billing lock; that status predates the v7/v8/v9 work and has not changed since — no new hosted run has been possible. The hosted status is not green CI; that external status is separate from passing local gates and the finalized hardened-v9 funded on-chain lifecycle. See [CI attestation](CI_ATTESTATION.md) for the latest run and job IDs.
+For the current hardened-v10 source tree, contract lint, 42 Direct Mode tests, 27 frontend tests on Vitest `5.0.5`, TypeScript, production build, live multi-provider publisher verification, and both full and production dependency audits pass locally. The full dependency audit is clean after resolving the three former Vitest-related advisories. The latest hosted run, attached to commit `35bd3d1`, failed before executing any steps because GitHub reports an account billing lock; that status predates the v7/v8/v9/v10 work and has not changed since — no new hosted run has been possible. The hosted status is not green CI; that external status is separate from passing local gates and the finalized hardened-v10 funded on-chain lifecycle. See [CI attestation](CI_ATTESTATION.md) for the latest run and job IDs.
 

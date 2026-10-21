@@ -1,0 +1,21 @@
+{
+  "schema": "proofrail.deployment/v2",
+  "releaseId": "hardened-v10",
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "source": "contracts/proofrail.py",
+  "sourceSha256": "ac524584cd74d3c968ea2aaf5c7149109718fc95e5fa515c9fa4a97061b60c8b",
+  "deployedSourceSha256": "ac524584cd74d3c968ea2aaf5c7149109718fc95e5fa515c9fa4a97061b60c8b",
+  "sourceBytes": 21174,
+  "sourceEquivalent": true,
+  "sourceEquivalence": "The SHA-256 is computed over the exact local UTF-8 source and over finalized transaction contract_code decoded from base64.",
+  "deployer": "0x9e75694e204B03997D55B5A664a924aDaE3F43D1",
+  "startedAt": "2026-10-21T00:21:38.695Z",
+  "finalizedAt": "2026-10-21T00:22:19.212Z",
+  "txHash": "0xad56e579c45f8726b31b1aedfcd87caba625b533534a9a6702b1d9edd2f1f3e9",
+  "contractAddress": "0x0dd0e186c7C509c8E94E38A6536B78A0754fB4c9",
+  "consensus": "MAJORITY_AGREE",
+  "execution": "FINALIZED_WITH_EXECUTION_HASH",
+  "txExecutionHash": "0xb8a48591e1a5f4ae83456335729f460b81f35e5ec6b091d8bb74f43705ebd649",
+  "transactionStatus": "FINALIZED"
+}
