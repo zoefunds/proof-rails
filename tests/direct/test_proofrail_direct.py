@@ -1,14 +1,15 @@
 import datetime,hashlib,json,sys,pytest
 START=1893456000;END=1896134400;CLAIM_END=END+86400
+OBLIGATION="urn:proofrail:test-obligation:january-service:2030-01"
 OUTCOMES=json.dumps([{"code":"PASS","description":"availability at least 99.9%","payout_bps":0},{"code":"BREACH","description":"availability below 99.9%","payout_bps":10000}])
 def h(x):return hashlib.sha256(x.encode()).hexdigest()
 def did(domain,path):return json.dumps({"id":"did:web:"+domain,"service":[{"id":"did:web:"+domain+"#evidence","type":"LinkedDomains","serviceEndpoint":"https://"+domain+path}]},sort_keys=True)
 def artifact(n,outcome="BREACH",**overrides):
- domain=f"source{n}.test";facts={"total_seconds":END-START,"unavailable_seconds":0 if outcome=="PASS" else 3000,"period_start":START,"period_end":END};value={"schema":"proofrail.independent-attestation/v2","publisher_id":"did:web:"+domain,"authority_id":f"authority-{n}","source_id":f"source-{n}","subject":"January availability","content_version":"2030-01/v1","outcome":outcome,"observed_from":START,"observed_until":END,"statement":"Availability was independently observed.","facts":facts};value.update(overrides);return json.dumps(value,sort_keys=True)
+ domain=f"source{n}.test";facts={"total_seconds":END-START,"unavailable_seconds":0 if outcome=="PASS" else 3000,"period_start":START,"period_end":END};value={"schema":"proofrail.independent-attestation/v3","publisher_id":"did:web:"+domain,"authority_id":f"authority-{n}","source_id":f"source-{n}","obligation_id":OBLIGATION,"subject":"January availability","content_version":"2030-01/v1","outcome":outcome,"observed_from":START,"observed_until":END,"statement":"Availability was independently observed.","facts":facts};value.update(overrides);return json.dumps(value,sort_keys=True)
 def source(n,body=None):
  domain=f"source{n}.test";path="/attestations/";d=did(domain,path);body=body or artifact(n);digest=h(body)
  return {"source_id":f"source-{n}","authority_id":f"authority-{n}","url":f"https://{domain}{path}{digest}.json","publisher_id":"did:web:"+domain,"publisher_domain":domain,"did_sha256":h(d),"did_http_status":200,"service_path":path,"content_version":"2030-01/v1","content_sha256":digest,"evidence_http_status":200,"observed_from":START,"observed_until":END}
-def policy(sources=None,counter_sources=None):return json.dumps({"schema":"proofrail.evidence-policy/v6","observed_from":START,"observed_until":END,"source_rule":{"min_sources":2,"min_verified":2,"min_agreement":2},"counter_rule":{"min_sources":3,"min_verified":3,"min_agreement":2},"semantic_rule":{"kind":"uptime_bps","threshold_bps":9990,"fulfilled_code":"PASS","breached_code":"BREACH"},"sources":sources or [source(1),source(2)],"counterevidence":{"schema":"proofrail.counterevidence/v1","sources":counter_sources or [source(3),source(4),source(5)]}},sort_keys=True)
+def policy(sources=None,counter_sources=None,obligation_id=OBLIGATION):return json.dumps({"schema":"proofrail.evidence-policy/v7","obligation_id":obligation_id,"observed_from":START,"observed_until":END,"source_rule":{"min_sources":2,"min_verified":2,"min_agreement":2},"counter_rule":{"min_sources":3,"min_verified":3,"min_agreement":2},"semantic_rule":{"kind":"uptime_bps","threshold_bps":9990,"fulfilled_code":"PASS","breached_code":"BREACH"},"sources":sources or [source(1),source(2)],"counterevidence":{"schema":"proofrail.counterevidence/v1","sources":counter_sources or [source(3),source(4),source(5)]}},sort_keys=True)
 def answer(code,confidence="HIGH"):return json.dumps({"schema":"proofrail.semantic-classification/v1","code":code,"confidence":confidence})
 def addr(c,x):return type(c._zero())(x)
 def warp(vm,t):vm.warp(t);sys.modules["genlayer.gl"].message_raw["datetime"]=t
@@ -166,6 +167,52 @@ def test_retry_cap_receipt_boundaries_and_late_review(direct_vm,direct_deploy,di
   c.review_claim(1)
  assert c.get_rail(1).attempts==5
  with pytest.raises(AssertionError):c.review_claim(1)
+
+@pytest.mark.direct
+def test_policy_requires_nonempty_obligation_id(direct_vm,direct_deploy,direct_alice,direct_bob):
+ c=direct_deploy("contracts/proofrail.py");p=json.loads(policy());p["obligation_id"]=""
+ with pytest.raises(AssertionError):create(direct_vm,c,direct_alice,direct_bob,json.dumps(p))
+
+@pytest.mark.direct
+def test_evidence_for_a_different_obligation_is_rejected_even_when_correctly_hashed(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ # A publisher artifact that is byte-for-byte authentic, correctly signed by
+ # its DID, and schema-valid, but concerns a *different* obligation than the
+ # one this rail froze at funding, must not be able to satisfy quorum.
+ unrelated=artifact(1,"PASS",obligation_id="urn:proofrail:test-obligation:unrelated-service:2030-01")
+ sources=[source(1,unrelated),source(2)];c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob,policy(sources));claimed(direct_vm,c,direct_bob,direct_charlie)
+ mock_source(direct_vm,sources[0],body=unrelated);mock_source(direct_vm,sources[1]);c.review_claim(1)
+ receipt=c.get_receipt(1,False,1);rows=json.loads(receipt.provenance_json)
+ assert rows[0]["status"]=="INVALID" and "obligation" in rows[0]["error"];assert c.get_rail(1).status==2
+
+@pytest.mark.direct
+def test_receipt_policy_digest_commits_to_payout_table_not_just_evidence(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ # Two rails with byte-identical evidence policies but different payout
+ # tables must not share a policy_digest: the digest is a commitment to the
+ # complete material contract (evidence + payout), not evidence alone.
+ sources=[source(1),source(2)];c=direct_deploy("contracts/proofrail.py")
+ create(direct_vm,c,direct_alice,direct_bob,policy(sources));claimed(direct_vm,c,direct_bob,direct_charlie);mock_all(direct_vm,sources,["BREACH","BREACH"]);c.review_claim(1)
+ digest_a=c.get_receipt(1,False,1).policy_digest
+ other_outcomes=json.dumps([{"code":"PASS","description":"availability at least 99.9%","payout_bps":0},{"code":"BREACH","description":"availability below 99.9%","payout_bps":5000}])
+ direct_vm.sender=addr(c,direct_alice);direct_vm.value=20000;c.open_rail(addr(c,direct_bob),"second rail","Availability is at least 99.9%",START,CLAIM_END,20000,policy(sources),other_outcomes)
+ warp(direct_vm,"2030-02-01T00:00:00Z");direct_vm.sender=addr(c,direct_bob);c.lodge_claim(2);direct_vm.sender=addr(c,direct_charlie);mock_all(direct_vm,sources,["BREACH","BREACH"]);c.review_claim(2)
+ digest_b=c.get_receipt(2,False,1).policy_digest
+ assert digest_a!=digest_b
+
+@pytest.mark.direct
+def test_coordinated_identical_false_facts_pass_quorum_by_design(direct_vm,direct_deploy,direct_alice,direct_bob,direct_charlie):
+ # Documents a real, acknowledged protocol limitation (see SECURITY.md
+ # "Collusion boundary"): the contract authenticates that retrieved bytes
+ # are genuinely the publisher's pinned content, not that the content is
+ # factually true. If every quorum publisher independently chooses to
+ # publish the same fabricated facts, authenticated structured corroboration
+ # still succeeds. This is not a bug to "fix" — SHA-256/DID binding cannot
+ # distinguish a true measurement from a false one both publishers actually
+ # chose to publish — but it must be demonstrated, not just claimed.
+ fabricated={"total_seconds":END-START,"unavailable_seconds":0,"period_start":START,"period_end":END}
+ body1=artifact(1,"PASS",facts=fabricated);body2=artifact(2,"PASS",facts=fabricated)
+ sources=[source(1,body1),source(2,body2)];c=direct_deploy("contracts/proofrail.py");create(direct_vm,c,direct_alice,direct_bob,policy(sources));claimed(direct_vm,c,direct_bob,direct_charlie)
+ mock_source(direct_vm,sources[0],"PASS",body1);mock_source(direct_vm,sources[1],"PASS",body2);c.review_claim(1)
+ receipt=c.get_receipt(1,False,1);assert receipt.result=="VERIFIED" and receipt.outcome_code=="PASS" and receipt.agreeing_sources==2
 
 @pytest.mark.direct
 def test_transfer_callback_guard_rejects_all_settlement_reentry(direct_vm,direct_deploy,direct_alice,direct_bob):

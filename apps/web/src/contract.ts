@@ -1,17 +1,20 @@
 import {createClient} from "genlayer-js";
 import {studionet} from "genlayer-js/chains";
 import {CalldataAddress,ExecutionResult,TransactionStatus} from "genlayer-js/types";
-// This is the source-matched hardened-v8 Studionet deployment.  Keeping the
+// This is the source-matched hardened-v9 Studionet deployment.  Keeping the
 // address in source (rather than accepting an unreviewed browser value) stops
 // the production UI from accidentally writing to a retired contract.
-export const CONTRACT="0xE91096019eBf3a4E96654a2Ab7649d6002E073b6" as const;
+export const CONTRACT="0xC4C899Bd6A06544d56E58eFA87e96bC78eE46100" as const;
 // hardened-v6 (0x7F21Cfd207C7843078c99a05d4F0cF3e0fcb8986) predates the
 // funding-time counter-panel freeze; hardened-v7 (0xC217A00E471368E005A624B926bC5A13B267c7F4)
-// fixed that but sourced all five publishers from one Vercel account. Both are
-// retired; do not rebind to them. hardened-v8 is the same corrected source
-// with its five publisher sources spread across three distinct hosting
-// providers/accounts (Vercel, Cloudflare Pages, GitHub Pages) and has its own
-// funded, on-chain reversal demonstration (artifacts/live-e2e-hardened-v8-4.studionet.json).
+// fixed that but sourced all five publishers from one Vercel account; hardened-v8
+// (0xE91096019eBf3a4E96654a2Ab7649d6002E073b6) spread them across three hosting
+// providers but still let any correctly hashed evidence for the right publisher
+// satisfy quorum regardless of which obligation it concerned. All three are
+// retired; do not rebind to them. hardened-v9 additionally binds every evidence
+// artifact to a frozen obligation_id and commits receipts to the full payout
+// policy, not just the evidence spec (see docs/SECURITY.md#obligation-binding).
+// Funded, on-chain reversal demonstration: artifacts/live-e2e-hardened-v9-4.studionet.json.
 export const DEPLOYMENT_SUPPORTS_PRE_FUNDED_COUNTEREVIDENCE=true;
 export const EXPLORER="https://explorer-studio.genlayer.com";const reads=createClient({chain:studionet});let writes:any=null;
 export type Rail={id:number;issuer:unknown;recipient:unknown;name:string;criterion:string;evidence_json:string;counterevidence_json:string;outcomes_json:string;funded:unknown;locked:unknown;paid:unknown;returned:unknown;status:number;opens_at:unknown;closes_at:unknown;claimed_at:unknown;attempts:number;last_attempt:unknown;provisional_code:string;provisional_amount:unknown;challenge_until:unknown;challenger:unknown;bond:unknown;dispute_deadline:unknown;challenge_reason:string;final_code:string;final_bps:number;terminal_reason:string};

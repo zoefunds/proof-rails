@@ -17,7 +17,7 @@ const [deployment,policy,counter,open,final,rail,accounting,primaryReceipt,dispu
   read.readContract({address,functionName:"get_rail",args:[railId]}),read.readContract({address,functionName:"accounting",args:[]}),
   read.readContract({address,functionName:"get_receipt",args:[railId,false,1]}),read.readContract({address,functionName:"get_receipt",args:[railId,true,1]}),
 ]);
-if(policy.schema!=="proofrail.evidence-policy/v6"||counter.schema!=="proofrail.counterevidence/v1"||canonical(policy.counterevidence)!==canonical(counter))throw Error("release manifests do not prove a pre-funded matching v6 counter panel");
+if(policy.schema!=="proofrail.evidence-policy/v7"||counter.schema!=="proofrail.counterevidence/v1"||canonical(policy.counterevidence)!==canonical(counter))throw Error("release manifests do not prove a pre-funded matching counter panel");
 if(deployment.releaseId!==releaseId)throw Error("deployment record release does not match receipt capture release");
 if(deployment.contractAddress.toLowerCase()!==address.toLowerCase())throw Error("deployment record contract does not match capture contract");
 if(canonical(JSON.parse(String(rail.counterevidence_json)))!==canonical(counter))throw Error("rail did not persist the pre-funded counter panel");

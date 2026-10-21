@@ -71,8 +71,9 @@ class ProofRail(gl.Contract):
 
  def _validate_policy(self,evidence_json:str,outcomes_json:str)->dict:
   evidence=json.loads(evidence_json); outcomes=json.loads(outcomes_json)
-  assert isinstance(evidence,dict) and set(evidence)=={"schema","observed_from","observed_until","source_rule","counter_rule","semantic_rule","sources","counterevidence"}
-  assert evidence["schema"]=="proofrail.evidence-policy/v6" and type(evidence["observed_from"]) is int and type(evidence["observed_until"]) is int and 0<=evidence["observed_from"]<evidence["observed_until"]<2**64
+  assert isinstance(evidence,dict) and set(evidence)=={"schema","obligation_id","observed_from","observed_until","source_rule","counter_rule","semantic_rule","sources","counterevidence"}
+  assert evidence["schema"]=="proofrail.evidence-policy/v7" and type(evidence["observed_from"]) is int and type(evidence["observed_until"]) is int and 0<=evidence["observed_from"]<evidence["observed_until"]<2**64
+  assert isinstance(evidence["obligation_id"],str) and 0<len(evidence["obligation_id"])<=200,"a frozen canonical obligation identifier is required"
   rule=evidence["source_rule"];counter_rule=evidence["counter_rule"]
   for x in (rule,counter_rule):assert isinstance(x,dict) and set(x)=={"min_sources","min_verified","min_agreement"} and type(x["min_sources"]) is int and type(x["min_verified"]) is int and type(x["min_agreement"]) is int and 2<=x["min_agreement"]<=x["min_verified"]<=x["min_sources"]<=5
   semantic=evidence["semantic_rule"];assert isinstance(semantic,dict) and set(semantic)=={"kind","threshold_bps","fulfilled_code","breached_code"} and semantic["kind"]=="uptime_bps" and type(semantic["threshold_bps"]) is int and 1<=semantic["threshold_bps"]<=10000 and isinstance(semantic["fulfilled_code"],str) and isinstance(semantic["breached_code"],str) and semantic["fulfilled_code"]!=semantic["breached_code"]
@@ -113,9 +114,10 @@ class ProofRail(gl.Contract):
      er=gl.nondet.web.get(s["url"]);assert er.status==s["evidence_http_status"] and len(er.body)<=MAX_BODY_BYTES;digest=hashlib.sha256(er.body).hexdigest();p["observed_digest"]=digest;raw=er.body.decode("utf-8")
      if digest!=s["content_sha256"]:p["status"]=TAMPERED;provenance.append(p);continue
      try:
-      artifact=json.loads(raw);required={"schema","publisher_id","authority_id","source_id","subject","content_version","outcome","observed_from","observed_until","statement","facts"}
-      assert isinstance(artifact,dict) and set(artifact)==required and artifact["schema"]=="proofrail.independent-attestation/v2","invalid evidence schema"
+      artifact=json.loads(raw);required={"schema","publisher_id","authority_id","source_id","obligation_id","subject","content_version","outcome","observed_from","observed_until","statement","facts"}
+      assert isinstance(artifact,dict) and set(artifact)==required and artifact["schema"]=="proofrail.independent-attestation/v3","invalid evidence schema"
       assert artifact["publisher_id"]==s["publisher_id"] and artifact["authority_id"]==s["authority_id"] and artifact["source_id"]==s["source_id"],"evidence publisher mismatch"
+      assert artifact["obligation_id"]==spec["obligation_id"],"evidence does not concern this rail's frozen obligation"
       assert artifact["content_version"]==s["content_version"] and type(artifact["observed_from"]) is int and type(artifact["observed_until"]) is int and artifact["observed_from"]==s["observed_from"] and artifact["observed_until"]==s["observed_until"],"evidence metadata mismatch"
       assert artifact["outcome"] in allowed and isinstance(artifact["subject"],str) and 0<len(artifact["subject"])<=240 and isinstance(artifact["statement"],str) and 0<len(artifact["statement"])<=2000
       facts=artifact["facts"];assert isinstance(facts,dict) and set(facts)=={"total_seconds","unavailable_seconds","period_start","period_end"} and type(facts["total_seconds"]) is int and type(facts["unavailable_seconds"]) is int and type(facts["period_start"]) is int and type(facts["period_end"]) is int
@@ -143,9 +145,16 @@ class ProofRail(gl.Contract):
  def _receipt_key(self,i:u256,dispute:bool,round:u8)->u256:
   assert u8(1)<=round<=u8(MAX_ATTEMPTS),"invalid receipt round"
   return i*u256(1000)+(u256(500) if dispute else u256(0))+u256(round)
+ def _policy_digest(self,r:Rail)->str:
+  # Commits to the complete material contract: the evidence/counterevidence
+  # spec AND the payout table, not just the evidence spec alone, so a
+  # receipt's digest cannot be reused to imply agreement with a different
+  # payout schedule.
+  evidence=json.loads(r.evidence_json);outcomes=json.loads(r.outcomes_json)
+  return hashlib.sha256(json.dumps({"evidence":evidence,"outcomes":outcomes},sort_keys=True).encode("utf-8")).hexdigest()
  def _apply_review(self,i:u256,dispute:bool):
   r=self._get(i); result=json.loads(self._review(r,dispute)); spec=json.loads(r.evidence_json); round=u8(r.attempts+1)
-  provenance=json.dumps(result["provenance"],sort_keys=True);self.receipts[self._receipt_key(i,dispute,round)]=Receipt(i,"DISPUTE" if dispute else "PRIMARY",round,self._now(),result["result"],result["code"],u8(result["verified"]),u8(result["agreeing"]),u8(len(result["provenance"])),provenance,hashlib.sha256(r.evidence_json.encode("utf-8")).hexdigest())
+  provenance=json.dumps(result["provenance"],sort_keys=True);self.receipts[self._receipt_key(i,dispute,round)]=Receipt(i,"DISPUTE" if dispute else "PRIMARY",round,self._now(),result["result"],result["code"],u8(result["verified"]),u8(result["agreeing"]),u8(len(result["provenance"])),provenance,self._policy_digest(r))
   r.attempts=round;r.last_attempt=self._now()
   if result["result"]!=VERIFIED:r.status=u8(DISPUTED if dispute else REVIEWING);self.rails[i]=r;return
   code=result["code"]

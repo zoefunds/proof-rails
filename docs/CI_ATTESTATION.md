@@ -41,7 +41,7 @@ The following repository gates have passed locally. These results are useful rev
 | Gate | Command | Latest recorded/observed result |
 | --- | --- | --- |
 | Contract static lint | `genvm-lint contracts/proofrail.py` | Passed, 3 checks (rerun during this audit). |
-| Direct Mode suite | `pytest -q` | 38 passed (rerun during this audit). |
+| Direct Mode suite | `pytest -q` | 42 passed (adds obligation-binding, policy-digest scope, and coordinated-false-measurement tests). |
 | Frontend suite | `npm test --prefix apps/web` | 26 passed across 3 files (rerun during this audit). |
 | TypeScript | `npm run typecheck --prefix apps/web` | Passed (rerun during this audit). |
 | Production bundle | `npm run build --prefix apps/web` | Passed; 2,372 modules transformed (rerun during this audit). Vite emitted a non-fatal large-chunk advisory. |
@@ -50,14 +50,14 @@ The following repository gates have passed locally. These results are useful rev
 | Historical publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_publishers.mjs` | Audit-only. It is not a gate for the corrected candidate and cannot establish provenance for current source bytes. |
 | Source-matched funded receipt | `PROOFRAIL_RELEASE_ID=hardened-v6 node scripts/verify_live_receipts.mjs` | Correctly rejects the modified candidate source because its SHA-256 differs from the deployed historical source. Not a candidate deployment proof. |
 | Deployed source/lifecycle artifact | `node scripts/verify_live_artifact.mjs` | Passes historical record integrity and explicitly identifies that current candidate source is not the deployed source. |
-| Candidate policy manifest | `PROOFRAIL_RELEASE_ID=hardened-v8 node scripts/verify_candidate_policy.mjs` | Passed locally; validates the published v6-schema dual-panel manifest shape and cross-panel identities for the current multi-provider release. It is not funded/deployed proof by itself. |
-| Candidate publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v8 node scripts/verify_publishers.mjs` | Passed locally against 10 live objects spread across three hosting providers (Vercel, Cloudflare Pages, GitHub Pages): exact URL/no redirect, HTTP 200, DID and evidence SHA-256 matched. |
-| Funded multi-provider lifecycle | `artifacts/live-e2e-hardened-v8-4.studionet.json` on contract `0xE91096019eBf3a4E96654a2Ab7649d6002E073b6` | Funding-time-frozen counterevidence panel, a distinct 3-of-3 counter panel reversing a 2-of-2 provisional verdict, payout, bond clearing, and conservation accounting — GenVM validators independently authenticated evidence across all three providers. |
+| Candidate policy manifest | `PROOFRAIL_RELEASE_ID=hardened-v9 node scripts/verify_candidate_policy.mjs` | Passed locally; validates the published v7-schema, obligation-bound dual-panel manifest shape and cross-panel identities for the current multi-provider release. It is not funded/deployed proof by itself. |
+| Candidate publisher retrieval | `PROOFRAIL_RELEASE_ID=hardened-v9 node scripts/verify_publishers.mjs` | Passed locally against 10 live objects spread across three hosting providers (Vercel, Cloudflare Pages, GitHub Pages): exact URL/no redirect, HTTP 200, DID and evidence SHA-256 matched. |
+| Funded multi-provider lifecycle | `artifacts/live-e2e-hardened-v9-4.studionet.json` on contract `0xC4C899Bd6A06544d56E58eFA87e96bC78eE46100` | Funding-time-frozen, obligation-bound counterevidence panel, a distinct 3-of-3 counter panel reversing a 2-of-2 provisional verdict, payout, bond clearing, and conservation accounting — GenVM validators independently authenticated evidence across all three providers. |
 | Governance and blocker record | `node scripts/verify_review_evidence.mjs` | Passed during this audit. |
-| V6 production browser capture | `node scripts/verify_browser_wallet_evidence.mjs` | Passes as a historical capture; it is not source-matched to the current `hardened-v8` contract. |
-| V8 production browser capture | `PROOFRAIL_RELEASE_ID=hardened-v8 node scripts/verify_browser_wallet_candidate.mjs` | **Outstanding.** Requires a real injected-wallet lifecycle through the production UI, supplied by the wallet owner; cannot be produced by an automated key. |
+| V6 production browser capture | `node scripts/verify_browser_wallet_evidence.mjs` | Passes as a historical capture; it is not source-matched to the current `hardened-v9` contract. |
+| V9 production browser capture | `PROOFRAIL_RELEASE_ID=hardened-v9 node scripts/verify_browser_wallet_candidate.mjs` | **Outstanding.** Requires a real injected-wallet lifecycle through the production UI, supplied by the wallet owner; cannot be produced by an automated key. |
 
-The locally executed Direct Mode suite covers forged DID content, wrong/unauthorized paths, redirects, stale or inconsistent metadata, malformed schemas, prompt injection, conflicting sources, unavailable retrieval, bounded retries, validator disagreement, rollback, replay, bond routing/recovery, and principal conservation. The V6 browser capture is a separate production wallet lifecycle from the source-matched runner rail; both have dedicated evidence records and verifiers. No V8 browser capture exists yet.
+The locally executed Direct Mode suite covers forged DID content, wrong/unauthorized paths, redirects, stale or inconsistent metadata, malformed schemas, prompt injection, conflicting sources, unavailable retrieval, bounded retries, validator disagreement, rollback, replay, bond routing/recovery, and principal conservation. The V6 browser capture is a separate production wallet lifecycle from the source-matched runner rail; both have dedicated evidence records and verifiers. No V9 browser capture exists yet, and obligation-binding and coordinated-false-measurement adversarial cases are now also covered locally.
 
 ## Resume condition and reporting rule
 
